@@ -1,0 +1,10 @@
+language: cpp
+install:
+  - pushd ..
+  - git clone https://chromium.googlesource.com/chromium/tools/depot_tools.git
+  - export PATH="$PATH":'pwd'/depot_tools
+  - popd
+script:
+  - ./makeall-iossim.sh 
+notifications:
+  email: false
