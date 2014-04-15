@@ -1,5 +1,4 @@
-language: cpp
-compiler: gcc
+language: objective-c
 install:
   - pushd ..
   - git clone https://chromium.googlesource.com/chromium/tools/depot_tools.git
