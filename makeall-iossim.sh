@@ -32,7 +32,7 @@ export GYP_GENERATOR_FLAGS="$GYP_GENERATOR_FLAGS output_dir=out_mac"
 function buildios() {
 echo "-- building webrtc ios"
 pushd trunk
-wrios && gclient runhooks && ninja -C out_ios/Debug-iphoneos AppRTCDemo
+wrios && gclient runhooks && ninja -C out_ios/Debug-iphoneos
 popd
 echo "-- webrtc has been sucessfully built"
 }
