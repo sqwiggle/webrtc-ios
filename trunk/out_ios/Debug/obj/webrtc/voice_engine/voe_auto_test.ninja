@@ -1,0 +1,317 @@
+build obj/webrtc/voice_engine/voe_auto_test.actions_depends.stamp: stamp $
+    libvoice_engine.a libgmock.a libgtest.a libgflags.a $
+    libsystem_wrappers.a libchannel_transport.a libtest_support.a $
+    libcommon_audio.a libcommon_audio_neon.a libaudio_coding_module.a $
+    libCNG.a libG711.a libG722.a libiLBC.a libiSAC.a libiSACFix.a $
+    libisac_neon.a libPCM16B.a libNetEq.a libwebrtc_opus.a libopus.a $
+    libacm2.a libNetEq4.a libaudio_conference_mixer.a libaudio_processing.a $
+    libaudio_processing_neon.a $
+    obj/webrtc/modules/audio_processing/gen_nsx_core_neon_offsets_h.actions_rules_copies.stamp $
+    lib_core_neon_offsets.a $
+    obj/webrtc/modules/audio_processing/gen_aecm_core_neon_offsets_h.actions_rules_copies.stamp $
+    libwebrtc_utility.a libmedia_file.a libwebrtc_video_coding.a $
+    libwebrtc_i420.a libcommon_video.a libyuv.a libyuv_neon.a $
+    libvideo_coding_utility.a libwebrtc_vp8.a libvpx.a $
+    obj/third_party/libvpx/gen_asm_offsets_vp8.actions_rules_copies.stamp $
+    libvpx_asm_offsets_vp8.a $
+    obj/third_party/libvpx/gen_asm_offsets_vpx_scale.actions_rules_copies.stamp $
+    libvpx_asm_offsets_vpx_scale.a libaudio_device.a librtp_rtcp.a $
+    libpaced_sender.a libremote_bitrate_estimator.a librbe_components.a
+
+build obj/webrtc/voice_engine/voe_auto_test.compile_depends.stamp: stamp $
+    obj.host/testing/iossim/iossim.gen/iossim/DVTiPhoneSimulatorRemoteClient.h $
+    obj/webrtc/modules/audio_processing_neon.compile_depends.stamp $
+    obj/webrtc/modules/audio_processing/gen_nsx_core_neon_offsets_h.actions_rules_copies.stamp $
+    obj/webrtc/modules/audio_processing/gen_aecm_core_neon_offsets_h.actions_rules_copies.stamp $
+    obj/third_party/libvpx/libvpx.actions_rules_copies.stamp $
+    obj/third_party/libvpx/gen_asm_offsets_vp8.actions_rules_copies.stamp $
+    obj/third_party/libvpx/gen_asm_offsets_vpx_scale.actions_rules_copies.stamp
+
+build voe_auto_test.app/Default-568h@2x.png: mac_tool $
+    ../../testing/gtest_ios/Default-568h@2x.png
+  mactool_cmd = copy-bundle-resource
+build voe_auto_test.app/Info.plist: copy_infoplist $
+    ../../testing/gtest_ios/unittest-Info.plist
+  env = export ALWAYS_SEARCH_USER_PATHS=NO; export $
+      BUILT_PRODUCTS_DIR=/Users/cwebb/Sqwiggle/webrtc/trunk/out_ios/Debug; $
+      export BUNDLE_ID_TEST_NAME=voeautotest; export $
+      SRCROOT=/Users/cwebb/Sqwiggle/webrtc/trunk/out_ios/Debug/../../webrtc/voice_engine; $
+      export SOURCE_ROOT="$${SRCROOT}"; export $
+      CC="$${SOURCE_ROOT}/../../third_party/llvm-build/Release+Asserts/bin/clang"; $
+      export CLANG_CXX_LANGUAGE_STANDARD=gnu++0x; export $
+      CLANG_LINK_OBJC_RUNTIME=NO; export $
+      CLANG_WARN_OBJC_MISSING_PROPERTY_SYNTHESIS=YES; export $
+      CONFIGURATION=Debug; export CONTENTS_FOLDER_PATH=voe_auto_test.app; $
+      export COPY_PHASE_STRIP=NO; export EXECUTABLE_NAME=voe_auto_test; $
+      export EXECUTABLE_PATH=voe_auto_test.app/voe_auto_test; export $
+      FULL_PRODUCT_NAME=voe_auto_test.app; export GCC_CW_ASM_SYNTAX=NO; $
+      export GCC_C_LANGUAGE_STANDARD=c99; export $
+      GCC_ENABLE_CPP_EXCEPTIONS=NO; export GCC_ENABLE_CPP_RTTI=NO; export $
+      GCC_ENABLE_PASCAL_STRINGS=NO; export $
+      GCC_INLINES_ARE_PRIVATE_EXTERN=YES; export $
+      GCC_OBJC_CALL_CXX_CDTORS=YES; export $
+      GCC_PRECOMPILE_PREFIX_HEADER=YES; export $
+      GCC_SYMBOLS_PRIVATE_EXTERN=YES; export GCC_THREADSAFE_STATICS=NO; $
+      export GCC_TREAT_WARNINGS_AS_ERRORS=YES; export $
+      GCC_VERSION=com.apple.compilers.llvm.clang.1_0; export $
+      GCC_WARN_ABOUT_MISSING_NEWLINE=YES; export $
+      INFOPLIST_FILE=../../testing/gtest_ios/unittest-Info.plist; export $
+      INFOPLIST_PATH=voe_auto_test.app/Info.plist; export $
+      IPHONEOS_DEPLOYMENT_TARGET=6.0; export $
+      LDPLUSPLUS="$${SOURCE_ROOT}/../../third_party/llvm-build/Release+Asserts/bin/clang++"; $
+      export MACH_O_TYPE=mh_execute; export $
+      OTHER_LDFLAGS=-Wl,-search_paths_first; export $
+      PRODUCT_NAME=voe_auto_test; export $
+      PRODUCT_TYPE=com.apple.product-type.application; export $
+      SDKROOT=/Applications/Xcode.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator7.1.sdk; $
+      export SYMROOT=../../xcodebuild; export TARGETED_DEVICE_FAMILY=1,2; $
+      export $
+      TARGET_BUILD_DIR=/Users/cwebb/Sqwiggle/webrtc/trunk/out_ios/Debug; $
+      export TEMP_DIR="$${TMPDIR}"; export $
+      UNLOCALIZED_RESOURCES_FOLDER_PATH=voe_auto_test.app; export $
+      USE_HEADERMAP=NO; export VALID_ARCHS="armv7 i386"; export $
+      WARNING_CFLAGS="-Wall -Wendif-labels -Wextra -Wno-unused-parameter $
+      -Wno-missing-field-initializers -Wheader-hygiene -Wno-c++11-narrowing $
+      -Wno-char-subscripts -Wno-unneeded-internal-declaration $
+      -Wno-covered-switch-default -Wstring-conversion $
+      -Wno-deprecated-register -Wno-absolute-value"; export $
+      WRAPPER_NAME=voe_auto_test.app;
+  keys = '{"DTXcode": "0510", "DTSDKName": "iphonesimulator", $
+      "DTPlatformName": "iphonesimulator", "UIDeviceFamily": [1, 2], $
+      "BuildMachineOSBuild": "13C64", "DTXcodeBuild": "5B130a", $
+      "DTSDKBuild": "11D167", "CFBundleSupportedPlatforms": $
+      ["iPhoneSimulator"]}'
+defines = -DV8_DEPRECATION_WARNINGS -DBLINK_SCALE_FILTERS_AT_RECORD_TIME $
+    -DDISABLE_NACL -DCHROMIUM_BUILD -DUSE_LIBJPEG_TURBO=1 $
+    -DENABLE_CONFIGURATION_POLICY $
+    -DDISCARDABLE_MEMORY_ALWAYS_SUPPORTED_NATIVELY $
+    -DSYSTEM_NATIVELY_SIGNALS_MEMORY_PRESSURE -DENABLE_EGLIMAGE=1 $
+    -DCLD_VERSION=1 -DENABLE_SPELLCHECK=1 -DDISABLE_FTP_SUPPORT=1 $
+    -DWEBRTC_MODULE_UTILITY_VIDEO -DWEBRTC_ARCH_ARM -DWEBRTC_ARCH_ARM_V7 $
+    -DWEBRTC_ARCH_ARM_NEON -DWEBRTC_POSIX -DWEBRTC_MAC -DWEBRTC_IOS $
+    -DGTEST_HAS_POSIX_RE=0 -DUNIT_TEST -DGTEST_HAS_RTTI=0 $
+    -DGFLAGS_DLL_DECL= -DGFLAGS_DLL_DECLARE_FLAG= -DGFLAGS_DLL_DEFINE_FLAG= $
+    -D__STDC_CONSTANT_MACROS -D__STDC_FORMAT_MACROS $
+    -DDYNAMIC_ANNOTATIONS_ENABLED=1 -DWTF_USE_DYNAMIC_ANNOTATIONS=1
+includes = -I../.. -I../.. -I../../testing/gmock/include $
+    -I../../testing/gtest/include $
+    -I../../third_party/gflags/gen/posix/include $
+    -I../../third_party/gflags/src -I../../webrtc/system_wrappers/interface
+cflags = -isysroot $
+    /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator7.1.sdk $
+    -O0 -gdwarf-2 -fvisibility=hidden -Werror -Wnewline-eof $
+    -mios-simulator-version-min=6.0 -arch i386 -Wall -Wendif-labels -Wextra $
+    -Wno-unused-parameter -Wno-missing-field-initializers -Wheader-hygiene $
+    -Wno-c++11-narrowing -Wno-char-subscripts $
+    -Wno-unneeded-internal-declaration -Wno-covered-switch-default $
+    -Wstring-conversion -Wno-deprecated-register -Wno-absolute-value
+cflags_c = -std=c99 -fcolor-diagnostics -fstack-protector-all
+cflags_cc = -std=gnu++0x -fno-rtti -fno-exceptions $
+    -fvisibility-inlines-hidden -fno-threadsafe-statics -fcolor-diagnostics $
+    -fstack-protector-all
+cflags_objc = $cflags_c -Wobjc-missing-property-synthesis
+cflags_objcc = $cflags_cc -Wobjc-missing-property-synthesis $
+    -fobjc-call-cxx-cdtors
+
+build $
+    obj/webrtc/voice_engine/test/auto_test/voe_auto_test.automated_mode.o: $
+    cxx ../../webrtc/voice_engine/test/auto_test/automated_mode.cc || $
+    obj/webrtc/voice_engine/voe_auto_test.compile_depends.stamp
+build $
+    obj/webrtc/voice_engine/test/auto_test/extended/voe_auto_test.agc_config_test.o: $
+    cxx $
+    ../../webrtc/voice_engine/test/auto_test/extended/agc_config_test.cc || $
+    obj/webrtc/voice_engine/voe_auto_test.compile_depends.stamp
+build $
+    obj/webrtc/voice_engine/test/auto_test/extended/voe_auto_test.ec_metrics_test.o: $
+    cxx $
+    ../../webrtc/voice_engine/test/auto_test/extended/ec_metrics_test.cc || $
+    obj/webrtc/voice_engine/voe_auto_test.compile_depends.stamp
+build $
+    obj/webrtc/voice_engine/test/auto_test/fakes/voe_auto_test.fake_external_transport.o: $
+    cxx $
+    ../../webrtc/voice_engine/test/auto_test/fakes/fake_external_transport.cc $
+    || obj/webrtc/voice_engine/voe_auto_test.compile_depends.stamp
+build $
+    obj/webrtc/voice_engine/test/auto_test/fixtures/voe_auto_test.after_initialization_fixture.o: $
+    cxx $
+    ../../webrtc/voice_engine/test/auto_test/fixtures/after_initialization_fixture.cc $
+    || obj/webrtc/voice_engine/voe_auto_test.compile_depends.stamp
+build $
+    obj/webrtc/voice_engine/test/auto_test/fixtures/voe_auto_test.after_streaming_fixture.o: $
+    cxx $
+    ../../webrtc/voice_engine/test/auto_test/fixtures/after_streaming_fixture.cc $
+    || obj/webrtc/voice_engine/voe_auto_test.compile_depends.stamp
+build $
+    obj/webrtc/voice_engine/test/auto_test/fixtures/voe_auto_test.before_initialization_fixture.o: $
+    cxx $
+    ../../webrtc/voice_engine/test/auto_test/fixtures/before_initialization_fixture.cc $
+    || obj/webrtc/voice_engine/voe_auto_test.compile_depends.stamp
+build $
+    obj/webrtc/voice_engine/test/auto_test/standard/voe_auto_test.audio_processing_test.o: $
+    cxx $
+    ../../webrtc/voice_engine/test/auto_test/standard/audio_processing_test.cc $
+    || obj/webrtc/voice_engine/voe_auto_test.compile_depends.stamp
+build $
+    obj/webrtc/voice_engine/test/auto_test/standard/voe_auto_test.codec_before_streaming_test.o: $
+    cxx $
+    ../../webrtc/voice_engine/test/auto_test/standard/codec_before_streaming_test.cc $
+    || obj/webrtc/voice_engine/voe_auto_test.compile_depends.stamp
+build $
+    obj/webrtc/voice_engine/test/auto_test/standard/voe_auto_test.codec_test.o: $
+    cxx ../../webrtc/voice_engine/test/auto_test/standard/codec_test.cc || $
+    obj/webrtc/voice_engine/voe_auto_test.compile_depends.stamp
+build $
+    obj/webrtc/voice_engine/test/auto_test/standard/voe_auto_test.dtmf_test.o: $
+    cxx ../../webrtc/voice_engine/test/auto_test/standard/dtmf_test.cc || $
+    obj/webrtc/voice_engine/voe_auto_test.compile_depends.stamp
+build $
+    obj/webrtc/voice_engine/test/auto_test/standard/voe_auto_test.external_media_test.o: $
+    cxx $
+    ../../webrtc/voice_engine/test/auto_test/standard/external_media_test.cc $
+    || obj/webrtc/voice_engine/voe_auto_test.compile_depends.stamp
+build $
+    obj/webrtc/voice_engine/test/auto_test/standard/voe_auto_test.file_before_streaming_test.o: $
+    cxx $
+    ../../webrtc/voice_engine/test/auto_test/standard/file_before_streaming_test.cc $
+    || obj/webrtc/voice_engine/voe_auto_test.compile_depends.stamp
+build $
+    obj/webrtc/voice_engine/test/auto_test/standard/voe_auto_test.file_test.o: $
+    cxx ../../webrtc/voice_engine/test/auto_test/standard/file_test.cc || $
+    obj/webrtc/voice_engine/voe_auto_test.compile_depends.stamp
+build $
+    obj/webrtc/voice_engine/test/auto_test/standard/voe_auto_test.hardware_before_initializing_test.o: $
+    cxx $
+    ../../webrtc/voice_engine/test/auto_test/standard/hardware_before_initializing_test.cc $
+    || obj/webrtc/voice_engine/voe_auto_test.compile_depends.stamp
+build $
+    obj/webrtc/voice_engine/test/auto_test/standard/voe_auto_test.hardware_before_streaming_test.o: $
+    cxx $
+    ../../webrtc/voice_engine/test/auto_test/standard/hardware_before_streaming_test.cc $
+    || obj/webrtc/voice_engine/voe_auto_test.compile_depends.stamp
+build $
+    obj/webrtc/voice_engine/test/auto_test/standard/voe_auto_test.hardware_test.o: $
+    cxx ../../webrtc/voice_engine/test/auto_test/standard/hardware_test.cc $
+    || obj/webrtc/voice_engine/voe_auto_test.compile_depends.stamp
+build $
+    obj/webrtc/voice_engine/test/auto_test/standard/voe_auto_test.manual_hold_test.o: $
+    cxx $
+    ../../webrtc/voice_engine/test/auto_test/standard/manual_hold_test.cc $
+    || obj/webrtc/voice_engine/voe_auto_test.compile_depends.stamp
+build $
+    obj/webrtc/voice_engine/test/auto_test/standard/voe_auto_test.mixing_test.o: $
+    cxx ../../webrtc/voice_engine/test/auto_test/standard/mixing_test.cc || $
+    obj/webrtc/voice_engine/voe_auto_test.compile_depends.stamp
+build $
+    obj/webrtc/voice_engine/test/auto_test/standard/voe_auto_test.neteq_stats_test.o: $
+    cxx $
+    ../../webrtc/voice_engine/test/auto_test/standard/neteq_stats_test.cc $
+    || obj/webrtc/voice_engine/voe_auto_test.compile_depends.stamp
+build $
+    obj/webrtc/voice_engine/test/auto_test/standard/voe_auto_test.neteq_test.o: $
+    cxx ../../webrtc/voice_engine/test/auto_test/standard/neteq_test.cc || $
+    obj/webrtc/voice_engine/voe_auto_test.compile_depends.stamp
+build $
+    obj/webrtc/voice_engine/test/auto_test/standard/voe_auto_test.network_test.o: $
+    cxx ../../webrtc/voice_engine/test/auto_test/standard/network_test.cc $
+    || obj/webrtc/voice_engine/voe_auto_test.compile_depends.stamp
+build $
+    obj/webrtc/voice_engine/test/auto_test/standard/voe_auto_test.rtp_rtcp_before_streaming_test.o: $
+    cxx $
+    ../../webrtc/voice_engine/test/auto_test/standard/rtp_rtcp_before_streaming_test.cc $
+    || obj/webrtc/voice_engine/voe_auto_test.compile_depends.stamp
+build $
+    obj/webrtc/voice_engine/test/auto_test/standard/voe_auto_test.rtp_rtcp_extensions.o: $
+    cxx $
+    ../../webrtc/voice_engine/test/auto_test/standard/rtp_rtcp_extensions.cc $
+    || obj/webrtc/voice_engine/voe_auto_test.compile_depends.stamp
+build $
+    obj/webrtc/voice_engine/test/auto_test/standard/voe_auto_test.rtp_rtcp_test.o: $
+    cxx ../../webrtc/voice_engine/test/auto_test/standard/rtp_rtcp_test.cc $
+    || obj/webrtc/voice_engine/voe_auto_test.compile_depends.stamp
+build $
+    obj/webrtc/voice_engine/test/auto_test/standard/voe_auto_test.voe_base_misc_test.o: $
+    cxx $
+    ../../webrtc/voice_engine/test/auto_test/standard/voe_base_misc_test.cc $
+    || obj/webrtc/voice_engine/voe_auto_test.compile_depends.stamp
+build $
+    obj/webrtc/voice_engine/test/auto_test/standard/voe_auto_test.video_sync_test.o: $
+    cxx $
+    ../../webrtc/voice_engine/test/auto_test/standard/video_sync_test.cc || $
+    obj/webrtc/voice_engine/voe_auto_test.compile_depends.stamp
+build $
+    obj/webrtc/voice_engine/test/auto_test/standard/voe_auto_test.volume_test.o: $
+    cxx ../../webrtc/voice_engine/test/auto_test/standard/volume_test.cc || $
+    obj/webrtc/voice_engine/voe_auto_test.compile_depends.stamp
+build $
+    obj/webrtc/voice_engine/test/auto_test/voe_auto_test.resource_manager.o: $
+    cxx ../../webrtc/voice_engine/test/auto_test/resource_manager.cc || $
+    obj/webrtc/voice_engine/voe_auto_test.compile_depends.stamp
+build obj/webrtc/voice_engine/test/auto_test/voe_auto_test.voe_cpu_test.o: $
+    cxx ../../webrtc/voice_engine/test/auto_test/voe_cpu_test.cc || $
+    obj/webrtc/voice_engine/voe_auto_test.compile_depends.stamp
+build $
+    obj/webrtc/voice_engine/test/auto_test/voe_auto_test.voe_standard_test.o: $
+    cxx ../../webrtc/voice_engine/test/auto_test/voe_standard_test.cc || $
+    obj/webrtc/voice_engine/voe_auto_test.compile_depends.stamp
+build $
+    obj/webrtc/voice_engine/test/auto_test/voe_auto_test.voe_stress_test.o: $
+    cxx ../../webrtc/voice_engine/test/auto_test/voe_stress_test.cc || $
+    obj/webrtc/voice_engine/voe_auto_test.compile_depends.stamp
+
+ldflags = -Wl,-search_paths_first -mios-simulator-version-min=6.0 -isysroot $
+    /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator7.1.sdk $
+    -arch i386 -L.
+libs = -framework AudioToolbox -framework CoreAudio -framework Foundation
+build voe_auto_test.app/voe_auto_test: link $
+    obj/webrtc/voice_engine/test/auto_test/voe_auto_test.automated_mode.o $
+    obj/webrtc/voice_engine/test/auto_test/extended/voe_auto_test.agc_config_test.o $
+    obj/webrtc/voice_engine/test/auto_test/extended/voe_auto_test.ec_metrics_test.o $
+    obj/webrtc/voice_engine/test/auto_test/fakes/voe_auto_test.fake_external_transport.o $
+    obj/webrtc/voice_engine/test/auto_test/fixtures/voe_auto_test.after_initialization_fixture.o $
+    obj/webrtc/voice_engine/test/auto_test/fixtures/voe_auto_test.after_streaming_fixture.o $
+    obj/webrtc/voice_engine/test/auto_test/fixtures/voe_auto_test.before_initialization_fixture.o $
+    obj/webrtc/voice_engine/test/auto_test/standard/voe_auto_test.audio_processing_test.o $
+    obj/webrtc/voice_engine/test/auto_test/standard/voe_auto_test.codec_before_streaming_test.o $
+    obj/webrtc/voice_engine/test/auto_test/standard/voe_auto_test.codec_test.o $
+    obj/webrtc/voice_engine/test/auto_test/standard/voe_auto_test.dtmf_test.o $
+    obj/webrtc/voice_engine/test/auto_test/standard/voe_auto_test.external_media_test.o $
+    obj/webrtc/voice_engine/test/auto_test/standard/voe_auto_test.file_before_streaming_test.o $
+    obj/webrtc/voice_engine/test/auto_test/standard/voe_auto_test.file_test.o $
+    obj/webrtc/voice_engine/test/auto_test/standard/voe_auto_test.hardware_before_initializing_test.o $
+    obj/webrtc/voice_engine/test/auto_test/standard/voe_auto_test.hardware_before_streaming_test.o $
+    obj/webrtc/voice_engine/test/auto_test/standard/voe_auto_test.hardware_test.o $
+    obj/webrtc/voice_engine/test/auto_test/standard/voe_auto_test.manual_hold_test.o $
+    obj/webrtc/voice_engine/test/auto_test/standard/voe_auto_test.mixing_test.o $
+    obj/webrtc/voice_engine/test/auto_test/standard/voe_auto_test.neteq_stats_test.o $
+    obj/webrtc/voice_engine/test/auto_test/standard/voe_auto_test.neteq_test.o $
+    obj/webrtc/voice_engine/test/auto_test/standard/voe_auto_test.network_test.o $
+    obj/webrtc/voice_engine/test/auto_test/standard/voe_auto_test.rtp_rtcp_before_streaming_test.o $
+    obj/webrtc/voice_engine/test/auto_test/standard/voe_auto_test.rtp_rtcp_extensions.o $
+    obj/webrtc/voice_engine/test/auto_test/standard/voe_auto_test.rtp_rtcp_test.o $
+    obj/webrtc/voice_engine/test/auto_test/standard/voe_auto_test.voe_base_misc_test.o $
+    obj/webrtc/voice_engine/test/auto_test/standard/voe_auto_test.video_sync_test.o $
+    obj/webrtc/voice_engine/test/auto_test/standard/voe_auto_test.volume_test.o $
+    obj/webrtc/voice_engine/test/auto_test/voe_auto_test.resource_manager.o $
+    obj/webrtc/voice_engine/test/auto_test/voe_auto_test.voe_cpu_test.o $
+    obj/webrtc/voice_engine/test/auto_test/voe_auto_test.voe_standard_test.o $
+    obj/webrtc/voice_engine/test/auto_test/voe_auto_test.voe_stress_test.o $
+    libvoice_engine.a libgmock.a libgtest.a libgflags.a $
+    libsystem_wrappers.a libchannel_transport.a libtest_support.a $
+    libcommon_audio.a libcommon_audio_neon.a libaudio_coding_module.a $
+    libCNG.a libG711.a libG722.a libiLBC.a libiSAC.a libiSACFix.a $
+    libisac_neon.a libPCM16B.a libNetEq.a libwebrtc_opus.a libopus.a $
+    libacm2.a libNetEq4.a libaudio_conference_mixer.a libaudio_processing.a $
+    libaudio_processing_neon.a lib_core_neon_offsets.a libwebrtc_utility.a $
+    libmedia_file.a libwebrtc_video_coding.a libwebrtc_i420.a $
+    libcommon_video.a libyuv.a libyuv_neon.a libvideo_coding_utility.a $
+    libwebrtc_vp8.a libvpx.a libvpx_asm_offsets_vp8.a $
+    libvpx_asm_offsets_vpx_scale.a libaudio_device.a librtp_rtcp.a $
+    libpaced_sender.a libremote_bitrate_estimator.a librbe_components.a | $
+    obj/webrtc/modules/audio_processing/gen_nsx_core_neon_offsets_h.actions_rules_copies.stamp $
+    obj/webrtc/modules/audio_processing/gen_aecm_core_neon_offsets_h.actions_rules_copies.stamp $
+    obj/third_party/libvpx/gen_asm_offsets_vpx_scale.actions_rules_copies.stamp $
+    obj/third_party/libvpx/gen_asm_offsets_vp8.actions_rules_copies.stamp
+  ld = $ldxx
+build voe_auto_test.app: stamp voe_auto_test.app/Default-568h@2x.png $
+    voe_auto_test.app/Info.plist voe_auto_test.app/voe_auto_test

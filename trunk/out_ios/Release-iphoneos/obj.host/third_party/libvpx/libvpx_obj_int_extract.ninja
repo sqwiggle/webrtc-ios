@@ -1,0 +1,61 @@
+ar = $ar_host
+cc = $cc_host
+cxx = $cxx_host
+ld = $ld_host
+ldxx = $ldxx_host
+defines = -DV8_DEPRECATION_WARNINGS -DBLINK_SCALE_FILTERS_AT_RECORD_TIME $
+    -DDISABLE_NACL -DCHROMIUM_BUILD -DUSE_LIBJPEG_TURBO=1 $
+    -DENABLE_CONFIGURATION_POLICY $
+    -DDISCARDABLE_MEMORY_ALWAYS_SUPPORTED_NATIVELY $
+    -DSYSTEM_NATIVELY_SIGNALS_MEMORY_PRESSURE -DENABLE_EGLIMAGE=1 $
+    -DCLD_VERSION=1 -DENABLE_SPELLCHECK=1 -DDISABLE_FTP_SUPPORT=1 -DNDEBUG $
+    -DNVALGRIND -DDYNAMIC_ANNOTATIONS_ENABLED=0 -DNS_BLOCK_ASSERTIONS=1
+includes = -I../../third_party/libvpx/source/config/linux/arm-neon $
+    -I../../third_party/libvpx/source/config $
+    -I../../third_party/libvpx/source/libvpx
+cflags = -isysroot $
+    /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.8.sdk $
+    -Os -gdwarf-2 -fvisibility=hidden -Wnewline-eof $
+    -mmacosx-version-min=10.6 -arch x86_64 -Wendif-labels $
+    -Wno-unused-parameter -Wno-missing-field-initializers -Wheader-hygiene $
+    -Wno-c++11-narrowing -Wno-char-subscripts $
+    -Wno-unneeded-internal-declaration -Wno-covered-switch-default $
+    -Wstring-conversion -Wno-deprecated-register -Wno-absolute-value
+cflags_c = -std=c99 -Xclang -load -Xclang $
+    /Users/cwebb/Sqwiggle/webrtc/trunk/tools/clang/scripts/../../../third_party/llvm-build/Release+Asserts/lib/libFindBadConstructs.dylib $
+    -Xclang -add-plugin -Xclang find-bad-constructs -fcolor-diagnostics
+cflags_cc = -std=gnu++0x -fno-rtti -fno-exceptions $
+    -fvisibility-inlines-hidden -fno-threadsafe-statics -Xclang -load $
+    -Xclang $
+    /Users/cwebb/Sqwiggle/webrtc/trunk/tools/clang/scripts/../../../third_party/llvm-build/Release+Asserts/lib/libFindBadConstructs.dylib $
+    -Xclang -add-plugin -Xclang find-bad-constructs -fcolor-diagnostics
+cflags_objc = $cflags_c
+cflags_objcc = $cflags_cc -fobjc-call-cxx-cdtors
+
+build $
+    obj.host/third_party/libvpx/source/libvpx/build/make/libvpx_obj_int_extract.obj_int_extract.o: $
+    cc ../../third_party/libvpx/source/libvpx/build/make/obj_int_extract.c
+
+ldflags = -Wl,-search_paths_first -Wl,-dead_strip -mmacosx-version-min=10.6 $
+    -isysroot $
+    /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.8.sdk $
+    -arch x86_64 -L.
+libs = 
+build libvpx_obj_int_extract: link $
+    obj.host/third_party/libvpx/source/libvpx/build/make/libvpx_obj_int_extract.obj_int_extract.o
+  postbuilds = $ && (export $
+      BUILT_PRODUCTS_DIR=/Users/cwebb/Sqwiggle/webrtc/trunk/out_ios/Release-iphoneos; $
+      export CONFIGURATION=Release-iphoneos; export $
+      EXECUTABLE_NAME=libvpx_obj_int_extract; export $
+      EXECUTABLE_PATH=libvpx_obj_int_extract; export $
+      FULL_PRODUCT_NAME=libvpx_obj_int_extract; export $
+      PRODUCT_NAME=libvpx_obj_int_extract; export $
+      PRODUCT_TYPE=com.apple.product-type.tool; export $
+      SDKROOT=/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.8.sdk; $
+      export $
+      SRCROOT=/Users/cwebb/Sqwiggle/webrtc/trunk/out_ios/Release-iphoneos/../../third_party/libvpx; $
+      export SOURCE_ROOT="$${SRCROOT}"; export $
+      TARGET_BUILD_DIR=/Users/cwebb/Sqwiggle/webrtc/trunk/out_ios/Release-iphoneos; $
+      export TEMP_DIR="$${TMPDIR}"; (cd ../../third_party/libvpx && strip  $
+      ../../out_ios/Release-iphoneos/libvpx_obj_int_extract); G=$$?; ((exit $
+      $$G) || rm -rf libvpx_obj_int_extract) && exit $$G)

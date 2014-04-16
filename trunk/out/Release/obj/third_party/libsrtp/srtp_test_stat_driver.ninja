@@ -1,0 +1,72 @@
+defines = -DHAVE_STDLIB_H -DHAVE_STRING_H -DV8_DEPRECATION_WARNINGS $
+    -DBLINK_SCALE_FILTERS_AT_RECORD_TIME -DHAVE_INT16_T -DHAVE_INT32_T $
+    -DHAVE_INT8_T -DHAVE_UINT16_T -DHAVE_UINT32_T -DHAVE_UINT64_T $
+    -DHAVE_UINT8_T -DHAVE_STDINT_H -DHAVE_INTTYPES_H -DHAVE_NETINET_IN_H $
+    -DINLINE=inline -DCPU_CISC -DCHROMIUM_BUILD -DUSE_LIBJPEG_TURBO=1 $
+    -DENABLE_ONE_CLICK_SIGNIN -DENABLE_REMOTING=1 -DENABLE_WEBRTC=1 $
+    -DENABLE_PEPPER_CDMS -DENABLE_CONFIGURATION_POLICY $
+    -DENABLE_INPUT_SPEECH -DENABLE_NOTIFICATIONS -DENABLE_HIDPI=1 $
+    -DDISCARDABLE_MEMORY_ALWAYS_SUPPORTED_NATIVELY $
+    -DSYSTEM_NATIVELY_SIGNALS_MEMORY_PRESSURE -DENABLE_EGLIMAGE=1 $
+    -DENABLE_TASK_MANAGER=1 -DENABLE_EXTENSIONS=1 $
+    -DENABLE_PLUGIN_INSTALLATION=1 -DENABLE_PLUGINS=1 $
+    -DENABLE_SESSION_SERVICE=1 -DENABLE_THEMES=1 -DENABLE_AUTOFILL_DIALOG=1 $
+    -DENABLE_BACKGROUND=1 -DENABLE_AUTOMATION=1 -DENABLE_GOOGLE_NOW=1 $
+    -DCLD_VERSION=2 -DENABLE_FULL_PRINTING=1 -DENABLE_PRINTING=1 $
+    -DENABLE_SPELLCHECK=1 -DENABLE_CAPTIVE_PORTAL_DETECTION=1 $
+    -DENABLE_APP_LIST=1 -DENABLE_SETTINGS_APP=1 -DENABLE_MANAGED_USERS=1 $
+    -DENABLE_SERVICE_DISCOVERY=1 -DNDEBUG -DNVALGRIND $
+    -DDYNAMIC_ANNOTATIONS_ENABLED=0
+includes = -I../../third_party/libsrtp/config $
+    -I../../third_party/libsrtp/srtp/include $
+    -I../../third_party/libsrtp/srtp/crypto/include
+cflags = -isysroot $
+    /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.8.sdk $
+    -O3 -gdwarf-2 -fvisibility=hidden -Werror -Wnewline-eof $
+    -mmacosx-version-min=10.6 -arch i386 -Wendif-labels $
+    -Wno-unused-parameter -Wno-missing-field-initializers -Wheader-hygiene $
+    -Wno-c++11-narrowing -Wno-char-subscripts $
+    -Wno-unneeded-internal-declaration -Wno-covered-switch-default $
+    -Wstring-conversion -Wno-deprecated-register -Wno-absolute-value
+cflags_c = -std=c99 -Xclang -load -Xclang $
+    /Users/cwebb/Sqwiggle/webrtc/trunk/tools/clang/scripts/../../../third_party/llvm-build/Release+Asserts/lib/libFindBadConstructs.dylib $
+    -Xclang -add-plugin -Xclang find-bad-constructs -fcolor-diagnostics $
+    -fno-strict-aliasing
+cflags_cc = -std=gnu++11 -fno-rtti -fno-exceptions $
+    -fvisibility-inlines-hidden -fno-threadsafe-statics -Xclang -load $
+    -Xclang $
+    /Users/cwebb/Sqwiggle/webrtc/trunk/tools/clang/scripts/../../../third_party/llvm-build/Release+Asserts/lib/libFindBadConstructs.dylib $
+    -Xclang -add-plugin -Xclang find-bad-constructs -fcolor-diagnostics $
+    -fno-strict-aliasing
+cflags_objc = $cflags_c -Wobjc-missing-property-synthesis
+cflags_objcc = $cflags_cc -Wobjc-missing-property-synthesis $
+    -fobjc-call-cxx-cdtors
+
+build $
+    obj/third_party/libsrtp/srtp/crypto/test/srtp_test_stat_driver.stat_driver.o: $
+    cc ../../third_party/libsrtp/srtp/crypto/test/stat_driver.c
+
+ldflags = -Wl,-search_paths_first -Wl,-pie -Wl,-dead_strip $
+    -mmacosx-version-min=10.6 -isysroot $
+    /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.8.sdk $
+    -arch i386 -L.
+libs = 
+build srtp_test_stat_driver: link $
+    obj/third_party/libsrtp/srtp/crypto/test/srtp_test_stat_driver.stat_driver.o $
+    libsrtp.a
+  postbuilds = $ && (export $
+      BUILT_PRODUCTS_DIR=/Users/cwebb/Sqwiggle/webrtc/trunk/out/Release; $
+      export CONFIGURATION=Release; export $
+      EXECUTABLE_NAME=srtp_test_stat_driver; export $
+      EXECUTABLE_PATH=srtp_test_stat_driver; export $
+      FULL_PRODUCT_NAME=srtp_test_stat_driver; export $
+      PRODUCT_NAME=srtp_test_stat_driver; export $
+      PRODUCT_TYPE=com.apple.product-type.tool; export $
+      SDKROOT=/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.8.sdk; $
+      export $
+      SRCROOT=/Users/cwebb/Sqwiggle/webrtc/trunk/out/Release/../../third_party/libsrtp; $
+      export SOURCE_ROOT="$${SRCROOT}"; export $
+      TARGET_BUILD_DIR=/Users/cwebb/Sqwiggle/webrtc/trunk/out/Release; $
+      export TEMP_DIR="$${TMPDIR}"; (cd ../../third_party/libsrtp && $
+      ../../build/mac/change_mach_o_flags_from_xcode.sh); G=$$?; ((exit $
+      $$G) || rm -rf srtp_test_stat_driver) && exit $$G)

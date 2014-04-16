@@ -1,0 +1,129 @@
+defines = -DV8_DEPRECATION_WARNINGS -DBLINK_SCALE_FILTERS_AT_RECORD_TIME $
+    -DDISABLE_NACL -DCHROMIUM_BUILD -DUSE_LIBJPEG_TURBO=1 $
+    -DENABLE_CONFIGURATION_POLICY $
+    -DDISCARDABLE_MEMORY_ALWAYS_SUPPORTED_NATIVELY $
+    -DSYSTEM_NATIVELY_SIGNALS_MEMORY_PRESSURE -DENABLE_EGLIMAGE=1 $
+    -DCLD_VERSION=1 -DENABLE_SPELLCHECK=1 -DDISABLE_FTP_SUPPORT=1 $
+    -DWEBRTC_MODULE_UTILITY_VIDEO -DWEBRTC_ARCH_ARM -DWEBRTC_ARCH_ARM_V7 $
+    -DWEBRTC_ARCH_ARM_NEON -DWEBRTC_POSIX -DWEBRTC_MAC -DWEBRTC_IOS $
+    -D__STDC_CONSTANT_MACROS -D__STDC_FORMAT_MACROS -DNDEBUG -DNVALGRIND $
+    -DDYNAMIC_ANNOTATIONS_ENABLED=0 -DNS_BLOCK_ASSERTIONS=1 $
+    -D_FORTIFY_SOURCE=2
+includes = -I../.. -I../.. -I../../webrtc/common_video/interface $
+    -I../../webrtc/common_video/libyuv/include $
+    -I../../webrtc/system_wrappers/interface
+cflags = -isysroot $
+    /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS7.1.sdk $
+    -Os -gdwarf-2 -fvisibility=hidden -Werror -Wnewline-eof $
+    -miphoneos-version-min=6.0 -arch armv7 -Wall -Wendif-labels -Wextra $
+    -Wno-unused-parameter -Wno-missing-field-initializers -Wheader-hygiene $
+    -Wno-c++11-narrowing -Wno-char-subscripts $
+    -Wno-unneeded-internal-declaration -Wno-covered-switch-default $
+    -Wstring-conversion -Wno-deprecated-register -Wno-absolute-value
+cflags_c = -std=c99 -fcolor-diagnostics
+cflags_cc = -std=gnu++0x -fno-rtti -fno-exceptions $
+    -fvisibility-inlines-hidden -fno-threadsafe-statics -fcolor-diagnostics
+cflags_objc = $cflags_c -Wobjc-missing-property-synthesis
+cflags_objcc = $cflags_cc -Wobjc-missing-property-synthesis $
+    -fobjc-call-cxx-cdtors
+
+build $
+    obj/webrtc/modules/video_coding/main/source/webrtc_video_coding.codec_database.o: $
+    cxx ../../webrtc/modules/video_coding/main/source/codec_database.cc
+build $
+    obj/webrtc/modules/video_coding/main/source/webrtc_video_coding.codec_timer.o: $
+    cxx ../../webrtc/modules/video_coding/main/source/codec_timer.cc
+build $
+    obj/webrtc/modules/video_coding/main/source/webrtc_video_coding.content_metrics_processing.o: $
+    cxx $
+    ../../webrtc/modules/video_coding/main/source/content_metrics_processing.cc
+build $
+    obj/webrtc/modules/video_coding/main/source/webrtc_video_coding.decoding_state.o: $
+    cxx ../../webrtc/modules/video_coding/main/source/decoding_state.cc
+build $
+    obj/webrtc/modules/video_coding/main/source/webrtc_video_coding.encoded_frame.o: $
+    cxx ../../webrtc/modules/video_coding/main/source/encoded_frame.cc
+build $
+    obj/webrtc/modules/video_coding/main/source/webrtc_video_coding.frame_buffer.o: $
+    cxx ../../webrtc/modules/video_coding/main/source/frame_buffer.cc
+build $
+    obj/webrtc/modules/video_coding/main/source/webrtc_video_coding.generic_decoder.o: $
+    cxx ../../webrtc/modules/video_coding/main/source/generic_decoder.cc
+build $
+    obj/webrtc/modules/video_coding/main/source/webrtc_video_coding.generic_encoder.o: $
+    cxx ../../webrtc/modules/video_coding/main/source/generic_encoder.cc
+build $
+    obj/webrtc/modules/video_coding/main/source/webrtc_video_coding.inter_frame_delay.o: $
+    cxx ../../webrtc/modules/video_coding/main/source/inter_frame_delay.cc
+build $
+    obj/webrtc/modules/video_coding/main/source/webrtc_video_coding.jitter_buffer.o: $
+    cxx ../../webrtc/modules/video_coding/main/source/jitter_buffer.cc
+build $
+    obj/webrtc/modules/video_coding/main/source/webrtc_video_coding.jitter_estimator.o: $
+    cxx ../../webrtc/modules/video_coding/main/source/jitter_estimator.cc
+build $
+    obj/webrtc/modules/video_coding/main/source/webrtc_video_coding.media_opt_util.o: $
+    cxx ../../webrtc/modules/video_coding/main/source/media_opt_util.cc
+build $
+    obj/webrtc/modules/video_coding/main/source/webrtc_video_coding.media_optimization.o: $
+    cxx ../../webrtc/modules/video_coding/main/source/media_optimization.cc
+build $
+    obj/webrtc/modules/video_coding/main/source/webrtc_video_coding.packet.o: $
+    cxx ../../webrtc/modules/video_coding/main/source/packet.cc
+build $
+    obj/webrtc/modules/video_coding/main/source/webrtc_video_coding.qm_select.o: $
+    cxx ../../webrtc/modules/video_coding/main/source/qm_select.cc
+build $
+    obj/webrtc/modules/video_coding/main/source/webrtc_video_coding.receiver.o: $
+    cxx ../../webrtc/modules/video_coding/main/source/receiver.cc
+build $
+    obj/webrtc/modules/video_coding/main/source/webrtc_video_coding.rtt_filter.o: $
+    cxx ../../webrtc/modules/video_coding/main/source/rtt_filter.cc
+build $
+    obj/webrtc/modules/video_coding/main/source/webrtc_video_coding.session_info.o: $
+    cxx ../../webrtc/modules/video_coding/main/source/session_info.cc
+build $
+    obj/webrtc/modules/video_coding/main/source/webrtc_video_coding.timestamp_extrapolator.o: $
+    cxx $
+    ../../webrtc/modules/video_coding/main/source/timestamp_extrapolator.cc
+build $
+    obj/webrtc/modules/video_coding/main/source/webrtc_video_coding.timestamp_map.o: $
+    cxx ../../webrtc/modules/video_coding/main/source/timestamp_map.cc
+build $
+    obj/webrtc/modules/video_coding/main/source/webrtc_video_coding.timing.o: $
+    cxx ../../webrtc/modules/video_coding/main/source/timing.cc
+build $
+    obj/webrtc/modules/video_coding/main/source/webrtc_video_coding.video_coding_impl.o: $
+    cxx ../../webrtc/modules/video_coding/main/source/video_coding_impl.cc
+build $
+    obj/webrtc/modules/video_coding/main/source/webrtc_video_coding.video_sender.o: $
+    cxx ../../webrtc/modules/video_coding/main/source/video_sender.cc
+build $
+    obj/webrtc/modules/video_coding/main/source/webrtc_video_coding.video_receiver.o: $
+    cxx ../../webrtc/modules/video_coding/main/source/video_receiver.cc
+
+build libwebrtc_video_coding.a: alink $
+    obj/webrtc/modules/video_coding/main/source/webrtc_video_coding.codec_database.o $
+    obj/webrtc/modules/video_coding/main/source/webrtc_video_coding.codec_timer.o $
+    obj/webrtc/modules/video_coding/main/source/webrtc_video_coding.content_metrics_processing.o $
+    obj/webrtc/modules/video_coding/main/source/webrtc_video_coding.decoding_state.o $
+    obj/webrtc/modules/video_coding/main/source/webrtc_video_coding.encoded_frame.o $
+    obj/webrtc/modules/video_coding/main/source/webrtc_video_coding.frame_buffer.o $
+    obj/webrtc/modules/video_coding/main/source/webrtc_video_coding.generic_decoder.o $
+    obj/webrtc/modules/video_coding/main/source/webrtc_video_coding.generic_encoder.o $
+    obj/webrtc/modules/video_coding/main/source/webrtc_video_coding.inter_frame_delay.o $
+    obj/webrtc/modules/video_coding/main/source/webrtc_video_coding.jitter_buffer.o $
+    obj/webrtc/modules/video_coding/main/source/webrtc_video_coding.jitter_estimator.o $
+    obj/webrtc/modules/video_coding/main/source/webrtc_video_coding.media_opt_util.o $
+    obj/webrtc/modules/video_coding/main/source/webrtc_video_coding.media_optimization.o $
+    obj/webrtc/modules/video_coding/main/source/webrtc_video_coding.packet.o $
+    obj/webrtc/modules/video_coding/main/source/webrtc_video_coding.qm_select.o $
+    obj/webrtc/modules/video_coding/main/source/webrtc_video_coding.receiver.o $
+    obj/webrtc/modules/video_coding/main/source/webrtc_video_coding.rtt_filter.o $
+    obj/webrtc/modules/video_coding/main/source/webrtc_video_coding.session_info.o $
+    obj/webrtc/modules/video_coding/main/source/webrtc_video_coding.timestamp_extrapolator.o $
+    obj/webrtc/modules/video_coding/main/source/webrtc_video_coding.timestamp_map.o $
+    obj/webrtc/modules/video_coding/main/source/webrtc_video_coding.timing.o $
+    obj/webrtc/modules/video_coding/main/source/webrtc_video_coding.video_coding_impl.o $
+    obj/webrtc/modules/video_coding/main/source/webrtc_video_coding.video_sender.o $
+    obj/webrtc/modules/video_coding/main/source/webrtc_video_coding.video_receiver.o

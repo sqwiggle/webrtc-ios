@@ -1,0 +1,69 @@
+defines = -DV8_DEPRECATION_WARNINGS -DBLINK_SCALE_FILTERS_AT_RECORD_TIME $
+    -DDISABLE_NACL -DCHROMIUM_BUILD -DUSE_LIBJPEG_TURBO=1 $
+    -DENABLE_CONFIGURATION_POLICY $
+    -DDISCARDABLE_MEMORY_ALWAYS_SUPPORTED_NATIVELY $
+    -DSYSTEM_NATIVELY_SIGNALS_MEMORY_PRESSURE -DENABLE_EGLIMAGE=1 $
+    -DCLD_VERSION=1 -DENABLE_SPELLCHECK=1 -DDISABLE_FTP_SUPPORT=1 $
+    -DWEBRTC_MODULE_UTILITY_VIDEO -DWEBRTC_ARCH_ARM -DWEBRTC_ARCH_ARM_V7 $
+    -DWEBRTC_ARCH_ARM_NEON -DWEBRTC_POSIX -DWEBRTC_MAC -DWEBRTC_IOS $
+    -DGTEST_HAS_POSIX_RE=0 -DUNIT_TEST -DGTEST_HAS_RTTI=0 $
+    -D__STDC_CONSTANT_MACROS -D__STDC_FORMAT_MACROS $
+    -DDYNAMIC_ANNOTATIONS_ENABLED=1 -DWTF_USE_DYNAMIC_ANNOTATIONS=1
+includes = -I../.. -I../.. -I../../webrtc/system_wrappers/interface $
+    -I../../testing/gtest/include
+cflags = -isysroot $
+    /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS7.1.sdk $
+    -O0 -gdwarf-2 -fvisibility=hidden -Werror -Wnewline-eof $
+    -miphoneos-version-min=6.0 -arch armv7 -Wall -Wendif-labels -Wextra $
+    -Wno-unused-parameter -Wno-missing-field-initializers -Wheader-hygiene $
+    -Wno-c++11-narrowing -Wno-char-subscripts $
+    -Wno-unneeded-internal-declaration -Wno-covered-switch-default $
+    -Wstring-conversion -Wno-deprecated-register -Wno-absolute-value
+cflags_c = -std=c99 -fcolor-diagnostics -fstack-protector-all
+cflags_cc = -std=gnu++0x -fno-rtti -fno-exceptions $
+    -fvisibility-inlines-hidden -fno-threadsafe-statics -fcolor-diagnostics $
+    -fstack-protector-all
+cflags_objc = $cflags_c -Wobjc-missing-property-synthesis
+cflags_objcc = $cflags_cc -Wobjc-missing-property-synthesis $
+    -fobjc-call-cxx-cdtors
+
+build $
+    obj/webrtc/video_engine/test/libvietest/helpers/libvietest.vie_fake_camera.o: $
+    cxx ../../webrtc/video_engine/test/libvietest/helpers/vie_fake_camera.cc
+build $
+    obj/webrtc/video_engine/test/libvietest/helpers/libvietest.vie_file_capture_device.o: $
+    cxx $
+    ../../webrtc/video_engine/test/libvietest/helpers/vie_file_capture_device.cc
+build $
+    obj/webrtc/video_engine/test/libvietest/helpers/libvietest.vie_to_file_renderer.o: $
+    cxx $
+    ../../webrtc/video_engine/test/libvietest/helpers/vie_to_file_renderer.cc
+build $
+    obj/webrtc/video_engine/test/libvietest/testbed/libvietest.tb_capture_device.o: $
+    cxx ../../webrtc/video_engine/test/libvietest/testbed/tb_capture_device.cc
+build $
+    obj/webrtc/video_engine/test/libvietest/testbed/libvietest.tb_external_transport.o: $
+    cxx $
+    ../../webrtc/video_engine/test/libvietest/testbed/tb_external_transport.cc
+build $
+    obj/webrtc/video_engine/test/libvietest/testbed/libvietest.tb_I420_codec.o: $
+    cxx ../../webrtc/video_engine/test/libvietest/testbed/tb_I420_codec.cc
+build $
+    obj/webrtc/video_engine/test/libvietest/testbed/libvietest.tb_interfaces.o: $
+    cxx ../../webrtc/video_engine/test/libvietest/testbed/tb_interfaces.cc
+build $
+    obj/webrtc/video_engine/test/libvietest/testbed/libvietest.tb_video_channel.o: $
+    cxx ../../webrtc/video_engine/test/libvietest/testbed/tb_video_channel.cc
+
+build libvietest.a: alink $
+    obj/webrtc/video_engine/test/libvietest/helpers/libvietest.vie_fake_camera.o $
+    obj/webrtc/video_engine/test/libvietest/helpers/libvietest.vie_file_capture_device.o $
+    obj/webrtc/video_engine/test/libvietest/helpers/libvietest.vie_to_file_renderer.o $
+    obj/webrtc/video_engine/test/libvietest/testbed/libvietest.tb_capture_device.o $
+    obj/webrtc/video_engine/test/libvietest/testbed/libvietest.tb_external_transport.o $
+    obj/webrtc/video_engine/test/libvietest/testbed/libvietest.tb_I420_codec.o $
+    obj/webrtc/video_engine/test/libvietest/testbed/libvietest.tb_interfaces.o $
+    obj/webrtc/video_engine/test/libvietest/testbed/libvietest.tb_video_channel.o
+  libtool_flags = -framework AVFoundation -framework CoreMedia -framework $
+      CoreVideo -framework UIKit -framework OpenGLES -framework QuartzCore $
+      -framework UIKit

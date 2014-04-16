@@ -1,0 +1,117 @@
+defines = -DHAVE_STDLIB_H -DHAVE_STRING_H -DV8_DEPRECATION_WARNINGS $
+    -DBLINK_SCALE_FILTERS_AT_RECORD_TIME -DHAVE_INT16_T -DHAVE_INT32_T $
+    -DHAVE_INT8_T -DHAVE_UINT16_T -DHAVE_UINT32_T -DHAVE_UINT64_T $
+    -DHAVE_UINT8_T -DHAVE_STDINT_H -DHAVE_INTTYPES_H -DHAVE_NETINET_IN_H $
+    -DINLINE=inline -DCPU_CISC -DCHROMIUM_BUILD -DUSE_LIBJPEG_TURBO=1 $
+    -DENABLE_ONE_CLICK_SIGNIN -DENABLE_REMOTING=1 -DENABLE_WEBRTC=1 $
+    -DENABLE_PEPPER_CDMS -DENABLE_CONFIGURATION_POLICY $
+    -DENABLE_INPUT_SPEECH -DENABLE_NOTIFICATIONS -DENABLE_HIDPI=1 $
+    -DDISCARDABLE_MEMORY_ALWAYS_SUPPORTED_NATIVELY $
+    -DSYSTEM_NATIVELY_SIGNALS_MEMORY_PRESSURE -DENABLE_EGLIMAGE=1 $
+    -DENABLE_TASK_MANAGER=1 -DENABLE_EXTENSIONS=1 $
+    -DENABLE_PLUGIN_INSTALLATION=1 -DENABLE_PLUGINS=1 $
+    -DENABLE_SESSION_SERVICE=1 -DENABLE_THEMES=1 -DENABLE_AUTOFILL_DIALOG=1 $
+    -DENABLE_BACKGROUND=1 -DENABLE_AUTOMATION=1 -DENABLE_GOOGLE_NOW=1 $
+    -DCLD_VERSION=2 -DENABLE_FULL_PRINTING=1 -DENABLE_PRINTING=1 $
+    -DENABLE_SPELLCHECK=1 -DENABLE_CAPTIVE_PORTAL_DETECTION=1 $
+    -DENABLE_APP_LIST=1 -DENABLE_SETTINGS_APP=1 -DENABLE_MANAGED_USERS=1 $
+    -DENABLE_SERVICE_DISCOVERY=1 -DNDEBUG -DNVALGRIND $
+    -DDYNAMIC_ANNOTATIONS_ENABLED=0
+includes = -I../../third_party/libsrtp/config $
+    -I../../third_party/libsrtp/srtp/include $
+    -I../../third_party/libsrtp/srtp/crypto/include
+cflags = -isysroot $
+    /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.8.sdk $
+    -O3 -gdwarf-2 -fvisibility=hidden -Werror -Wnewline-eof $
+    -mmacosx-version-min=10.6 -arch i386 -Wendif-labels $
+    -Wno-unused-parameter -Wno-missing-field-initializers -Wheader-hygiene $
+    -Wno-c++11-narrowing -Wno-char-subscripts $
+    -Wno-unneeded-internal-declaration -Wno-covered-switch-default $
+    -Wstring-conversion -Wno-deprecated-register -Wno-absolute-value
+cflags_c = -std=c99 -Xclang -load -Xclang $
+    /Users/cwebb/Sqwiggle/webrtc/trunk/tools/clang/scripts/../../../third_party/llvm-build/Release+Asserts/lib/libFindBadConstructs.dylib $
+    -Xclang -add-plugin -Xclang find-bad-constructs -fcolor-diagnostics $
+    -fno-strict-aliasing
+cflags_cc = -std=gnu++11 -fno-rtti -fno-exceptions $
+    -fvisibility-inlines-hidden -fno-threadsafe-statics -Xclang -load $
+    -Xclang $
+    /Users/cwebb/Sqwiggle/webrtc/trunk/tools/clang/scripts/../../../third_party/llvm-build/Release+Asserts/lib/libFindBadConstructs.dylib $
+    -Xclang -add-plugin -Xclang find-bad-constructs -fcolor-diagnostics $
+    -fno-strict-aliasing
+cflags_objc = $cflags_c -Wobjc-missing-property-synthesis
+cflags_objcc = $cflags_cc -Wobjc-missing-property-synthesis $
+    -fobjc-call-cxx-cdtors
+
+build obj/third_party/libsrtp/srtp/srtp/libsrtp.ekt.o: cc $
+    ../../third_party/libsrtp/srtp/srtp/ekt.c
+build obj/third_party/libsrtp/srtp/srtp/libsrtp.srtp.o: cc $
+    ../../third_party/libsrtp/srtp/srtp/srtp.c
+build obj/third_party/libsrtp/srtp/crypto/cipher/libsrtp.aes.o: cc $
+    ../../third_party/libsrtp/srtp/crypto/cipher/aes.c
+build obj/third_party/libsrtp/srtp/crypto/cipher/libsrtp.aes_cbc.o: cc $
+    ../../third_party/libsrtp/srtp/crypto/cipher/aes_cbc.c
+build obj/third_party/libsrtp/srtp/crypto/cipher/libsrtp.aes_icm.o: cc $
+    ../../third_party/libsrtp/srtp/crypto/cipher/aes_icm.c
+build obj/third_party/libsrtp/srtp/crypto/cipher/libsrtp.cipher.o: cc $
+    ../../third_party/libsrtp/srtp/crypto/cipher/cipher.c
+build obj/third_party/libsrtp/srtp/crypto/cipher/libsrtp.null_cipher.o: cc $
+    ../../third_party/libsrtp/srtp/crypto/cipher/null_cipher.c
+build obj/third_party/libsrtp/srtp/crypto/hash/libsrtp.auth.o: cc $
+    ../../third_party/libsrtp/srtp/crypto/hash/auth.c
+build obj/third_party/libsrtp/srtp/crypto/hash/libsrtp.hmac.o: cc $
+    ../../third_party/libsrtp/srtp/crypto/hash/hmac.c
+build obj/third_party/libsrtp/srtp/crypto/hash/libsrtp.null_auth.o: cc $
+    ../../third_party/libsrtp/srtp/crypto/hash/null_auth.c
+build obj/third_party/libsrtp/srtp/crypto/hash/libsrtp.sha1.o: cc $
+    ../../third_party/libsrtp/srtp/crypto/hash/sha1.c
+build obj/third_party/libsrtp/srtp/crypto/kernel/libsrtp.alloc.o: cc $
+    ../../third_party/libsrtp/srtp/crypto/kernel/alloc.c
+build obj/third_party/libsrtp/srtp/crypto/kernel/libsrtp.crypto_kernel.o: $
+    cc ../../third_party/libsrtp/srtp/crypto/kernel/crypto_kernel.c
+build obj/third_party/libsrtp/srtp/crypto/kernel/libsrtp.err.o: cc $
+    ../../third_party/libsrtp/srtp/crypto/kernel/err.c
+build obj/third_party/libsrtp/srtp/crypto/kernel/libsrtp.key.o: cc $
+    ../../third_party/libsrtp/srtp/crypto/kernel/key.c
+build obj/third_party/libsrtp/srtp/crypto/math/libsrtp.datatypes.o: cc $
+    ../../third_party/libsrtp/srtp/crypto/math/datatypes.c
+build obj/third_party/libsrtp/srtp/crypto/math/libsrtp.gf2_8.o: cc $
+    ../../third_party/libsrtp/srtp/crypto/math/gf2_8.c
+build obj/third_party/libsrtp/srtp/crypto/math/libsrtp.stat.o: cc $
+    ../../third_party/libsrtp/srtp/crypto/math/stat.c
+build obj/third_party/libsrtp/srtp/crypto/replay/libsrtp.rdb.o: cc $
+    ../../third_party/libsrtp/srtp/crypto/replay/rdb.c
+build obj/third_party/libsrtp/srtp/crypto/replay/libsrtp.rdbx.o: cc $
+    ../../third_party/libsrtp/srtp/crypto/replay/rdbx.c
+build obj/third_party/libsrtp/srtp/crypto/replay/libsrtp.ut_sim.o: cc $
+    ../../third_party/libsrtp/srtp/crypto/replay/ut_sim.c
+build obj/third_party/libsrtp/srtp/crypto/rng/libsrtp.ctr_prng.o: cc $
+    ../../third_party/libsrtp/srtp/crypto/rng/ctr_prng.c
+build obj/third_party/libsrtp/srtp/crypto/rng/libsrtp.prng.o: cc $
+    ../../third_party/libsrtp/srtp/crypto/rng/prng.c
+build obj/third_party/libsrtp/srtp/crypto/rng/libsrtp.rand_source.o: cc $
+    ../../third_party/libsrtp/srtp/crypto/rng/rand_source.c
+
+build libsrtp.a: alink obj/third_party/libsrtp/srtp/srtp/libsrtp.ekt.o $
+    obj/third_party/libsrtp/srtp/srtp/libsrtp.srtp.o $
+    obj/third_party/libsrtp/srtp/crypto/cipher/libsrtp.aes.o $
+    obj/third_party/libsrtp/srtp/crypto/cipher/libsrtp.aes_cbc.o $
+    obj/third_party/libsrtp/srtp/crypto/cipher/libsrtp.aes_icm.o $
+    obj/third_party/libsrtp/srtp/crypto/cipher/libsrtp.cipher.o $
+    obj/third_party/libsrtp/srtp/crypto/cipher/libsrtp.null_cipher.o $
+    obj/third_party/libsrtp/srtp/crypto/hash/libsrtp.auth.o $
+    obj/third_party/libsrtp/srtp/crypto/hash/libsrtp.hmac.o $
+    obj/third_party/libsrtp/srtp/crypto/hash/libsrtp.null_auth.o $
+    obj/third_party/libsrtp/srtp/crypto/hash/libsrtp.sha1.o $
+    obj/third_party/libsrtp/srtp/crypto/kernel/libsrtp.alloc.o $
+    obj/third_party/libsrtp/srtp/crypto/kernel/libsrtp.crypto_kernel.o $
+    obj/third_party/libsrtp/srtp/crypto/kernel/libsrtp.err.o $
+    obj/third_party/libsrtp/srtp/crypto/kernel/libsrtp.key.o $
+    obj/third_party/libsrtp/srtp/crypto/math/libsrtp.datatypes.o $
+    obj/third_party/libsrtp/srtp/crypto/math/libsrtp.gf2_8.o $
+    obj/third_party/libsrtp/srtp/crypto/math/libsrtp.stat.o $
+    obj/third_party/libsrtp/srtp/crypto/replay/libsrtp.rdb.o $
+    obj/third_party/libsrtp/srtp/crypto/replay/libsrtp.rdbx.o $
+    obj/third_party/libsrtp/srtp/crypto/replay/libsrtp.ut_sim.o $
+    obj/third_party/libsrtp/srtp/crypto/rng/libsrtp.ctr_prng.o $
+    obj/third_party/libsrtp/srtp/crypto/rng/libsrtp.prng.o $
+    obj/third_party/libsrtp/srtp/crypto/rng/libsrtp.rand_source.o

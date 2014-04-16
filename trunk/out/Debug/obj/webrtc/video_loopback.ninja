@@ -1,0 +1,113 @@
+build obj/webrtc/video_loopback.actions_depends.stamp: stamp libgtest.a $
+    libwebrtc_test_common.a libwebrtc.a libgflags.a $
+    libvideo_capture_module.a libwebrtc_utility.a libaudio_coding_module.a $
+    libCNG.a libcommon_audio.a libsystem_wrappers.a libcommon_audio_sse2.a $
+    libG711.a libG722.a libiLBC.a libiSAC.a libiSACFix.a libPCM16B.a $
+    libNetEq.a libwebrtc_opus.a libopus.a libacm2.a libNetEq4.a $
+    libmedia_file.a libwebrtc_video_coding.a libwebrtc_i420.a $
+    libcommon_video.a libyuv.a libjpeg_turbo.a libvideo_coding_utility.a $
+    libwebrtc_vp8.a libvpx.a $
+    obj/third_party/libvpx/gen_asm_offsets_vp8.actions_rules_copies.stamp $
+    libvpx_asm_offsets_vp8.a libvpx_intrinsics_mmx.a $
+    libvpx_intrinsics_sse2.a libvpx_intrinsics_ssse3.a libframe_generator.a $
+    libtest_support.a libgmock.a libvideo_engine_core.a librtp_rtcp.a $
+    libpaced_sender.a libremote_bitrate_estimator.a librbe_components.a $
+    libbitrate_controller.a libvideo_processing.a $
+    libvideo_processing_sse2.a libvideo_render_module.a libvoice_engine.a $
+    libaudio_conference_mixer.a libaudio_processing.a $
+    libaudioproc_debug_proto.a libprotobuf_lite.a $
+    libaudio_processing_sse2.a libaudio_device.a
+
+build obj/webrtc/video_loopback.compile_depends.stamp: stamp $
+    obj/third_party/libjpeg_turbo/libjpeg.actions_rules_copies.stamp $
+    obj/third_party/libvpx/libvpx.actions_rules_copies.stamp $
+    obj/third_party/libvpx/gen_asm_offsets_vp8.actions_rules_copies.stamp $
+    obj/webrtc/modules/audioproc_debug_proto.actions_rules_copies.stamp $
+    obj/webrtc/modules/audioproc_debug_proto.actions_rules_copies.stamp
+
+defines = -DV8_DEPRECATION_WARNINGS -DBLINK_SCALE_FILTERS_AT_RECORD_TIME $
+    -DCHROMIUM_BUILD -DUSE_LIBJPEG_TURBO=1 -DENABLE_ONE_CLICK_SIGNIN $
+    -DENABLE_REMOTING=1 -DENABLE_WEBRTC=1 -DENABLE_PEPPER_CDMS $
+    -DENABLE_CONFIGURATION_POLICY -DENABLE_INPUT_SPEECH $
+    -DENABLE_NOTIFICATIONS -DENABLE_HIDPI=1 $
+    -DDISCARDABLE_MEMORY_ALWAYS_SUPPORTED_NATIVELY $
+    -DSYSTEM_NATIVELY_SIGNALS_MEMORY_PRESSURE -DENABLE_EGLIMAGE=1 $
+    -DENABLE_TASK_MANAGER=1 -DENABLE_EXTENSIONS=1 $
+    -DENABLE_PLUGIN_INSTALLATION=1 -DENABLE_PLUGINS=1 $
+    -DENABLE_SESSION_SERVICE=1 -DENABLE_THEMES=1 -DENABLE_AUTOFILL_DIALOG=1 $
+    -DENABLE_BACKGROUND=1 -DENABLE_AUTOMATION=1 -DENABLE_GOOGLE_NOW=1 $
+    -DCLD_VERSION=2 -DENABLE_FULL_PRINTING=1 -DENABLE_PRINTING=1 $
+    -DENABLE_SPELLCHECK=1 -DENABLE_CAPTIVE_PORTAL_DETECTION=1 $
+    -DENABLE_APP_LIST=1 -DENABLE_SETTINGS_APP=1 -DENABLE_MANAGED_USERS=1 $
+    -DENABLE_SERVICE_DISCOVERY=1 -DWEBRTC_MODULE_UTILITY_VIDEO $
+    -DWEBRTC_POSIX -DWEBRTC_MAC -DGTEST_HAS_POSIX_RE=0 -DUNIT_TEST $
+    -DGTEST_HAS_RTTI=0 -D__STDC_CONSTANT_MACROS -D__STDC_FORMAT_MACROS $
+    -DDYNAMIC_ANNOTATIONS_ENABLED=1 -DWTF_USE_DYNAMIC_ANNOTATIONS=1
+includes = -I../.. -I../.. -I../../testing/gtest/include
+cflags = -isysroot $
+    /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.8.sdk $
+    -O0 -gdwarf-2 -fvisibility=hidden -Werror -Wnewline-eof $
+    -mmacosx-version-min=10.6 -arch i386 -Wall -Wendif-labels -Wextra $
+    -Wno-unused-parameter -Wno-missing-field-initializers -Wheader-hygiene $
+    -Wno-c++11-narrowing -Wno-char-subscripts $
+    -Wno-unneeded-internal-declaration -Wno-covered-switch-default $
+    -Wstring-conversion -Wno-deprecated-register -Wno-absolute-value
+cflags_c = -std=c99 -fcolor-diagnostics -fno-strict-aliasing $
+    -fstack-protector-all
+cflags_cc = -std=gnu++11 -fno-rtti -fno-exceptions $
+    -fvisibility-inlines-hidden -fno-threadsafe-statics -fcolor-diagnostics $
+    -fno-strict-aliasing -fstack-protector-all
+cflags_objc = $cflags_c -Wobjc-missing-property-synthesis
+cflags_objcc = $cflags_cc -Wobjc-missing-property-synthesis $
+    -fobjc-call-cxx-cdtors
+
+build obj/webrtc/video/video_loopback.loopback.o: cxx $
+    ../../webrtc/video/loopback.cc || $
+    obj/webrtc/video_loopback.compile_depends.stamp
+build obj/webrtc/test/video_loopback.test_main.o: cxx $
+    ../../webrtc/test/test_main.cc || $
+    obj/webrtc/video_loopback.compile_depends.stamp
+
+ldflags = -framework Foundation -framework AppKit -framework Cocoa $
+    -framework OpenGL -framework CoreVideo -framework CoreAudio -framework $
+    AudioToolbox -framework QTKit -Wl,-search_paths_first -Wl,-pie $
+    -mmacosx-version-min=10.6 -isysroot $
+    /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.8.sdk $
+    -arch i386 -L.
+libs = -framework Foundation -framework ApplicationServices -framework $
+    AudioToolbox -framework CoreAudio
+build video_loopback: link obj/webrtc/video/video_loopback.loopback.o $
+    obj/webrtc/test/video_loopback.test_main.o libgtest.a $
+    libwebrtc_test_common.a libwebrtc.a libgflags.a $
+    libvideo_capture_module.a libwebrtc_utility.a libaudio_coding_module.a $
+    libCNG.a libcommon_audio.a libsystem_wrappers.a libcommon_audio_sse2.a $
+    libG711.a libG722.a libiLBC.a libiSAC.a libiSACFix.a libPCM16B.a $
+    libNetEq.a libwebrtc_opus.a libopus.a libacm2.a libNetEq4.a $
+    libmedia_file.a libwebrtc_video_coding.a libwebrtc_i420.a $
+    libcommon_video.a libyuv.a libjpeg_turbo.a libvideo_coding_utility.a $
+    libwebrtc_vp8.a libvpx.a libvpx_asm_offsets_vp8.a $
+    libvpx_intrinsics_mmx.a libvpx_intrinsics_sse2.a $
+    libvpx_intrinsics_ssse3.a libframe_generator.a libtest_support.a $
+    libgmock.a libvideo_engine_core.a librtp_rtcp.a libpaced_sender.a $
+    libremote_bitrate_estimator.a librbe_components.a $
+    libbitrate_controller.a libvideo_processing.a $
+    libvideo_processing_sse2.a libvideo_render_module.a libvoice_engine.a $
+    libaudio_conference_mixer.a libaudio_processing.a $
+    libaudioproc_debug_proto.a libprotobuf_lite.a $
+    libaudio_processing_sse2.a libaudio_device.a | $
+    obj/third_party/libvpx/gen_asm_offsets_vp8.actions_rules_copies.stamp
+  ld = $ldxx
+  postbuilds = $ && (export $
+      BUILT_PRODUCTS_DIR=/Users/cwebb/Sqwiggle/webrtc/trunk/out/Debug; $
+      export CONFIGURATION=Debug; export EXECUTABLE_NAME=video_loopback; $
+      export EXECUTABLE_PATH=video_loopback; export $
+      FULL_PRODUCT_NAME=video_loopback; export PRODUCT_NAME=video_loopback; $
+      export PRODUCT_TYPE=com.apple.product-type.tool; export $
+      SDKROOT=/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.8.sdk; $
+      export $
+      SRCROOT=/Users/cwebb/Sqwiggle/webrtc/trunk/out/Debug/../../webrtc; $
+      export SOURCE_ROOT="$${SRCROOT}"; export $
+      TARGET_BUILD_DIR=/Users/cwebb/Sqwiggle/webrtc/trunk/out/Debug; export $
+      TEMP_DIR="$${TMPDIR}"; (cd ../../webrtc && $
+      ../build/mac/change_mach_o_flags_from_xcode.sh); G=$$?; ((exit $$G) $
+      || rm -rf video_loopback) && exit $$G)

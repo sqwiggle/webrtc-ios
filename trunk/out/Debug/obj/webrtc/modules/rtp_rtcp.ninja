@@ -1,0 +1,130 @@
+defines = -DV8_DEPRECATION_WARNINGS -DBLINK_SCALE_FILTERS_AT_RECORD_TIME $
+    -DCHROMIUM_BUILD -DUSE_LIBJPEG_TURBO=1 -DENABLE_ONE_CLICK_SIGNIN $
+    -DENABLE_REMOTING=1 -DENABLE_WEBRTC=1 -DENABLE_PEPPER_CDMS $
+    -DENABLE_CONFIGURATION_POLICY -DENABLE_INPUT_SPEECH $
+    -DENABLE_NOTIFICATIONS -DENABLE_HIDPI=1 $
+    -DDISCARDABLE_MEMORY_ALWAYS_SUPPORTED_NATIVELY $
+    -DSYSTEM_NATIVELY_SIGNALS_MEMORY_PRESSURE -DENABLE_EGLIMAGE=1 $
+    -DENABLE_TASK_MANAGER=1 -DENABLE_EXTENSIONS=1 $
+    -DENABLE_PLUGIN_INSTALLATION=1 -DENABLE_PLUGINS=1 $
+    -DENABLE_SESSION_SERVICE=1 -DENABLE_THEMES=1 -DENABLE_AUTOFILL_DIALOG=1 $
+    -DENABLE_BACKGROUND=1 -DENABLE_AUTOMATION=1 -DENABLE_GOOGLE_NOW=1 $
+    -DCLD_VERSION=2 -DENABLE_FULL_PRINTING=1 -DENABLE_PRINTING=1 $
+    -DENABLE_SPELLCHECK=1 -DENABLE_CAPTIVE_PORTAL_DETECTION=1 $
+    -DENABLE_APP_LIST=1 -DENABLE_SETTINGS_APP=1 -DENABLE_MANAGED_USERS=1 $
+    -DENABLE_SERVICE_DISCOVERY=1 -DWEBRTC_MODULE_UTILITY_VIDEO $
+    -DWEBRTC_POSIX -DWEBRTC_MAC -D__STDC_CONSTANT_MACROS $
+    -D__STDC_FORMAT_MACROS -DDYNAMIC_ANNOTATIONS_ENABLED=1 $
+    -DWTF_USE_DYNAMIC_ANNOTATIONS=1
+includes = -I../.. -I../.. -I../../webrtc/system_wrappers/interface
+cflags = -isysroot $
+    /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.8.sdk $
+    -O0 -gdwarf-2 -fvisibility=hidden -Werror -Wnewline-eof $
+    -mmacosx-version-min=10.6 -arch i386 -Wall -Wendif-labels -Wextra $
+    -Wno-unused-parameter -Wno-missing-field-initializers -Wheader-hygiene $
+    -Wno-c++11-narrowing -Wno-char-subscripts $
+    -Wno-unneeded-internal-declaration -Wno-covered-switch-default $
+    -Wstring-conversion -Wno-deprecated-register -Wno-absolute-value
+cflags_c = -std=c99 -fcolor-diagnostics -fno-strict-aliasing $
+    -fstack-protector-all
+cflags_cc = -std=gnu++11 -fno-rtti -fno-exceptions $
+    -fvisibility-inlines-hidden -fno-threadsafe-statics -fcolor-diagnostics $
+    -fno-strict-aliasing -fstack-protector-all
+cflags_objc = $cflags_c -Wobjc-missing-property-synthesis
+cflags_objcc = $cflags_cc -Wobjc-missing-property-synthesis $
+    -fobjc-call-cxx-cdtors
+
+build obj/webrtc/modules/rtp_rtcp/source/rtp_rtcp.bitrate.o: cxx $
+    ../../webrtc/modules/rtp_rtcp/source/bitrate.cc
+build obj/webrtc/modules/rtp_rtcp/source/rtp_rtcp.fec_receiver_impl.o: cxx $
+    ../../webrtc/modules/rtp_rtcp/source/fec_receiver_impl.cc
+build $
+    obj/webrtc/modules/rtp_rtcp/source/rtp_rtcp.receive_statistics_impl.o: $
+    cxx ../../webrtc/modules/rtp_rtcp/source/receive_statistics_impl.cc
+build obj/webrtc/modules/rtp_rtcp/source/rtp_rtcp.rtp_header_parser.o: cxx $
+    ../../webrtc/modules/rtp_rtcp/source/rtp_header_parser.cc
+build obj/webrtc/modules/rtp_rtcp/source/rtp_rtcp.rtp_rtcp_impl.o: cxx $
+    ../../webrtc/modules/rtp_rtcp/source/rtp_rtcp_impl.cc
+build obj/webrtc/modules/rtp_rtcp/source/rtp_rtcp.rtcp_packet.o: cxx $
+    ../../webrtc/modules/rtp_rtcp/source/rtcp_packet.cc
+build obj/webrtc/modules/rtp_rtcp/source/rtp_rtcp.rtcp_receiver.o: cxx $
+    ../../webrtc/modules/rtp_rtcp/source/rtcp_receiver.cc
+build obj/webrtc/modules/rtp_rtcp/source/rtp_rtcp.rtcp_receiver_help.o: cxx $
+    ../../webrtc/modules/rtp_rtcp/source/rtcp_receiver_help.cc
+build obj/webrtc/modules/rtp_rtcp/source/rtp_rtcp.rtcp_sender.o: cxx $
+    ../../webrtc/modules/rtp_rtcp/source/rtcp_sender.cc
+build obj/webrtc/modules/rtp_rtcp/source/rtp_rtcp.rtcp_utility.o: cxx $
+    ../../webrtc/modules/rtp_rtcp/source/rtcp_utility.cc
+build obj/webrtc/modules/rtp_rtcp/source/rtp_rtcp.rtp_header_extension.o: $
+    cxx ../../webrtc/modules/rtp_rtcp/source/rtp_header_extension.cc
+build obj/webrtc/modules/rtp_rtcp/source/rtp_rtcp.rtp_receiver_impl.o: cxx $
+    ../../webrtc/modules/rtp_rtcp/source/rtp_receiver_impl.cc
+build obj/webrtc/modules/rtp_rtcp/source/rtp_rtcp.rtp_sender.o: cxx $
+    ../../webrtc/modules/rtp_rtcp/source/rtp_sender.cc
+build obj/webrtc/modules/rtp_rtcp/source/rtp_rtcp.rtp_utility.o: cxx $
+    ../../webrtc/modules/rtp_rtcp/source/rtp_utility.cc
+build obj/webrtc/modules/rtp_rtcp/source/rtp_rtcp.ssrc_database.o: cxx $
+    ../../webrtc/modules/rtp_rtcp/source/ssrc_database.cc
+build obj/webrtc/modules/rtp_rtcp/source/rtp_rtcp.tmmbr_help.o: cxx $
+    ../../webrtc/modules/rtp_rtcp/source/tmmbr_help.cc
+build obj/webrtc/modules/rtp_rtcp/source/rtp_rtcp.dtmf_queue.o: cxx $
+    ../../webrtc/modules/rtp_rtcp/source/dtmf_queue.cc
+build obj/webrtc/modules/rtp_rtcp/source/rtp_rtcp.rtp_receiver_audio.o: cxx $
+    ../../webrtc/modules/rtp_rtcp/source/rtp_receiver_audio.cc
+build obj/webrtc/modules/rtp_rtcp/source/rtp_rtcp.rtp_sender_audio.o: cxx $
+    ../../webrtc/modules/rtp_rtcp/source/rtp_sender_audio.cc
+build $
+    obj/webrtc/modules/rtp_rtcp/source/rtp_rtcp.forward_error_correction.o: $
+    cxx ../../webrtc/modules/rtp_rtcp/source/forward_error_correction.cc
+build $
+    obj/webrtc/modules/rtp_rtcp/source/rtp_rtcp.forward_error_correction_internal.o: $
+    cxx $
+    ../../webrtc/modules/rtp_rtcp/source/forward_error_correction_internal.cc
+build obj/webrtc/modules/rtp_rtcp/source/rtp_rtcp.producer_fec.o: cxx $
+    ../../webrtc/modules/rtp_rtcp/source/producer_fec.cc
+build obj/webrtc/modules/rtp_rtcp/source/rtp_rtcp.rtp_packet_history.o: cxx $
+    ../../webrtc/modules/rtp_rtcp/source/rtp_packet_history.cc
+build obj/webrtc/modules/rtp_rtcp/source/rtp_rtcp.rtp_payload_registry.o: $
+    cxx ../../webrtc/modules/rtp_rtcp/source/rtp_payload_registry.cc
+build obj/webrtc/modules/rtp_rtcp/source/rtp_rtcp.rtp_receiver_strategy.o: $
+    cxx ../../webrtc/modules/rtp_rtcp/source/rtp_receiver_strategy.cc
+build obj/webrtc/modules/rtp_rtcp/source/rtp_rtcp.rtp_receiver_video.o: cxx $
+    ../../webrtc/modules/rtp_rtcp/source/rtp_receiver_video.cc
+build obj/webrtc/modules/rtp_rtcp/source/rtp_rtcp.rtp_sender_video.o: cxx $
+    ../../webrtc/modules/rtp_rtcp/source/rtp_sender_video.cc
+build obj/webrtc/modules/rtp_rtcp/source/rtp_rtcp.rtp_format_vp8.o: cxx $
+    ../../webrtc/modules/rtp_rtcp/source/rtp_format_vp8.cc
+build $
+    obj/webrtc/modules/rtp_rtcp/source/rtp_rtcp.vp8_partition_aggregator.o: $
+    cxx ../../webrtc/modules/rtp_rtcp/source/vp8_partition_aggregator.cc
+
+build librtp_rtcp.a: alink $
+    obj/webrtc/modules/rtp_rtcp/source/rtp_rtcp.bitrate.o $
+    obj/webrtc/modules/rtp_rtcp/source/rtp_rtcp.fec_receiver_impl.o $
+    obj/webrtc/modules/rtp_rtcp/source/rtp_rtcp.receive_statistics_impl.o $
+    obj/webrtc/modules/rtp_rtcp/source/rtp_rtcp.rtp_header_parser.o $
+    obj/webrtc/modules/rtp_rtcp/source/rtp_rtcp.rtp_rtcp_impl.o $
+    obj/webrtc/modules/rtp_rtcp/source/rtp_rtcp.rtcp_packet.o $
+    obj/webrtc/modules/rtp_rtcp/source/rtp_rtcp.rtcp_receiver.o $
+    obj/webrtc/modules/rtp_rtcp/source/rtp_rtcp.rtcp_receiver_help.o $
+    obj/webrtc/modules/rtp_rtcp/source/rtp_rtcp.rtcp_sender.o $
+    obj/webrtc/modules/rtp_rtcp/source/rtp_rtcp.rtcp_utility.o $
+    obj/webrtc/modules/rtp_rtcp/source/rtp_rtcp.rtp_header_extension.o $
+    obj/webrtc/modules/rtp_rtcp/source/rtp_rtcp.rtp_receiver_impl.o $
+    obj/webrtc/modules/rtp_rtcp/source/rtp_rtcp.rtp_sender.o $
+    obj/webrtc/modules/rtp_rtcp/source/rtp_rtcp.rtp_utility.o $
+    obj/webrtc/modules/rtp_rtcp/source/rtp_rtcp.ssrc_database.o $
+    obj/webrtc/modules/rtp_rtcp/source/rtp_rtcp.tmmbr_help.o $
+    obj/webrtc/modules/rtp_rtcp/source/rtp_rtcp.dtmf_queue.o $
+    obj/webrtc/modules/rtp_rtcp/source/rtp_rtcp.rtp_receiver_audio.o $
+    obj/webrtc/modules/rtp_rtcp/source/rtp_rtcp.rtp_sender_audio.o $
+    obj/webrtc/modules/rtp_rtcp/source/rtp_rtcp.forward_error_correction.o $
+    obj/webrtc/modules/rtp_rtcp/source/rtp_rtcp.forward_error_correction_internal.o $
+    obj/webrtc/modules/rtp_rtcp/source/rtp_rtcp.producer_fec.o $
+    obj/webrtc/modules/rtp_rtcp/source/rtp_rtcp.rtp_packet_history.o $
+    obj/webrtc/modules/rtp_rtcp/source/rtp_rtcp.rtp_payload_registry.o $
+    obj/webrtc/modules/rtp_rtcp/source/rtp_rtcp.rtp_receiver_strategy.o $
+    obj/webrtc/modules/rtp_rtcp/source/rtp_rtcp.rtp_receiver_video.o $
+    obj/webrtc/modules/rtp_rtcp/source/rtp_rtcp.rtp_sender_video.o $
+    obj/webrtc/modules/rtp_rtcp/source/rtp_rtcp.rtp_format_vp8.o $
+    obj/webrtc/modules/rtp_rtcp/source/rtp_rtcp.vp8_partition_aggregator.o

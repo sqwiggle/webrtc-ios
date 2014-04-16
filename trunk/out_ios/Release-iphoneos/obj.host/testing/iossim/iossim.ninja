@@ -1,0 +1,83 @@
+rule iossim_generate_dvt_iphone_sim_header_7963cbf602f437a297870c9c6fc0eccd
+  command = cd ../../testing/iossim; export $
+      BUILT_PRODUCTS_DIR=/Users/cwebb/Sqwiggle/webrtc/trunk/out_ios/Release-iphoneos; $
+      export CONFIGURATION=Release-iphoneos; export EXECUTABLE_NAME=iossim; $
+      export EXECUTABLE_PATH=iossim; export FULL_PRODUCT_NAME=iossim; $
+      export PRODUCT_NAME=iossim; export $
+      PRODUCT_TYPE=com.apple.product-type.tool; export $
+      SDKROOT=/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.8.sdk; $
+      export $
+      SRCROOT=/Users/cwebb/Sqwiggle/webrtc/trunk/out_ios/Release-iphoneos/../../testing/iossim; $
+      export SOURCE_ROOT="$${SRCROOT}"; export $
+      TARGET_BUILD_DIR=/Users/cwebb/Sqwiggle/webrtc/trunk/out_ios/Release-iphoneos; $
+      export TEMP_DIR="$${TMPDIR}";./redirect-stdout.sh $
+      "../../out_ios/Release-iphoneos/class-dump -I -CiPhoneSimulator $
+      /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/Library/PrivateFrameworks/DVTiPhoneSimulatorRemoteClient.framework" $
+      ../../out_ios/Release-iphoneos/obj.host/testing/iossim/iossim.gen/iossim/DVTiPhoneSimulatorRemoteClient.h
+  description = ACTION(host) Generating header
+  restat = 1
+
+build $
+    obj.host/testing/iossim/iossim.gen/iossim/DVTiPhoneSimulatorRemoteClient.h: $
+    iossim_generate_dvt_iphone_sim_header_7963cbf602f437a297870c9c6fc0eccd $
+    /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/Library/PrivateFrameworks/DVTiPhoneSimulatorRemoteClient.framework/Versions/Current/DVTiPhoneSimulatorRemoteClient $
+    class-dump || class-dump
+
+ar = $ar_host
+cc = $cc_host
+cxx = $cxx_host
+ld = $ld_host
+ldxx = $ldxx_host
+defines = -DV8_DEPRECATION_WARNINGS -DBLINK_SCALE_FILTERS_AT_RECORD_TIME $
+    -DDISABLE_NACL -DCHROMIUM_BUILD -DUSE_LIBJPEG_TURBO=1 $
+    -DENABLE_CONFIGURATION_POLICY $
+    -DDISCARDABLE_MEMORY_ALWAYS_SUPPORTED_NATIVELY $
+    -DSYSTEM_NATIVELY_SIGNALS_MEMORY_PRESSURE -DENABLE_EGLIMAGE=1 $
+    -DCLD_VERSION=1 -DENABLE_SPELLCHECK=1 -DDISABLE_FTP_SUPPORT=1 -DNDEBUG $
+    -DNVALGRIND -DDYNAMIC_ANNOTATIONS_ENABLED=0 -DNS_BLOCK_ASSERTIONS=1
+includes = -Iobj.host/testing/iossim/iossim.gen/iossim
+cflags = -isysroot $
+    /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.8.sdk $
+    -Os -gdwarf-2 -fvisibility=hidden -Wnewline-eof $
+    -mmacosx-version-min=10.6 -arch x86_64 -Wendif-labels $
+    -Wno-unused-parameter -Wno-missing-field-initializers -Wheader-hygiene $
+    -Wno-c++11-narrowing -Wno-char-subscripts $
+    -Wno-unneeded-internal-declaration -Wno-covered-switch-default $
+    -Wstring-conversion -Wno-deprecated-register -Wno-absolute-value $
+    -Wno-objc-property-no-attribute
+cflags_c = -std=c99 -Xclang -load -Xclang $
+    /Users/cwebb/Sqwiggle/webrtc/trunk/tools/clang/scripts/../../../third_party/llvm-build/Release+Asserts/lib/libFindBadConstructs.dylib $
+    -Xclang -add-plugin -Xclang find-bad-constructs -fcolor-diagnostics
+cflags_cc = -std=gnu++0x -fno-rtti -fno-exceptions $
+    -fvisibility-inlines-hidden -fno-threadsafe-statics -Xclang -load $
+    -Xclang $
+    /Users/cwebb/Sqwiggle/webrtc/trunk/tools/clang/scripts/../../../third_party/llvm-build/Release+Asserts/lib/libFindBadConstructs.dylib $
+    -Xclang -add-plugin -Xclang find-bad-constructs -fcolor-diagnostics
+cflags_objc = $cflags_c
+cflags_objcc = $cflags_cc -fobjc-call-cxx-cdtors
+
+build obj.host/testing/iossim/iossim.iossim.o: objcxx $
+    ../../testing/iossim/iossim.mm || $
+    obj.host/testing/iossim/iossim.gen/iossim/DVTiPhoneSimulatorRemoteClient.h
+
+ldflags = -Wl,-search_paths_first -Wl,-dead_strip -mmacosx-version-min=10.6 $
+    -isysroot $
+    /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.8.sdk $
+    -arch x86_64 -L.
+libs = -framework Foundation
+build iossim: link obj.host/testing/iossim/iossim.iossim.o | class-dump
+  ld = $ldxx
+  postbuilds = $ && (export $
+      BUILT_PRODUCTS_DIR=/Users/cwebb/Sqwiggle/webrtc/trunk/out_ios/Release-iphoneos; $
+      export CONFIGURATION=Release-iphoneos; export EXECUTABLE_NAME=iossim; $
+      export EXECUTABLE_PATH=iossim; export FULL_PRODUCT_NAME=iossim; $
+      export PRODUCT_NAME=iossim; export $
+      PRODUCT_TYPE=com.apple.product-type.tool; export $
+      SDKROOT=/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.8.sdk; $
+      export $
+      SRCROOT=/Users/cwebb/Sqwiggle/webrtc/trunk/out_ios/Release-iphoneos/../../testing/iossim; $
+      export SOURCE_ROOT="$${SRCROOT}"; export $
+      TARGET_BUILD_DIR=/Users/cwebb/Sqwiggle/webrtc/trunk/out_ios/Release-iphoneos; $
+      export TEMP_DIR="$${TMPDIR}"; (cd ../../testing/iossim && strip  $
+      ../../out_ios/Release-iphoneos/iossim); G=$$?; ((exit $$G) || rm -rf $
+      iossim) && exit $$G)

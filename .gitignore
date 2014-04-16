@@ -1,1 +1,2 @@
-
+*.DS_Store
+out_ios/Debug-iphoneos/lib*.a

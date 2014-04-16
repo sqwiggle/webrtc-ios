@@ -1,0 +1,85 @@
+build obj/webrtc/webrtc_all.actions_depends.stamp: stamp libcommon_audio.a $
+    libcommon_audio_neon.a common_audio_unittests.app libcommon_video.a $
+    libCNG.a libG711.a libG722.a libiLBC.a libiSAC.a libiSACFix.a $
+    libPCM16B.a libaudio_coding_module.a libacm2.a libNetEq.a libNetEq4.a $
+    libaudio_conference_mixer.a libaudio_device.a libaudio_processing.a $
+    libbitrate_controller.a libdesktop_capture.a libmedia_file.a $
+    libpaced_sender.a libremote_bitrate_estimator.a libbwe_tools_util.a $
+    bwe_rtp_to_text bwe_rtp_play librtp_rtcp.a libwebrtc_utility.a $
+    libwebrtc_i420.a libwebrtc_video_coding.a libvideo_capture_module.a $
+    libvideo_processing.a libvideo_render_module.a libwebrtc_opus.a $
+    webrtc_opus_fec_test.app modules_unittests.app modules_tests.app $
+    iSACtest iSACAPITest iSACSwitchSampRateTest iSACFixtest $
+    audio_codec_speed_tests.app test_packet_masks_metrics.app $
+    video_coding_test.app libtest_framework.a $
+    libvideo_codecs_test_framework.a video_quality_measurement g711_test $
+    G722Test iLBCtest libisac_neon.a delay_test.app $
+    insert_packet_with_timing.app neteq_unittests.app NetEqRTPplay $
+    neteq3_speed_test libNetEqTestTools.a audio_decoder_unittests.app $
+    libneteq_unittest_tools.a neteq_rtpplay RTPencode RTPjitter.app $
+    rtp_analyze.app RTPchange.app RTPtimeshift.app RTPcat.app rtp_to_text $
+    audio_classifier_test neteq4_speed_test $
+    neteq4_opus_fec_quality_test.app libNetEq4TestTools.a $
+    audio_device_tests.app audio_device_test_func.app $
+    libaudio_processing_neon.a video_capture_tests.app video_render_tests $
+    libsystem_wrappers.a libvideo_engine_core.a libvietest.a $
+    vie_auto_test.app video_engine_core_unittests.app libvoice_engine.a $
+    voice_engine_unittests.app voe_auto_test.app voe_cmd_test.app $
+    libwebrtc_vp8.a vp8_coder.app libwebrtc.a common_video_unittests.app $
+    system_wrappers_unittests.app libmetrics.a libchannel_transport.a $
+    libframe_generator.a librtcp_packet_parser.a libtest_support.a $
+    libtest_support_main.a test_support_unittests.app $
+    obj/webrtc/test/buildbot_tests_scripts.actions_rules_copies.stamp $
+    webrtc_test_common_unittests.app libvideo_quality_analysis.a $
+    frame_analyzer psnr_ssim_analyzer rgba_to_i420_converter $
+    libframe_editing_lib.a frame_editor force_mic_volume_max $
+    audio_e2e_harness.app tools_unittests.app $
+    obj/webrtc/webrtc_tests.actions_depends.stamp
+
+build obj/webrtc/webrtc_all.compile_depends.stamp: stamp $
+    obj.host/testing/iossim/iossim.gen/iossim/DVTiPhoneSimulatorRemoteClient.h $
+    obj.host/testing/iossim/iossim.gen/iossim/DVTiPhoneSimulatorRemoteClient.h $
+    obj/webrtc/modules/modules_unittests.compile_depends.stamp $
+    obj/webrtc/modules/modules_tests.compile_depends.stamp $
+    obj.host/testing/iossim/iossim.gen/iossim/DVTiPhoneSimulatorRemoteClient.h $
+    obj/webrtc/modules/audio_codec_speed_tests.compile_depends.stamp $
+    obj.host/testing/iossim/iossim.gen/iossim/DVTiPhoneSimulatorRemoteClient.h $
+    obj/webrtc/modules/video_coding_test.compile_depends.stamp $
+    obj/webrtc/modules/video_quality_measurement.compile_depends.stamp $
+    obj.host/testing/iossim/iossim.gen/iossim/DVTiPhoneSimulatorRemoteClient.h $
+    obj.host/testing/iossim/iossim.gen/iossim/DVTiPhoneSimulatorRemoteClient.h $
+    obj.host/testing/iossim/iossim.gen/iossim/DVTiPhoneSimulatorRemoteClient.h $
+    obj.host/testing/iossim/iossim.gen/iossim/DVTiPhoneSimulatorRemoteClient.h $
+    obj.host/testing/iossim/iossim.gen/iossim/DVTiPhoneSimulatorRemoteClient.h $
+    obj.host/testing/iossim/iossim.gen/iossim/DVTiPhoneSimulatorRemoteClient.h $
+    obj.host/testing/iossim/iossim.gen/iossim/DVTiPhoneSimulatorRemoteClient.h $
+    obj.host/testing/iossim/iossim.gen/iossim/DVTiPhoneSimulatorRemoteClient.h $
+    obj.host/testing/iossim/iossim.gen/iossim/DVTiPhoneSimulatorRemoteClient.h $
+    obj.host/testing/iossim/iossim.gen/iossim/DVTiPhoneSimulatorRemoteClient.h $
+    obj.host/testing/iossim/iossim.gen/iossim/DVTiPhoneSimulatorRemoteClient.h $
+    obj.host/testing/iossim/iossim.gen/iossim/DVTiPhoneSimulatorRemoteClient.h $
+    obj.host/testing/iossim/iossim.gen/iossim/DVTiPhoneSimulatorRemoteClient.h $
+    obj.host/testing/iossim/iossim.gen/iossim/DVTiPhoneSimulatorRemoteClient.h $
+    obj.host/testing/iossim/iossim.gen/iossim/DVTiPhoneSimulatorRemoteClient.h $
+    obj.host/testing/iossim/iossim.gen/iossim/DVTiPhoneSimulatorRemoteClient.h $
+    obj/webrtc/modules/audio_device_tests.compile_depends.stamp $
+    obj/webrtc/modules/audio_device_test_func.compile_depends.stamp $
+    obj/webrtc/modules/audio_processing_neon.compile_depends.stamp $
+    obj/webrtc/modules/video_capture_tests.compile_depends.stamp $
+    obj/webrtc/modules/video_render_tests.compile_depends.stamp $
+    obj/webrtc/video_engine/vie_auto_test.compile_depends.stamp $
+    obj/webrtc/video_engine/video_engine_core_unittests.compile_depends.stamp $
+    obj/webrtc/voice_engine/voice_engine_unittests.compile_depends.stamp $
+    obj/webrtc/voice_engine/voe_auto_test.compile_depends.stamp $
+    obj/webrtc/voice_engine/voe_cmd_test.compile_depends.stamp $
+    obj/webrtc/modules/video_coding/codecs/vp8/vp8_coder.compile_depends.stamp $
+    obj.host/testing/iossim/iossim.gen/iossim/DVTiPhoneSimulatorRemoteClient.h $
+    obj.host/testing/iossim/iossim.gen/iossim/DVTiPhoneSimulatorRemoteClient.h $
+    obj.host/testing/iossim/iossim.gen/iossim/DVTiPhoneSimulatorRemoteClient.h $
+    obj/webrtc/test/buildbot_tests_scripts.actions_rules_copies.stamp $
+    obj/webrtc/test/webrtc_test_common_unittests.compile_depends.stamp $
+    obj/webrtc/tools/force_mic_volume_max.compile_depends.stamp $
+    obj/webrtc/tools/audio_e2e_harness.compile_depends.stamp $
+    obj.host/testing/iossim/iossim.gen/iossim/DVTiPhoneSimulatorRemoteClient.h $
+    obj/webrtc/webrtc_tests.compile_depends.stamp
+

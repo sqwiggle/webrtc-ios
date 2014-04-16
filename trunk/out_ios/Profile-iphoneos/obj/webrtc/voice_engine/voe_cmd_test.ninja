@@ -1,0 +1,171 @@
+build obj/webrtc/voice_engine/voe_cmd_test.actions_depends.stamp: stamp $
+    libvoice_engine.a libgtest.a libgflags.a libsystem_wrappers.a $
+    libchannel_transport.a libtest_support.a libcommon_audio.a $
+    libcommon_audio_neon.a libaudio_coding_module.a libCNG.a libG711.a $
+    libG722.a libiLBC.a libiSAC.a libiSACFix.a libisac_neon.a libPCM16B.a $
+    libNetEq.a libwebrtc_opus.a libopus.a libacm2.a libNetEq4.a $
+    libaudio_conference_mixer.a libaudio_processing.a $
+    libaudio_processing_neon.a $
+    obj/webrtc/modules/audio_processing/gen_nsx_core_neon_offsets_h.actions_rules_copies.stamp $
+    lib_core_neon_offsets.a $
+    obj/webrtc/modules/audio_processing/gen_aecm_core_neon_offsets_h.actions_rules_copies.stamp $
+    libwebrtc_utility.a libmedia_file.a libwebrtc_video_coding.a $
+    libwebrtc_i420.a libcommon_video.a libyuv.a libyuv_neon.a $
+    libvideo_coding_utility.a libwebrtc_vp8.a libvpx.a $
+    obj/third_party/libvpx/gen_asm_offsets_vp8.actions_rules_copies.stamp $
+    libvpx_asm_offsets_vp8.a $
+    obj/third_party/libvpx/gen_asm_offsets_vpx_scale.actions_rules_copies.stamp $
+    libvpx_asm_offsets_vpx_scale.a libaudio_device.a librtp_rtcp.a $
+    libpaced_sender.a libremote_bitrate_estimator.a librbe_components.a $
+    libgmock.a
+
+build obj/webrtc/voice_engine/voe_cmd_test.compile_depends.stamp: stamp $
+    obj.host/testing/iossim/iossim.gen/iossim/DVTiPhoneSimulatorRemoteClient.h $
+    obj/webrtc/modules/audio_processing_neon.compile_depends.stamp $
+    obj/webrtc/modules/audio_processing/gen_nsx_core_neon_offsets_h.actions_rules_copies.stamp $
+    obj/webrtc/modules/audio_processing/gen_aecm_core_neon_offsets_h.actions_rules_copies.stamp $
+    obj/third_party/libvpx/libvpx.actions_rules_copies.stamp $
+    obj/third_party/libvpx/gen_asm_offsets_vp8.actions_rules_copies.stamp $
+    obj/third_party/libvpx/gen_asm_offsets_vpx_scale.actions_rules_copies.stamp
+
+build voe_cmd_test.app/Default-568h@2x.png: mac_tool $
+    ../../testing/gtest_ios/Default-568h@2x.png
+  mactool_cmd = copy-bundle-resource
+build voe_cmd_test.app/Info.plist: copy_infoplist $
+    ../../testing/gtest_ios/unittest-Info.plist
+  env = export ALWAYS_SEARCH_USER_PATHS=NO; export $
+      BUILT_PRODUCTS_DIR=/Users/cwebb/Sqwiggle/webrtc/trunk/out_ios/Profile-iphoneos; $
+      export BUNDLE_ID_TEST_NAME=voecmdtest; export $
+      SRCROOT=/Users/cwebb/Sqwiggle/webrtc/trunk/out_ios/Profile-iphoneos/../../webrtc/voice_engine; $
+      export SOURCE_ROOT="$${SRCROOT}"; export $
+      CC="$${SOURCE_ROOT}/../../third_party/llvm-build/Release+Asserts/bin/clang"; $
+      export CLANG_CXX_LANGUAGE_STANDARD=gnu++0x; export $
+      CLANG_LINK_OBJC_RUNTIME=NO; export $
+      CLANG_WARN_OBJC_MISSING_PROPERTY_SYNTHESIS=YES; export $
+      CONFIGURATION=Profile-iphoneos; export $
+      CONTENTS_FOLDER_PATH=voe_cmd_test.app; export COPY_PHASE_STRIP=NO; $
+      export EXECUTABLE_NAME=voe_cmd_test; export $
+      EXECUTABLE_PATH=voe_cmd_test.app/voe_cmd_test; export $
+      FULL_PRODUCT_NAME=voe_cmd_test.app; export GCC_CW_ASM_SYNTAX=NO; $
+      export GCC_C_LANGUAGE_STANDARD=c99; export $
+      GCC_ENABLE_CPP_EXCEPTIONS=NO; export GCC_ENABLE_CPP_RTTI=NO; export $
+      GCC_ENABLE_PASCAL_STRINGS=NO; export $
+      GCC_INLINES_ARE_PRIVATE_EXTERN=YES; export $
+      GCC_OBJC_CALL_CXX_CDTORS=YES; export $
+      GCC_PRECOMPILE_PREFIX_HEADER=YES; export $
+      GCC_SYMBOLS_PRIVATE_EXTERN=YES; export GCC_THREADSAFE_STATICS=NO; $
+      export GCC_TREAT_WARNINGS_AS_ERRORS=YES; export $
+      GCC_VERSION=com.apple.compilers.llvm.clang.1_0; export $
+      GCC_WARN_ABOUT_MISSING_NEWLINE=YES; export $
+      INFOPLIST_FILE=../../testing/gtest_ios/unittest-Info.plist; export $
+      INFOPLIST_PATH=voe_cmd_test.app/Info.plist; export $
+      IPHONEOS_DEPLOYMENT_TARGET=6.0; export $
+      LDPLUSPLUS="$${SOURCE_ROOT}/../../third_party/llvm-build/Release+Asserts/bin/clang++"; $
+      export MACH_O_TYPE=mh_execute; export $
+      OTHER_LDFLAGS=-Wl,-search_paths_first; export $
+      PRODUCT_NAME=voe_cmd_test; export $
+      PRODUCT_TYPE=com.apple.product-type.application; export $
+      SDKROOT=/Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS7.1.sdk; $
+      export SYMROOT=../../xcodebuild; export TARGETED_DEVICE_FAMILY=1,2; $
+      export $
+      TARGET_BUILD_DIR=/Users/cwebb/Sqwiggle/webrtc/trunk/out_ios/Profile-iphoneos; $
+      export TEMP_DIR="$${TMPDIR}"; export $
+      UNLOCALIZED_RESOURCES_FOLDER_PATH=voe_cmd_test.app; export $
+      USE_HEADERMAP=NO; export VALID_ARCHS="armv7 i386"; export $
+      WARNING_CFLAGS="-Wall -Wendif-labels -Wextra -Wno-unused-parameter $
+      -Wno-missing-field-initializers -Wheader-hygiene -Wno-c++11-narrowing $
+      -Wno-char-subscripts -Wno-unneeded-internal-declaration $
+      -Wno-covered-switch-default -Wstring-conversion $
+      -Wno-deprecated-register -Wno-absolute-value"; export $
+      WRAPPER_NAME=voe_cmd_test.app;
+  keys = '{"UIDeviceFamily": [1, 2], "BuildMachineOSBuild": "13C64", $
+      "DTXcodeBuild": "5B130a", "DTSDKBuild": "11D167", $
+      "CFBundleSupportedPlatforms": ["iPhoneOS"], "DTXcode": "0510", $
+      "DTSDKName": "iphoneos", "DTPlatformVersion": "7.1", $
+      "DTPlatformName": "iphoneos"}'
+defines = -DV8_DEPRECATION_WARNINGS -DBLINK_SCALE_FILTERS_AT_RECORD_TIME $
+    -DDISABLE_NACL -DCHROMIUM_BUILD -DUSE_LIBJPEG_TURBO=1 $
+    -DENABLE_CONFIGURATION_POLICY $
+    -DDISCARDABLE_MEMORY_ALWAYS_SUPPORTED_NATIVELY $
+    -DSYSTEM_NATIVELY_SIGNALS_MEMORY_PRESSURE -DENABLE_EGLIMAGE=1 $
+    -DCLD_VERSION=1 -DENABLE_SPELLCHECK=1 -DDISABLE_FTP_SUPPORT=1 $
+    -DWEBRTC_MODULE_UTILITY_VIDEO -DWEBRTC_ARCH_ARM -DWEBRTC_ARCH_ARM_V7 $
+    -DWEBRTC_ARCH_ARM_NEON -DWEBRTC_POSIX -DWEBRTC_MAC -DWEBRTC_IOS $
+    -DGTEST_HAS_POSIX_RE=0 -DUNIT_TEST -DGTEST_HAS_RTTI=0 $
+    -DGFLAGS_DLL_DECL= -DGFLAGS_DLL_DECLARE_FLAG= -DGFLAGS_DLL_DEFINE_FLAG= $
+    -D__STDC_CONSTANT_MACROS -D__STDC_FORMAT_MACROS -DNDEBUG -DNVALGRIND $
+    -DDYNAMIC_ANNOTATIONS_ENABLED=0 -DNS_BLOCK_ASSERTIONS=1 $
+    -D_FORTIFY_SOURCE=2
+includes = -I../.. -I../.. -I../../testing/gtest/include $
+    -I../../third_party/gflags/gen/posix/include $
+    -I../../third_party/gflags/src -I../../webrtc/system_wrappers/interface
+cflags = -isysroot $
+    /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS7.1.sdk $
+    -Os -gdwarf-2 -fvisibility=hidden -Werror -Wnewline-eof $
+    -miphoneos-version-min=6.0 -arch armv7 -Wall -Wendif-labels -Wextra $
+    -Wno-unused-parameter -Wno-missing-field-initializers -Wheader-hygiene $
+    -Wno-c++11-narrowing -Wno-char-subscripts $
+    -Wno-unneeded-internal-declaration -Wno-covered-switch-default $
+    -Wstring-conversion -Wno-deprecated-register -Wno-absolute-value
+cflags_c = -std=c99 -fcolor-diagnostics
+cflags_cc = -std=gnu++0x -fno-rtti -fno-exceptions $
+    -fvisibility-inlines-hidden -fno-threadsafe-statics -fcolor-diagnostics
+cflags_objc = $cflags_c -Wobjc-missing-property-synthesis
+cflags_objcc = $cflags_cc -Wobjc-missing-property-synthesis $
+    -fobjc-call-cxx-cdtors
+
+build obj/webrtc/voice_engine/test/cmd_test/voe_cmd_test.voe_cmd_test.o: $
+    cxx ../../webrtc/voice_engine/test/cmd_test/voe_cmd_test.cc || $
+    obj/webrtc/voice_engine/voe_cmd_test.compile_depends.stamp
+
+ldflags = -Wl,-search_paths_first -Wl,-dead_strip $
+    -miphoneos-version-min=6.0 -isysroot $
+    /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS7.1.sdk $
+    -arch armv7 -L.
+libs = -framework AudioToolbox -framework CoreAudio -framework Foundation
+build voe_cmd_test.app/voe_cmd_test: link $
+    obj/webrtc/voice_engine/test/cmd_test/voe_cmd_test.voe_cmd_test.o $
+    libvoice_engine.a libgtest.a libgflags.a libsystem_wrappers.a $
+    libchannel_transport.a libtest_support.a libcommon_audio.a $
+    libcommon_audio_neon.a libaudio_coding_module.a libCNG.a libG711.a $
+    libG722.a libiLBC.a libiSAC.a libiSACFix.a libisac_neon.a libPCM16B.a $
+    libNetEq.a libwebrtc_opus.a libopus.a libacm2.a libNetEq4.a $
+    libaudio_conference_mixer.a libaudio_processing.a $
+    libaudio_processing_neon.a lib_core_neon_offsets.a libwebrtc_utility.a $
+    libmedia_file.a libwebrtc_video_coding.a libwebrtc_i420.a $
+    libcommon_video.a libyuv.a libyuv_neon.a libvideo_coding_utility.a $
+    libwebrtc_vp8.a libvpx.a libvpx_asm_offsets_vp8.a $
+    libvpx_asm_offsets_vpx_scale.a libaudio_device.a librtp_rtcp.a $
+    libpaced_sender.a libremote_bitrate_estimator.a librbe_components.a $
+    libgmock.a | $
+    obj/webrtc/modules/audio_processing/gen_nsx_core_neon_offsets_h.actions_rules_copies.stamp $
+    obj/webrtc/modules/audio_processing/gen_aecm_core_neon_offsets_h.actions_rules_copies.stamp $
+    obj/third_party/libvpx/gen_asm_offsets_vpx_scale.actions_rules_copies.stamp $
+    obj/third_party/libvpx/gen_asm_offsets_vp8.actions_rules_copies.stamp
+  ld = $ldxx
+build voe_cmd_test.app: stamp voe_cmd_test.app/Default-568h@2x.png $
+    voe_cmd_test.app/Info.plist voe_cmd_test.app/voe_cmd_test
+  postbuilds = (export $
+      BUILT_PRODUCTS_DIR=/Users/cwebb/Sqwiggle/webrtc/trunk/out_ios/Profile-iphoneos; $
+      export CONFIGURATION=Profile-iphoneos; export $
+      CONTENTS_FOLDER_PATH=voe_cmd_test.app; export $
+      EXECUTABLE_NAME=voe_cmd_test; export $
+      EXECUTABLE_PATH=voe_cmd_test.app/voe_cmd_test; export $
+      FULL_PRODUCT_NAME=voe_cmd_test.app; export $
+      INFOPLIST_PATH=voe_cmd_test.app/Info.plist; export $
+      MACH_O_TYPE=mh_execute; export PRODUCT_NAME=voe_cmd_test; export $
+      PRODUCT_TYPE=com.apple.product-type.application; export $
+      SDKROOT=/Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS7.1.sdk; $
+      export $
+      SRCROOT=/Users/cwebb/Sqwiggle/webrtc/trunk/out_ios/Profile-iphoneos/../../webrtc/voice_engine; $
+      export SOURCE_ROOT="$${SRCROOT}"; export $
+      TARGET_BUILD_DIR=/Users/cwebb/Sqwiggle/webrtc/trunk/out_ios/Profile-iphoneos; $
+      export TEMP_DIR="$${TMPDIR}"; export $
+      UNLOCALIZED_RESOURCES_FOLDER_PATH=voe_cmd_test.app; export $
+      WRAPPER_NAME=voe_cmd_test.app; (cd ../../webrtc/voice_engine && $
+      dsymutil ../../out_ios/Profile-iphoneos/voe_cmd_test.app/voe_cmd_test $
+      -o ../../out_ios/Profile-iphoneos/voe_cmd_test.app.dSYM && strip  $
+      ../../out_ios/Profile-iphoneos/voe_cmd_test.app/voe_cmd_test && $
+      $${TARGET_BUILD_DIR}/gyp-mac-tool code-sign-bundle $
+      "5E39A28CDE1D5A07BAF9F1DEE8F82380A1D33F8B" "" "" ""); G=$$?; ((exit $
+      $$G) || rm -rf voe_cmd_test.app) && exit $$G) && 

@@ -1,0 +1,141 @@
+build obj/webrtc/voice_engine/voice_engine_unittests.actions_depends.stamp: $
+    stamp libvoice_engine.a libgtest.a libcommon_audio.a libaudio_device.a $
+    libaudio_processing.a libaudio_coding_module.a $
+    libaudio_conference_mixer.a libmedia_file.a librtp_rtcp.a $
+    libwebrtc_utility.a libsystem_wrappers.a libtest_support_main.a $
+    libcommon_audio_sse2.a libCNG.a libG711.a libG722.a libiLBC.a libiSAC.a $
+    libiSACFix.a libPCM16B.a libNetEq.a libwebrtc_opus.a libopus.a $
+    libacm2.a libNetEq4.a libaudioproc_debug_proto.a libprotobuf_lite.a $
+    libaudio_processing_sse2.a libwebrtc_video_coding.a libwebrtc_i420.a $
+    libcommon_video.a libyuv.a libjpeg_turbo.a libvideo_coding_utility.a $
+    libwebrtc_vp8.a libvpx.a $
+    obj/third_party/libvpx/gen_asm_offsets_vp8.actions_rules_copies.stamp $
+    libvpx_asm_offsets_vp8.a libvpx_intrinsics_mmx.a $
+    libvpx_intrinsics_sse2.a libvpx_intrinsics_ssse3.a libpaced_sender.a $
+    libremote_bitrate_estimator.a librbe_components.a libtest_support.a $
+    libgmock.a libgflags.a
+
+build obj/webrtc/voice_engine/voice_engine_unittests.compile_depends.stamp: $
+    stamp $
+    obj/webrtc/modules/audioproc_debug_proto.actions_rules_copies.stamp $
+    obj/webrtc/modules/audioproc_debug_proto.actions_rules_copies.stamp $
+    obj/third_party/libjpeg_turbo/libjpeg.actions_rules_copies.stamp $
+    obj/third_party/libvpx/libvpx.actions_rules_copies.stamp $
+    obj/third_party/libvpx/gen_asm_offsets_vp8.actions_rules_copies.stamp
+
+defines = -DV8_DEPRECATION_WARNINGS -DBLINK_SCALE_FILTERS_AT_RECORD_TIME $
+    -DCHROMIUM_BUILD -DUSE_LIBJPEG_TURBO=1 -DENABLE_ONE_CLICK_SIGNIN $
+    -DENABLE_REMOTING=1 -DENABLE_WEBRTC=1 -DENABLE_PEPPER_CDMS $
+    -DENABLE_CONFIGURATION_POLICY -DENABLE_INPUT_SPEECH $
+    -DENABLE_NOTIFICATIONS -DENABLE_HIDPI=1 $
+    -DDISCARDABLE_MEMORY_ALWAYS_SUPPORTED_NATIVELY $
+    -DSYSTEM_NATIVELY_SIGNALS_MEMORY_PRESSURE -DENABLE_EGLIMAGE=1 $
+    -DENABLE_TASK_MANAGER=1 -DENABLE_EXTENSIONS=1 $
+    -DENABLE_PLUGIN_INSTALLATION=1 -DENABLE_PLUGINS=1 $
+    -DENABLE_SESSION_SERVICE=1 -DENABLE_THEMES=1 -DENABLE_AUTOFILL_DIALOG=1 $
+    -DENABLE_BACKGROUND=1 -DENABLE_AUTOMATION=1 -DENABLE_GOOGLE_NOW=1 $
+    -DCLD_VERSION=2 -DENABLE_FULL_PRINTING=1 -DENABLE_PRINTING=1 $
+    -DENABLE_SPELLCHECK=1 -DENABLE_CAPTIVE_PORTAL_DETECTION=1 $
+    -DENABLE_APP_LIST=1 -DENABLE_SETTINGS_APP=1 -DENABLE_MANAGED_USERS=1 $
+    -DENABLE_SERVICE_DISCOVERY=1 -DWEBRTC_MODULE_UTILITY_VIDEO $
+    -DWEBRTC_POSIX -DWEBRTC_MAC -DGTEST_HAS_POSIX_RE=0 -DUNIT_TEST $
+    -DGTEST_HAS_RTTI=0 -D__STDC_CONSTANT_MACROS -D__STDC_FORMAT_MACROS $
+    -DDYNAMIC_ANNOTATIONS_ENABLED=1 -DWTF_USE_DYNAMIC_ANNOTATIONS=1
+includes = -I../.. -I../.. -I../../testing/gtest/include $
+    -I../../webrtc/common_audio/resampler/include $
+    -I../../webrtc/common_audio/signal_processing/include $
+    -I../../webrtc/common_audio/vad/include $
+    -I../../webrtc/modules/interface $
+    -I../../webrtc/modules/audio_device/include $
+    -I../../webrtc/modules/audio_coding/main/interface -I../../webrtc $
+    -I../../webrtc/modules/audio_conference_mixer/interface $
+    -I../../webrtc/modules/media_file/interface $
+    -I../../webrtc/system_wrappers/interface
+cflags = -isysroot $
+    /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.8.sdk $
+    -O0 -gdwarf-2 -fvisibility=hidden -Werror -Wnewline-eof $
+    -mmacosx-version-min=10.6 -arch i386 -Wall -Wendif-labels -Wextra $
+    -Wno-unused-parameter -Wno-missing-field-initializers -Wheader-hygiene $
+    -Wno-c++11-narrowing -Wno-char-subscripts $
+    -Wno-unneeded-internal-declaration -Wno-covered-switch-default $
+    -Wstring-conversion -Wno-deprecated-register -Wno-absolute-value
+cflags_c = -std=c99 -fcolor-diagnostics -fno-strict-aliasing $
+    -fstack-protector-all
+cflags_cc = -std=gnu++11 -fno-rtti -fno-exceptions $
+    -fvisibility-inlines-hidden -fno-threadsafe-statics -fcolor-diagnostics $
+    -fno-strict-aliasing -fstack-protector-all
+cflags_objc = $cflags_c -Wobjc-missing-property-synthesis
+cflags_objcc = $cflags_cc -Wobjc-missing-property-synthesis $
+    -fobjc-call-cxx-cdtors
+
+build obj/webrtc/voice_engine/voice_engine_unittests.channel_unittest.o: $
+    cxx ../../webrtc/voice_engine/channel_unittest.cc || $
+    obj/webrtc/voice_engine/voice_engine_unittests.compile_depends.stamp
+build $
+    obj/webrtc/voice_engine/voice_engine_unittests.transmit_mixer_unittest.o: $
+    cxx ../../webrtc/voice_engine/transmit_mixer_unittest.cc || $
+    obj/webrtc/voice_engine/voice_engine_unittests.compile_depends.stamp
+build obj/webrtc/voice_engine/voice_engine_unittests.utility_unittest.o: $
+    cxx ../../webrtc/voice_engine/utility_unittest.cc || $
+    obj/webrtc/voice_engine/voice_engine_unittests.compile_depends.stamp
+build $
+    obj/webrtc/voice_engine/voice_engine_unittests.voe_audio_processing_unittest.o: $
+    cxx ../../webrtc/voice_engine/voe_audio_processing_unittest.cc || $
+    obj/webrtc/voice_engine/voice_engine_unittests.compile_depends.stamp
+build obj/webrtc/voice_engine/voice_engine_unittests.voe_base_unittest.o: $
+    cxx ../../webrtc/voice_engine/voe_base_unittest.cc || $
+    obj/webrtc/voice_engine/voice_engine_unittests.compile_depends.stamp
+build obj/webrtc/voice_engine/voice_engine_unittests.voe_codec_unittest.o: $
+    cxx ../../webrtc/voice_engine/voe_codec_unittest.cc || $
+    obj/webrtc/voice_engine/voice_engine_unittests.compile_depends.stamp
+build $
+    obj/webrtc/voice_engine/voice_engine_unittests.voe_neteq_stats_unittest.o: $
+    cxx ../../webrtc/voice_engine/voe_neteq_stats_unittest.cc || $
+    obj/webrtc/voice_engine/voice_engine_unittests.compile_depends.stamp
+
+ldflags = -Wl,-search_paths_first -Wl,-pie -mmacosx-version-min=10.6 $
+    -isysroot $
+    /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.8.sdk $
+    -arch i386 -L.
+libs = -framework ApplicationServices -framework AudioToolbox -framework $
+    CoreAudio -framework Foundation
+build voice_engine_unittests: link $
+    obj/webrtc/voice_engine/voice_engine_unittests.channel_unittest.o $
+    obj/webrtc/voice_engine/voice_engine_unittests.transmit_mixer_unittest.o $
+    obj/webrtc/voice_engine/voice_engine_unittests.utility_unittest.o $
+    obj/webrtc/voice_engine/voice_engine_unittests.voe_audio_processing_unittest.o $
+    obj/webrtc/voice_engine/voice_engine_unittests.voe_base_unittest.o $
+    obj/webrtc/voice_engine/voice_engine_unittests.voe_codec_unittest.o $
+    obj/webrtc/voice_engine/voice_engine_unittests.voe_neteq_stats_unittest.o $
+    libvoice_engine.a libgtest.a libcommon_audio.a libaudio_device.a $
+    libaudio_processing.a libaudio_coding_module.a $
+    libaudio_conference_mixer.a libmedia_file.a librtp_rtcp.a $
+    libwebrtc_utility.a libsystem_wrappers.a libtest_support_main.a $
+    libcommon_audio_sse2.a libCNG.a libG711.a libG722.a libiLBC.a libiSAC.a $
+    libiSACFix.a libPCM16B.a libNetEq.a libwebrtc_opus.a libopus.a $
+    libacm2.a libNetEq4.a libaudioproc_debug_proto.a libprotobuf_lite.a $
+    libaudio_processing_sse2.a libwebrtc_video_coding.a libwebrtc_i420.a $
+    libcommon_video.a libyuv.a libjpeg_turbo.a libvideo_coding_utility.a $
+    libwebrtc_vp8.a libvpx.a libvpx_asm_offsets_vp8.a $
+    libvpx_intrinsics_mmx.a libvpx_intrinsics_sse2.a $
+    libvpx_intrinsics_ssse3.a libpaced_sender.a $
+    libremote_bitrate_estimator.a librbe_components.a libtest_support.a $
+    libgmock.a libgflags.a | $
+    obj/third_party/libvpx/gen_asm_offsets_vp8.actions_rules_copies.stamp
+  ld = $ldxx
+  postbuilds = $ && (export $
+      BUILT_PRODUCTS_DIR=/Users/cwebb/Sqwiggle/webrtc/trunk/out/Debug; $
+      export CONFIGURATION=Debug; export $
+      EXECUTABLE_NAME=voice_engine_unittests; export $
+      EXECUTABLE_PATH=voice_engine_unittests; export $
+      FULL_PRODUCT_NAME=voice_engine_unittests; export $
+      PRODUCT_NAME=voice_engine_unittests; export $
+      PRODUCT_TYPE=com.apple.product-type.tool; export $
+      SDKROOT=/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.8.sdk; $
+      export $
+      SRCROOT=/Users/cwebb/Sqwiggle/webrtc/trunk/out/Debug/../../webrtc/voice_engine; $
+      export SOURCE_ROOT="$${SRCROOT}"; export $
+      TARGET_BUILD_DIR=/Users/cwebb/Sqwiggle/webrtc/trunk/out/Debug; export $
+      TEMP_DIR="$${TMPDIR}"; (cd ../../webrtc/voice_engine && $
+      ../../build/mac/change_mach_o_flags_from_xcode.sh); G=$$?; ((exit $
+      $$G) || rm -rf voice_engine_unittests) && exit $$G)

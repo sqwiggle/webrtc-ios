@@ -1,0 +1,134 @@
+defines = -DV8_DEPRECATION_WARNINGS -DBLINK_SCALE_FILTERS_AT_RECORD_TIME $
+    -DDISABLE_NACL -DCHROMIUM_BUILD -DUSE_LIBJPEG_TURBO=1 $
+    -DENABLE_CONFIGURATION_POLICY $
+    -DDISCARDABLE_MEMORY_ALWAYS_SUPPORTED_NATIVELY $
+    -DSYSTEM_NATIVELY_SIGNALS_MEMORY_PRESSURE -DENABLE_EGLIMAGE=1 $
+    -DCLD_VERSION=1 -DENABLE_SPELLCHECK=1 -DDISABLE_FTP_SUPPORT=1 $
+    -DWEBRTC_MODULE_UTILITY_VIDEO -DWEBRTC_ARCH_ARM -DWEBRTC_ARCH_ARM_V7 $
+    -DWEBRTC_ARCH_ARM_NEON -DWEBRTC_POSIX -DWEBRTC_MAC -DWEBRTC_IOS $
+    -DWEBRTC_NS_FIXED -D__STDC_CONSTANT_MACROS -D__STDC_FORMAT_MACROS $
+    -DNDEBUG -DNVALGRIND -DDYNAMIC_ANNOTATIONS_ENABLED=0 $
+    -DNS_BLOCK_ASSERTIONS=1 -D_FORTIFY_SOURCE=2
+includes = -I../.. -I../.. -I../../webrtc/common_audio/resampler/include $
+    -I../../webrtc/common_audio/signal_processing/include $
+    -I../../webrtc/common_audio/vad/include $
+    -I../../webrtc/system_wrappers/interface
+cflags = -isysroot $
+    /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS7.1.sdk $
+    -Os -gdwarf-2 -fvisibility=hidden -Werror -Wnewline-eof $
+    -miphoneos-version-min=6.0 -arch armv7 -Wall -Wendif-labels -Wextra $
+    -Wno-unused-parameter -Wno-missing-field-initializers -Wheader-hygiene $
+    -Wno-c++11-narrowing -Wno-char-subscripts $
+    -Wno-unneeded-internal-declaration -Wno-covered-switch-default $
+    -Wstring-conversion -Wno-deprecated-register -Wno-absolute-value
+cflags_c = -std=c99 -fcolor-diagnostics
+cflags_cc = -std=gnu++0x -fno-rtti -fno-exceptions $
+    -fvisibility-inlines-hidden -fno-threadsafe-statics -fcolor-diagnostics
+cflags_objc = $cflags_c -Wobjc-missing-property-synthesis
+cflags_objcc = $cflags_cc -Wobjc-missing-property-synthesis $
+    -fobjc-call-cxx-cdtors
+
+build $
+    obj/webrtc/modules/audio_processing/aec/audio_processing.echo_cancellation.o: $
+    cc ../../webrtc/modules/audio_processing/aec/echo_cancellation.c
+build obj/webrtc/modules/audio_processing/aec/audio_processing.aec_core.o: $
+    cc ../../webrtc/modules/audio_processing/aec/aec_core.c
+build obj/webrtc/modules/audio_processing/aec/audio_processing.aec_rdft.o: $
+    cc ../../webrtc/modules/audio_processing/aec/aec_rdft.c
+build $
+    obj/webrtc/modules/audio_processing/aec/audio_processing.aec_resampler.o: $
+    cc ../../webrtc/modules/audio_processing/aec/aec_resampler.c
+build $
+    obj/webrtc/modules/audio_processing/aecm/audio_processing.echo_control_mobile.o: $
+    cc ../../webrtc/modules/audio_processing/aecm/echo_control_mobile.c
+build $
+    obj/webrtc/modules/audio_processing/aecm/audio_processing.aecm_core.o: $
+    cc ../../webrtc/modules/audio_processing/aecm/aecm_core.c
+build $
+    obj/webrtc/modules/audio_processing/agc/audio_processing.analog_agc.o: $
+    cc ../../webrtc/modules/audio_processing/agc/analog_agc.c
+build $
+    obj/webrtc/modules/audio_processing/agc/audio_processing.digital_agc.o: $
+    cc ../../webrtc/modules/audio_processing/agc/digital_agc.c
+build obj/webrtc/modules/audio_processing/audio_processing.audio_buffer.o: $
+    cxx ../../webrtc/modules/audio_processing/audio_buffer.cc
+build $
+    obj/webrtc/modules/audio_processing/audio_processing.audio_processing_impl.o: $
+    cxx ../../webrtc/modules/audio_processing/audio_processing_impl.cc
+build $
+    obj/webrtc/modules/audio_processing/audio_processing.echo_cancellation_impl.o: $
+    cxx ../../webrtc/modules/audio_processing/echo_cancellation_impl.cc
+build $
+    obj/webrtc/modules/audio_processing/audio_processing.echo_control_mobile_impl.o: $
+    cxx ../../webrtc/modules/audio_processing/echo_control_mobile_impl.cc
+build $
+    obj/webrtc/modules/audio_processing/audio_processing.gain_control_impl.o: $
+    cxx ../../webrtc/modules/audio_processing/gain_control_impl.cc
+build $
+    obj/webrtc/modules/audio_processing/audio_processing.high_pass_filter_impl.o: $
+    cxx ../../webrtc/modules/audio_processing/high_pass_filter_impl.cc
+build $
+    obj/webrtc/modules/audio_processing/audio_processing.level_estimator_impl.o: $
+    cxx ../../webrtc/modules/audio_processing/level_estimator_impl.cc
+build $
+    obj/webrtc/modules/audio_processing/audio_processing.noise_suppression_impl.o: $
+    cxx ../../webrtc/modules/audio_processing/noise_suppression_impl.cc
+build $
+    obj/webrtc/modules/audio_processing/audio_processing.processing_component.o: $
+    cxx ../../webrtc/modules/audio_processing/processing_component.cc
+build $
+    obj/webrtc/modules/audio_processing/audio_processing.typing_detection.o: $
+    cxx ../../webrtc/modules/audio_processing/typing_detection.cc
+build $
+    obj/webrtc/modules/audio_processing/utility/audio_processing.delay_estimator.o: $
+    cc ../../webrtc/modules/audio_processing/utility/delay_estimator.c
+build $
+    obj/webrtc/modules/audio_processing/utility/audio_processing.delay_estimator_wrapper.o: $
+    cc ../../webrtc/modules/audio_processing/utility/delay_estimator_wrapper.c
+build obj/webrtc/modules/audio_processing/utility/audio_processing.fft4g.o: $
+    cc ../../webrtc/modules/audio_processing/utility/fft4g.c
+build $
+    obj/webrtc/modules/audio_processing/utility/audio_processing.ring_buffer.o: $
+    cc ../../webrtc/modules/audio_processing/utility/ring_buffer.c
+build $
+    obj/webrtc/modules/audio_processing/audio_processing.voice_detection_impl.o: $
+    cxx ../../webrtc/modules/audio_processing/voice_detection_impl.cc
+build $
+    obj/webrtc/modules/audio_processing/ns/audio_processing.noise_suppression_x.o: $
+    cc ../../webrtc/modules/audio_processing/ns/noise_suppression_x.c
+build obj/webrtc/modules/audio_processing/ns/audio_processing.nsx_core.o: $
+    cc ../../webrtc/modules/audio_processing/ns/nsx_core.c
+build obj/webrtc/modules/audio_processing/ns/audio_processing.nsx_core_c.o: $
+    cc ../../webrtc/modules/audio_processing/ns/nsx_core_c.c
+build $
+    obj/webrtc/modules/audio_processing/aecm/audio_processing.aecm_core_c.o: $
+    cc ../../webrtc/modules/audio_processing/aecm/aecm_core_c.c
+
+build libaudio_processing.a: alink $
+    obj/webrtc/modules/audio_processing/aec/audio_processing.echo_cancellation.o $
+    obj/webrtc/modules/audio_processing/aec/audio_processing.aec_core.o $
+    obj/webrtc/modules/audio_processing/aec/audio_processing.aec_rdft.o $
+    obj/webrtc/modules/audio_processing/aec/audio_processing.aec_resampler.o $
+    obj/webrtc/modules/audio_processing/aecm/audio_processing.echo_control_mobile.o $
+    obj/webrtc/modules/audio_processing/aecm/audio_processing.aecm_core.o $
+    obj/webrtc/modules/audio_processing/agc/audio_processing.analog_agc.o $
+    obj/webrtc/modules/audio_processing/agc/audio_processing.digital_agc.o $
+    obj/webrtc/modules/audio_processing/audio_processing.audio_buffer.o $
+    obj/webrtc/modules/audio_processing/audio_processing.audio_processing_impl.o $
+    obj/webrtc/modules/audio_processing/audio_processing.echo_cancellation_impl.o $
+    obj/webrtc/modules/audio_processing/audio_processing.echo_control_mobile_impl.o $
+    obj/webrtc/modules/audio_processing/audio_processing.gain_control_impl.o $
+    obj/webrtc/modules/audio_processing/audio_processing.high_pass_filter_impl.o $
+    obj/webrtc/modules/audio_processing/audio_processing.level_estimator_impl.o $
+    obj/webrtc/modules/audio_processing/audio_processing.noise_suppression_impl.o $
+    obj/webrtc/modules/audio_processing/audio_processing.processing_component.o $
+    obj/webrtc/modules/audio_processing/audio_processing.typing_detection.o $
+    obj/webrtc/modules/audio_processing/utility/audio_processing.delay_estimator.o $
+    obj/webrtc/modules/audio_processing/utility/audio_processing.delay_estimator_wrapper.o $
+    obj/webrtc/modules/audio_processing/utility/audio_processing.fft4g.o $
+    obj/webrtc/modules/audio_processing/utility/audio_processing.ring_buffer.o $
+    obj/webrtc/modules/audio_processing/audio_processing.voice_detection_impl.o $
+    obj/webrtc/modules/audio_processing/ns/audio_processing.noise_suppression_x.o $
+    obj/webrtc/modules/audio_processing/ns/audio_processing.nsx_core.o $
+    obj/webrtc/modules/audio_processing/ns/audio_processing.nsx_core_c.o $
+    obj/webrtc/modules/audio_processing/aecm/audio_processing.aecm_core_c.o

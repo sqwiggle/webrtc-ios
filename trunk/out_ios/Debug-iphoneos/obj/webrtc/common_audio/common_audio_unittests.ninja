@@ -1,0 +1,197 @@
+build obj/webrtc/common_audio/common_audio_unittests.actions_depends.stamp: $
+    stamp libcommon_audio.a libtest_support_main.a libgmock.a libgtest.a $
+    libsystem_wrappers.a libcommon_audio_neon.a libtest_support.a libgflags.a
+
+build common_audio_unittests.app/Default-568h@2x.png: mac_tool $
+    ../../testing/gtest_ios/Default-568h@2x.png
+  mactool_cmd = copy-bundle-resource
+build common_audio_unittests.app/Info.plist: copy_infoplist $
+    ../../testing/gtest_ios/unittest-Info.plist
+  env = export ALWAYS_SEARCH_USER_PATHS=NO; export $
+      BUILT_PRODUCTS_DIR=/Users/cwebb/Sqwiggle/webrtc/trunk/out_ios/Debug-iphoneos; $
+      export BUNDLE_ID_TEST_NAME=commonaudiounittests; export $
+      SRCROOT=/Users/cwebb/Sqwiggle/webrtc/trunk/out_ios/Debug-iphoneos/../../webrtc/common_audio; $
+      export SOURCE_ROOT="$${SRCROOT}"; export $
+      CC="$${SOURCE_ROOT}/../../third_party/llvm-build/Release+Asserts/bin/clang"; $
+      export CLANG_CXX_LANGUAGE_STANDARD=gnu++0x; export $
+      CLANG_LINK_OBJC_RUNTIME=NO; export $
+      CLANG_WARN_OBJC_MISSING_PROPERTY_SYNTHESIS=YES; export $
+      CONFIGURATION=Debug-iphoneos; export $
+      CONTENTS_FOLDER_PATH=common_audio_unittests.app; export $
+      COPY_PHASE_STRIP=NO; export EXECUTABLE_NAME=common_audio_unittests; $
+      export $
+      EXECUTABLE_PATH=common_audio_unittests.app/common_audio_unittests; $
+      export FULL_PRODUCT_NAME=common_audio_unittests.app; export $
+      GCC_CW_ASM_SYNTAX=NO; export GCC_C_LANGUAGE_STANDARD=c99; export $
+      GCC_ENABLE_CPP_EXCEPTIONS=NO; export GCC_ENABLE_CPP_RTTI=NO; export $
+      GCC_ENABLE_PASCAL_STRINGS=NO; export $
+      GCC_INLINES_ARE_PRIVATE_EXTERN=YES; export $
+      GCC_OBJC_CALL_CXX_CDTORS=YES; export $
+      GCC_PRECOMPILE_PREFIX_HEADER=YES; export $
+      GCC_SYMBOLS_PRIVATE_EXTERN=YES; export GCC_THREADSAFE_STATICS=NO; $
+      export GCC_TREAT_WARNINGS_AS_ERRORS=YES; export $
+      GCC_VERSION=com.apple.compilers.llvm.clang.1_0; export $
+      GCC_WARN_ABOUT_MISSING_NEWLINE=YES; export $
+      INFOPLIST_FILE=../../testing/gtest_ios/unittest-Info.plist; export $
+      INFOPLIST_PATH=common_audio_unittests.app/Info.plist; export $
+      IPHONEOS_DEPLOYMENT_TARGET=6.0; export $
+      LDPLUSPLUS="$${SOURCE_ROOT}/../../third_party/llvm-build/Release+Asserts/bin/clang++"; $
+      export MACH_O_TYPE=mh_execute; export $
+      OTHER_LDFLAGS=-Wl,-search_paths_first; export $
+      PRODUCT_NAME=common_audio_unittests; export $
+      PRODUCT_TYPE=com.apple.product-type.application; export $
+      SDKROOT=/Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS7.1.sdk; $
+      export SYMROOT=../../xcodebuild; export TARGETED_DEVICE_FAMILY=1,2; $
+      export $
+      TARGET_BUILD_DIR=/Users/cwebb/Sqwiggle/webrtc/trunk/out_ios/Debug-iphoneos; $
+      export TEMP_DIR="$${TMPDIR}"; export $
+      UNLOCALIZED_RESOURCES_FOLDER_PATH=common_audio_unittests.app; export $
+      USE_HEADERMAP=NO; export VALID_ARCHS="armv7 i386"; export $
+      WARNING_CFLAGS="-Wall -Wendif-labels -Wextra -Wno-unused-parameter $
+      -Wno-missing-field-initializers -Wheader-hygiene -Wno-c++11-narrowing $
+      -Wno-char-subscripts -Wno-unneeded-internal-declaration $
+      -Wno-covered-switch-default -Wstring-conversion $
+      -Wno-deprecated-register -Wno-absolute-value"; export $
+      WRAPPER_NAME=common_audio_unittests.app;
+  keys = '{"UIDeviceFamily": [1, 2], "BuildMachineOSBuild": "13C64", $
+      "DTXcodeBuild": "5B130a", "DTSDKBuild": "11D167", $
+      "CFBundleSupportedPlatforms": ["iPhoneOS"], "DTXcode": "0510", $
+      "DTSDKName": "iphoneos", "DTPlatformVersion": "7.1", $
+      "DTPlatformName": "iphoneos"}'
+defines = -DV8_DEPRECATION_WARNINGS -DBLINK_SCALE_FILTERS_AT_RECORD_TIME $
+    -DDISABLE_NACL -DCHROMIUM_BUILD -DUSE_LIBJPEG_TURBO=1 $
+    -DENABLE_CONFIGURATION_POLICY $
+    -DDISCARDABLE_MEMORY_ALWAYS_SUPPORTED_NATIVELY $
+    -DSYSTEM_NATIVELY_SIGNALS_MEMORY_PRESSURE -DENABLE_EGLIMAGE=1 $
+    -DCLD_VERSION=1 -DENABLE_SPELLCHECK=1 -DDISABLE_FTP_SUPPORT=1 $
+    -DWEBRTC_MODULE_UTILITY_VIDEO -DWEBRTC_ARCH_ARM -DWEBRTC_ARCH_ARM_V7 $
+    -DWEBRTC_ARCH_ARM_NEON -DWEBRTC_POSIX -DWEBRTC_MAC -DWEBRTC_IOS $
+    -DGTEST_HAS_POSIX_RE=0 -DUNIT_TEST -DGTEST_HAS_RTTI=0 $
+    -D__STDC_CONSTANT_MACROS -D__STDC_FORMAT_MACROS $
+    -DDYNAMIC_ANNOTATIONS_ENABLED=1 -DWTF_USE_DYNAMIC_ANNOTATIONS=1
+includes = -I../.. -I../.. -I../../webrtc/common_audio/resampler/include $
+    -I../../webrtc/common_audio/signal_processing/include $
+    -I../../webrtc/common_audio/vad/include -I../../testing/gmock/include $
+    -I../../testing/gtest/include
+cflags = -isysroot $
+    /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS7.1.sdk $
+    -O0 -gdwarf-2 -fvisibility=hidden -Werror -Wnewline-eof $
+    -miphoneos-version-min=6.0 -arch armv7 -Wall -Wendif-labels -Wextra $
+    -Wno-unused-parameter -Wno-missing-field-initializers -Wheader-hygiene $
+    -Wno-c++11-narrowing -Wno-char-subscripts $
+    -Wno-unneeded-internal-declaration -Wno-covered-switch-default $
+    -Wstring-conversion -Wno-deprecated-register -Wno-absolute-value
+cflags_c = -std=c99 -fcolor-diagnostics -fstack-protector-all
+cflags_cc = -std=gnu++0x -fno-rtti -fno-exceptions $
+    -fvisibility-inlines-hidden -fno-threadsafe-statics -fcolor-diagnostics $
+    -fstack-protector-all
+cflags_objc = $cflags_c -Wobjc-missing-property-synthesis
+cflags_objcc = $cflags_cc -Wobjc-missing-property-synthesis $
+    -fobjc-call-cxx-cdtors
+
+build obj/webrtc/common_audio/common_audio_unittests.audio_util_unittest.o: $
+    cxx ../../webrtc/common_audio/audio_util_unittest.cc || $
+    obj.host/testing/iossim/iossim.gen/iossim/DVTiPhoneSimulatorRemoteClient.h
+build obj/webrtc/common_audio/common_audio_unittests.fir_filter_unittest.o: $
+    cxx ../../webrtc/common_audio/fir_filter_unittest.cc || $
+    obj.host/testing/iossim/iossim.gen/iossim/DVTiPhoneSimulatorRemoteClient.h
+build $
+    obj/webrtc/common_audio/resampler/common_audio_unittests.resampler_unittest.o: $
+    cxx ../../webrtc/common_audio/resampler/resampler_unittest.cc || $
+    obj.host/testing/iossim/iossim.gen/iossim/DVTiPhoneSimulatorRemoteClient.h
+build $
+    obj/webrtc/common_audio/resampler/common_audio_unittests.push_resampler_unittest.o: $
+    cxx ../../webrtc/common_audio/resampler/push_resampler_unittest.cc || $
+    obj.host/testing/iossim/iossim.gen/iossim/DVTiPhoneSimulatorRemoteClient.h
+build $
+    obj/webrtc/common_audio/resampler/common_audio_unittests.push_sinc_resampler_unittest.o: $
+    cxx ../../webrtc/common_audio/resampler/push_sinc_resampler_unittest.cc $
+    || $
+    obj.host/testing/iossim/iossim.gen/iossim/DVTiPhoneSimulatorRemoteClient.h
+build $
+    obj/webrtc/common_audio/resampler/common_audio_unittests.sinc_resampler_unittest.o: $
+    cxx ../../webrtc/common_audio/resampler/sinc_resampler_unittest.cc || $
+    obj.host/testing/iossim/iossim.gen/iossim/DVTiPhoneSimulatorRemoteClient.h
+build $
+    obj/webrtc/common_audio/resampler/common_audio_unittests.sinusoidal_linear_chirp_source.o: $
+    cxx $
+    ../../webrtc/common_audio/resampler/sinusoidal_linear_chirp_source.cc $
+    || $
+    obj.host/testing/iossim/iossim.gen/iossim/DVTiPhoneSimulatorRemoteClient.h
+build $
+    obj/webrtc/common_audio/signal_processing/common_audio_unittests.real_fft_unittest.o: $
+    cxx ../../webrtc/common_audio/signal_processing/real_fft_unittest.cc || $
+    obj.host/testing/iossim/iossim.gen/iossim/DVTiPhoneSimulatorRemoteClient.h
+build $
+    obj/webrtc/common_audio/signal_processing/common_audio_unittests.signal_processing_unittest.o: $
+    cxx $
+    ../../webrtc/common_audio/signal_processing/signal_processing_unittest.cc $
+    || $
+    obj.host/testing/iossim/iossim.gen/iossim/DVTiPhoneSimulatorRemoteClient.h
+build $
+    obj/webrtc/common_audio/vad/common_audio_unittests.vad_core_unittest.o: $
+    cxx ../../webrtc/common_audio/vad/vad_core_unittest.cc || $
+    obj.host/testing/iossim/iossim.gen/iossim/DVTiPhoneSimulatorRemoteClient.h
+build $
+    obj/webrtc/common_audio/vad/common_audio_unittests.vad_filterbank_unittest.o: $
+    cxx ../../webrtc/common_audio/vad/vad_filterbank_unittest.cc || $
+    obj.host/testing/iossim/iossim.gen/iossim/DVTiPhoneSimulatorRemoteClient.h
+build $
+    obj/webrtc/common_audio/vad/common_audio_unittests.vad_gmm_unittest.o: $
+    cxx ../../webrtc/common_audio/vad/vad_gmm_unittest.cc || $
+    obj.host/testing/iossim/iossim.gen/iossim/DVTiPhoneSimulatorRemoteClient.h
+build obj/webrtc/common_audio/vad/common_audio_unittests.vad_sp_unittest.o: $
+    cxx ../../webrtc/common_audio/vad/vad_sp_unittest.cc || $
+    obj.host/testing/iossim/iossim.gen/iossim/DVTiPhoneSimulatorRemoteClient.h
+build obj/webrtc/common_audio/vad/common_audio_unittests.vad_unittest.o: $
+    cxx ../../webrtc/common_audio/vad/vad_unittest.cc || $
+    obj.host/testing/iossim/iossim.gen/iossim/DVTiPhoneSimulatorRemoteClient.h
+
+ldflags = -Wl,-search_paths_first -miphoneos-version-min=6.0 -isysroot $
+    /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS7.1.sdk $
+    -arch armv7 -L.
+libs = -framework Foundation
+build common_audio_unittests.app/common_audio_unittests: link $
+    obj/webrtc/common_audio/common_audio_unittests.audio_util_unittest.o $
+    obj/webrtc/common_audio/common_audio_unittests.fir_filter_unittest.o $
+    obj/webrtc/common_audio/resampler/common_audio_unittests.resampler_unittest.o $
+    obj/webrtc/common_audio/resampler/common_audio_unittests.push_resampler_unittest.o $
+    obj/webrtc/common_audio/resampler/common_audio_unittests.push_sinc_resampler_unittest.o $
+    obj/webrtc/common_audio/resampler/common_audio_unittests.sinc_resampler_unittest.o $
+    obj/webrtc/common_audio/resampler/common_audio_unittests.sinusoidal_linear_chirp_source.o $
+    obj/webrtc/common_audio/signal_processing/common_audio_unittests.real_fft_unittest.o $
+    obj/webrtc/common_audio/signal_processing/common_audio_unittests.signal_processing_unittest.o $
+    obj/webrtc/common_audio/vad/common_audio_unittests.vad_core_unittest.o $
+    obj/webrtc/common_audio/vad/common_audio_unittests.vad_filterbank_unittest.o $
+    obj/webrtc/common_audio/vad/common_audio_unittests.vad_gmm_unittest.o $
+    obj/webrtc/common_audio/vad/common_audio_unittests.vad_sp_unittest.o $
+    obj/webrtc/common_audio/vad/common_audio_unittests.vad_unittest.o $
+    libcommon_audio.a libtest_support_main.a libgmock.a libgtest.a $
+    libsystem_wrappers.a libcommon_audio_neon.a libtest_support.a libgflags.a
+  ld = $ldxx
+build common_audio_unittests.app: stamp $
+    common_audio_unittests.app/Default-568h@2x.png $
+    common_audio_unittests.app/Info.plist $
+    common_audio_unittests.app/common_audio_unittests
+  postbuilds = (export $
+      BUILT_PRODUCTS_DIR=/Users/cwebb/Sqwiggle/webrtc/trunk/out_ios/Debug-iphoneos; $
+      export CONFIGURATION=Debug-iphoneos; export $
+      CONTENTS_FOLDER_PATH=common_audio_unittests.app; export $
+      EXECUTABLE_NAME=common_audio_unittests; export $
+      EXECUTABLE_PATH=common_audio_unittests.app/common_audio_unittests; $
+      export FULL_PRODUCT_NAME=common_audio_unittests.app; export $
+      INFOPLIST_PATH=common_audio_unittests.app/Info.plist; export $
+      MACH_O_TYPE=mh_execute; export PRODUCT_NAME=common_audio_unittests; $
+      export PRODUCT_TYPE=com.apple.product-type.application; export $
+      SDKROOT=/Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS7.1.sdk; $
+      export $
+      SRCROOT=/Users/cwebb/Sqwiggle/webrtc/trunk/out_ios/Debug-iphoneos/../../webrtc/common_audio; $
+      export SOURCE_ROOT="$${SRCROOT}"; export $
+      TARGET_BUILD_DIR=/Users/cwebb/Sqwiggle/webrtc/trunk/out_ios/Debug-iphoneos; $
+      export TEMP_DIR="$${TMPDIR}"; export $
+      UNLOCALIZED_RESOURCES_FOLDER_PATH=common_audio_unittests.app; export $
+      WRAPPER_NAME=common_audio_unittests.app; (cd $
+      ../../webrtc/common_audio && $${TARGET_BUILD_DIR}/gyp-mac-tool $
+      code-sign-bundle "5E39A28CDE1D5A07BAF9F1DEE8F82380A1D33F8B" "" "" $
+      ""); G=$$?; ((exit $$G) || rm -rf common_audio_unittests.app) && exit $
+      $$G) && 

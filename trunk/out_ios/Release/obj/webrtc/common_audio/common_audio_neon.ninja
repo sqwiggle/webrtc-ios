@@ -1,0 +1,53 @@
+defines = -DV8_DEPRECATION_WARNINGS -DBLINK_SCALE_FILTERS_AT_RECORD_TIME $
+    -DDISABLE_NACL -DCHROMIUM_BUILD -DUSE_LIBJPEG_TURBO=1 $
+    -DENABLE_CONFIGURATION_POLICY $
+    -DDISCARDABLE_MEMORY_ALWAYS_SUPPORTED_NATIVELY $
+    -DSYSTEM_NATIVELY_SIGNALS_MEMORY_PRESSURE -DENABLE_EGLIMAGE=1 $
+    -DCLD_VERSION=1 -DENABLE_SPELLCHECK=1 -DDISABLE_FTP_SUPPORT=1 $
+    -DWEBRTC_MODULE_UTILITY_VIDEO -DWEBRTC_ARCH_ARM -DWEBRTC_ARCH_ARM_V7 $
+    -DWEBRTC_ARCH_ARM_NEON -DWEBRTC_POSIX -DWEBRTC_MAC -DWEBRTC_IOS $
+    -D__STDC_CONSTANT_MACROS -D__STDC_FORMAT_MACROS -DNDEBUG -DNVALGRIND $
+    -DDYNAMIC_ANNOTATIONS_ENABLED=0 -DNS_BLOCK_ASSERTIONS=1 $
+    -D_FORTIFY_SOURCE=2
+includes = -I../.. -I../..
+cflags = -isysroot $
+    /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator7.1.sdk $
+    -Os -gdwarf-2 -fvisibility=hidden -Werror -Wnewline-eof $
+    -mios-simulator-version-min=6.0 -arch i386 -Wall -Wendif-labels -Wextra $
+    -Wno-unused-parameter -Wno-missing-field-initializers -Wheader-hygiene $
+    -Wno-c++11-narrowing -Wno-char-subscripts $
+    -Wno-unneeded-internal-declaration -Wno-covered-switch-default $
+    -Wstring-conversion -Wno-deprecated-register -Wno-absolute-value
+cflags_c = -std=c99 -fcolor-diagnostics
+cflags_cc = -std=gnu++0x -fno-rtti -fno-exceptions $
+    -fvisibility-inlines-hidden -fno-threadsafe-statics -fcolor-diagnostics
+cflags_objc = $cflags_c -Wobjc-missing-property-synthesis
+cflags_objcc = $cflags_cc -Wobjc-missing-property-synthesis $
+    -fobjc-call-cxx-cdtors
+
+build obj/webrtc/common_audio/common_audio_neon.fir_filter_neon.o: cxx $
+    ../../webrtc/common_audio/fir_filter_neon.cc
+build $
+    obj/webrtc/common_audio/resampler/common_audio_neon.sinc_resampler_neon.o: $
+    cxx ../../webrtc/common_audio/resampler/sinc_resampler_neon.cc
+build $
+    obj/webrtc/common_audio/signal_processing/common_audio_neon.cross_correlation_neon.o: $
+    cc ../../webrtc/common_audio/signal_processing/cross_correlation_neon.S
+build $
+    obj/webrtc/common_audio/signal_processing/common_audio_neon.downsample_fast_neon.o: $
+    cc ../../webrtc/common_audio/signal_processing/downsample_fast_neon.S
+build $
+    obj/webrtc/common_audio/signal_processing/common_audio_neon.min_max_operations_neon.o: $
+    cc ../../webrtc/common_audio/signal_processing/min_max_operations_neon.S
+build $
+    obj/webrtc/common_audio/signal_processing/common_audio_neon.vector_scaling_operations_neon.o: $
+    cc $
+    ../../webrtc/common_audio/signal_processing/vector_scaling_operations_neon.S
+
+build libcommon_audio_neon.a: alink $
+    obj/webrtc/common_audio/common_audio_neon.fir_filter_neon.o $
+    obj/webrtc/common_audio/resampler/common_audio_neon.sinc_resampler_neon.o $
+    obj/webrtc/common_audio/signal_processing/common_audio_neon.cross_correlation_neon.o $
+    obj/webrtc/common_audio/signal_processing/common_audio_neon.downsample_fast_neon.o $
+    obj/webrtc/common_audio/signal_processing/common_audio_neon.min_max_operations_neon.o $
+    obj/webrtc/common_audio/signal_processing/common_audio_neon.vector_scaling_operations_neon.o

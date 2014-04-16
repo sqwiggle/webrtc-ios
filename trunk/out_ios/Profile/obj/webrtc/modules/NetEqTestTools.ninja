@@ -1,0 +1,59 @@
+defines = -DV8_DEPRECATION_WARNINGS -DBLINK_SCALE_FILTERS_AT_RECORD_TIME $
+    -DDISABLE_NACL -DCHROMIUM_BUILD -DUSE_LIBJPEG_TURBO=1 $
+    -DENABLE_CONFIGURATION_POLICY $
+    -DDISCARDABLE_MEMORY_ALWAYS_SUPPORTED_NATIVELY $
+    -DSYSTEM_NATIVELY_SIGNALS_MEMORY_PRESSURE -DENABLE_EGLIMAGE=1 $
+    -DCLD_VERSION=1 -DENABLE_SPELLCHECK=1 -DDISABLE_FTP_SUPPORT=1 $
+    -DWEBRTC_MODULE_UTILITY_VIDEO -DWEBRTC_ARCH_ARM -DWEBRTC_ARCH_ARM_V7 $
+    -DWEBRTC_ARCH_ARM_NEON -DWEBRTC_POSIX -DWEBRTC_MAC -DWEBRTC_IOS $
+    -DCODEC_ILBC -DCODEC_PCM16B -DCODEC_G711 -DCODEC_G722 -DCODEC_ISAC $
+    -DCODEC_PCM16B_WB -DCODEC_ISAC_SWB -DCODEC_ISAC_FB -DCODEC_PCM16B_32KHZ $
+    -DCODEC_CNGCODEC8 -DCODEC_CNGCODEC16 -DCODEC_CNGCODEC32 $
+    -DCODEC_ATEVENT_DECODE -DCODEC_RED -DGTEST_HAS_POSIX_RE=0 -DUNIT_TEST $
+    -DGTEST_HAS_RTTI=0 -D__STDC_CONSTANT_MACROS -D__STDC_FORMAT_MACROS $
+    -DNDEBUG -DNVALGRIND -DDYNAMIC_ANNOTATIONS_ENABLED=0 $
+    -DNS_BLOCK_ASSERTIONS=1 -D_FORTIFY_SOURCE=2
+includes = -I../.. -I../.. $
+    -I../../webrtc/modules/audio_coding/neteq/interface $
+    -I../../webrtc/modules/audio_coding/neteq/test $
+    -I../../webrtc/modules/audio_coding/codecs/g711/include -I../../webrtc $
+    -I../../webrtc/modules/audio_coding/codecs/g722/include $
+    -I../../webrtc/modules/audio_coding/codecs/pcm16b/include $
+    -I../../webrtc/modules/audio_coding/codecs/ilbc/interface $
+    -I../../webrtc/modules/audio_coding/codecs/isac/main/interface $
+    -I../../webrtc/modules/audio_coding/codecs/cng/include $
+    -I../../testing/gtest/include
+cflags = -isysroot $
+    /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator7.1.sdk $
+    -Os -gdwarf-2 -fvisibility=hidden -Werror -Wnewline-eof $
+    -mios-simulator-version-min=6.0 -arch i386 -Wall -Wendif-labels -Wextra $
+    -Wno-unused-parameter -Wno-missing-field-initializers -Wheader-hygiene $
+    -Wno-c++11-narrowing -Wno-char-subscripts $
+    -Wno-unneeded-internal-declaration -Wno-covered-switch-default $
+    -Wstring-conversion -Wno-deprecated-register -Wno-absolute-value
+cflags_c = -std=c99 -fcolor-diagnostics
+cflags_cc = -std=gnu++0x -fno-rtti -fno-exceptions $
+    -fvisibility-inlines-hidden -fno-threadsafe-statics -fcolor-diagnostics
+cflags_objc = $cflags_c -Wobjc-missing-property-synthesis
+cflags_objcc = $cflags_cc -Wobjc-missing-property-synthesis $
+    -fobjc-call-cxx-cdtors
+
+build $
+    obj/webrtc/modules/audio_coding/neteq/test/NetEqTestTools.NETEQTEST_CodecClass.o: $
+    cxx ../../webrtc/modules/audio_coding/neteq/test/NETEQTEST_CodecClass.cc
+build $
+    obj/webrtc/modules/audio_coding/neteq/test/NetEqTestTools.NETEQTEST_DummyRTPpacket.o: $
+    cxx $
+    ../../webrtc/modules/audio_coding/neteq/test/NETEQTEST_DummyRTPpacket.cc
+build $
+    obj/webrtc/modules/audio_coding/neteq/test/NetEqTestTools.NETEQTEST_NetEQClass.o: $
+    cxx ../../webrtc/modules/audio_coding/neteq/test/NETEQTEST_NetEQClass.cc
+build $
+    obj/webrtc/modules/audio_coding/neteq/test/NetEqTestTools.NETEQTEST_RTPpacket.o: $
+    cxx ../../webrtc/modules/audio_coding/neteq/test/NETEQTEST_RTPpacket.cc
+
+build libNetEqTestTools.a: alink $
+    obj/webrtc/modules/audio_coding/neteq/test/NetEqTestTools.NETEQTEST_CodecClass.o $
+    obj/webrtc/modules/audio_coding/neteq/test/NetEqTestTools.NETEQTEST_DummyRTPpacket.o $
+    obj/webrtc/modules/audio_coding/neteq/test/NetEqTestTools.NETEQTEST_NetEQClass.o $
+    obj/webrtc/modules/audio_coding/neteq/test/NetEqTestTools.NETEQTEST_RTPpacket.o

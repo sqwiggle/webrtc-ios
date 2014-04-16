@@ -1,0 +1,78 @@
+build obj/webrtc/modules/neteq4_speed_test.actions_depends.stamp: stamp $
+    libNetEq4.a libneteq_unittest_tools.a libPCM16B.a libgflags.a $
+    libtest_support_main.a libG711.a libG722.a libiLBC.a libcommon_audio.a $
+    libsystem_wrappers.a libcommon_audio_neon.a libiSAC.a libiSACFix.a $
+    libisac_neon.a libCNG.a libopus.a libwebrtc_opus.a libgmock.a $
+    libgtest.a librtp_rtcp.a libpaced_sender.a $
+    libremote_bitrate_estimator.a librbe_components.a libtest_support.a
+
+defines = -DV8_DEPRECATION_WARNINGS -DBLINK_SCALE_FILTERS_AT_RECORD_TIME $
+    -DDISABLE_NACL -DCHROMIUM_BUILD -DUSE_LIBJPEG_TURBO=1 $
+    -DENABLE_CONFIGURATION_POLICY $
+    -DDISCARDABLE_MEMORY_ALWAYS_SUPPORTED_NATIVELY $
+    -DSYSTEM_NATIVELY_SIGNALS_MEMORY_PRESSURE -DENABLE_EGLIMAGE=1 $
+    -DCLD_VERSION=1 -DENABLE_SPELLCHECK=1 -DDISABLE_FTP_SUPPORT=1 $
+    -DWEBRTC_MODULE_UTILITY_VIDEO -DWEBRTC_ARCH_ARM -DWEBRTC_ARCH_ARM_V7 $
+    -DWEBRTC_ARCH_ARM_NEON -DWEBRTC_POSIX -DWEBRTC_MAC -DWEBRTC_IOS $
+    -DGTEST_HAS_POSIX_RE=0 -DGFLAGS_DLL_DECL= -DGFLAGS_DLL_DECLARE_FLAG= $
+    -DGFLAGS_DLL_DEFINE_FLAG= -D__STDC_CONSTANT_MACROS $
+    -D__STDC_FORMAT_MACROS -DDYNAMIC_ANNOTATIONS_ENABLED=1 $
+    -DWTF_USE_DYNAMIC_ANNOTATIONS=1
+includes = -I../.. -I../.. -I../../third_party/opus/src/celt $
+    -I../../third_party/opus/src/src -I../../third_party/opus/src/include $
+    -I../../webrtc/modules/audio_coding/neteq4/tools $
+    -I../../webrtc/modules/audio_coding/codecs/pcm16b/include $
+    -I../../webrtc -I../../third_party/gflags/gen/posix/include $
+    -I../../third_party/gflags/src
+cflags = -isysroot $
+    /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS7.1.sdk $
+    -O0 -gdwarf-2 -fvisibility=hidden -Werror -Wnewline-eof $
+    -miphoneos-version-min=6.0 -arch armv7 -Wall -Wendif-labels -Wextra $
+    -Wno-unused-parameter -Wno-missing-field-initializers -Wheader-hygiene $
+    -Wno-c++11-narrowing -Wno-char-subscripts $
+    -Wno-unneeded-internal-declaration -Wno-covered-switch-default $
+    -Wstring-conversion -Wno-deprecated-register -Wno-absolute-value
+cflags_c = -std=c99 -fcolor-diagnostics -fstack-protector-all
+cflags_cc = -std=gnu++0x -fno-rtti -fno-exceptions $
+    -fvisibility-inlines-hidden -fno-threadsafe-statics -fcolor-diagnostics $
+    -fstack-protector-all
+cflags_objc = $cflags_c -Wobjc-missing-property-synthesis
+cflags_objcc = $cflags_cc -Wobjc-missing-property-synthesis $
+    -fobjc-call-cxx-cdtors
+
+build $
+    obj/webrtc/modules/audio_coding/neteq4/test/neteq4_speed_test.neteq_speed_test.o: $
+    cxx ../../webrtc/modules/audio_coding/neteq4/test/neteq_speed_test.cc $
+    || $
+    obj.host/testing/iossim/iossim.gen/iossim/DVTiPhoneSimulatorRemoteClient.h
+
+ldflags = -Wl,-search_paths_first -miphoneos-version-min=6.0 -isysroot $
+    /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS7.1.sdk $
+    -arch armv7 -L.
+libs = -framework Foundation
+build neteq4_speed_test: link $
+    obj/webrtc/modules/audio_coding/neteq4/test/neteq4_speed_test.neteq_speed_test.o $
+    libNetEq4.a libneteq_unittest_tools.a libPCM16B.a libgflags.a $
+    libtest_support_main.a libG711.a libG722.a libiLBC.a libcommon_audio.a $
+    libsystem_wrappers.a libcommon_audio_neon.a libiSAC.a libiSACFix.a $
+    libisac_neon.a libCNG.a libopus.a libwebrtc_opus.a libgmock.a $
+    libgtest.a librtp_rtcp.a libpaced_sender.a $
+    libremote_bitrate_estimator.a librbe_components.a libtest_support.a
+  ld = $ldxx
+  postbuilds = $ && (export $
+      BUILT_PRODUCTS_DIR=/Users/cwebb/Sqwiggle/webrtc/trunk/out_ios/Debug-iphoneos; $
+      export CONFIGURATION=Debug-iphoneos; export $
+      EXECUTABLE_NAME=neteq4_speed_test; export $
+      EXECUTABLE_PATH=neteq4_speed_test; export $
+      FULL_PRODUCT_NAME=neteq4_speed_test; export $
+      PRODUCT_NAME=neteq4_speed_test; export $
+      PRODUCT_TYPE=com.apple.product-type.tool; export $
+      SDKROOT=/Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS7.1.sdk; $
+      export $
+      SRCROOT=/Users/cwebb/Sqwiggle/webrtc/trunk/out_ios/Debug-iphoneos/../../webrtc/modules; $
+      export SOURCE_ROOT="$${SRCROOT}"; export $
+      TARGET_BUILD_DIR=/Users/cwebb/Sqwiggle/webrtc/trunk/out_ios/Debug-iphoneos; $
+      export TEMP_DIR="$${TMPDIR}"; (cd ../../webrtc/modules && $
+      $${TARGET_BUILD_DIR}/gyp-mac-tool code-sign-bundle $
+      "5E39A28CDE1D5A07BAF9F1DEE8F82380A1D33F8B" "" "" ""); G=$$?; ((exit $
+      $$G) || rm -rf neteq4_speed_test) && exit $$G)

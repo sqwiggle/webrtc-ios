@@ -1,0 +1,351 @@
+defines = -DV8_DEPRECATION_WARNINGS -DBLINK_SCALE_FILTERS_AT_RECORD_TIME $
+    -DEXPAT_RELATIVE_PATH -DFEATURE_ENABLE_VOICEMAIL -DGTEST_RELATIVE_PATH $
+    -DJSONCPP_RELATIVE_PATH -DLOGGING=1 -DSRTP_RELATIVE_PATH $
+    -DFEATURE_ENABLE_SSL -DFEATURE_ENABLE_PSTN -DHAVE_SRTP $
+    -DHAVE_WEBRTC_VIDEO -DHAVE_WEBRTC_VOICE -DUSE_WEBRTC_DEV_BRANCH $
+    -DDISABLE_NACL -DCHROMIUM_BUILD -DUSE_LIBJPEG_TURBO=1 $
+    -DENABLE_CONFIGURATION_POLICY $
+    -DDISCARDABLE_MEMORY_ALWAYS_SUPPORTED_NATIVELY $
+    -DSYSTEM_NATIVELY_SIGNALS_MEMORY_PRESSURE -DENABLE_EGLIMAGE=1 $
+    -DCLD_VERSION=1 -DENABLE_SPELLCHECK=1 -DDISABLE_FTP_SUPPORT=1 $
+    -DLIBPEERCONNECTION_LIB=1 -DIOS -DCARBON_DEPRECATED=YES $
+    -DHASH_NAMESPACE=__gnu_cxx -DPOSIX -DDISABLE_DYNAMIC_CAST -D_REENTRANT $
+    -DSSL_USE_NSS -DHAVE_NSS_SSL_H -DSSL_USE_NSS_RNG -DNO_NSPR_10_SUPPORT $
+    -DNSPR_STATIC -DNSS_STATIC -DNSS_USE_STATIC_LIBS -DUSE_UTIL_DIRECTLY $
+    -DXML_STATIC -DDYNAMIC_ANNOTATIONS_ENABLED=1 $
+    -DWTF_USE_DYNAMIC_ANNOTATIONS=1 -D_DEBUG
+includes = -I../.. -I../.. -I../../third_party -I../../third_party/webrtc $
+    -I../../webrtc -I../../net/third_party/nss/ssl $
+    -I../../third_party/nss/nspr/pr/include $
+    -I../../third_party/nss/nspr/lib/ds $
+    -I../../third_party/nss/nspr/lib/libc/include $
+    -I../../third_party/nss/nss/lib/base $
+    -I../../third_party/nss/nss/lib/certdb $
+    -I../../third_party/nss/nss/lib/certhigh $
+    -I../../third_party/nss/nss/lib/cryptohi $
+    -I../../third_party/nss/nss/lib/dev $
+    -I../../third_party/nss/nss/lib/freebl $
+    -I../../third_party/nss/nss/lib/freebl/ecl $
+    -I../../third_party/nss/nss/lib/nss $
+    -I../../third_party/nss/nss/lib/pk11wrap $
+    -I../../third_party/nss/nss/lib/pkcs7 $
+    -I../../third_party/nss/nss/lib/pki $
+    -I../../third_party/nss/nss/lib/smime $
+    -I../../third_party/nss/nss/lib/softoken $
+    -I../../third_party/nss/nss/lib/util $
+    -I../../third_party/nss/nss/lib/ckfw/builtins $
+    -I../../third_party/expat/files/lib $
+    -I../../third_party/jsoncpp/overrides/include $
+    -I../../third_party/jsoncpp/source/include
+cflags = -isysroot $
+    /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS7.1.sdk $
+    -O0 -gdwarf-2 -fvisibility=hidden -Wnewline-eof $
+    -miphoneos-version-min=6.0 -arch armv7 -Wendif-labels $
+    -Wno-unused-parameter -Wno-missing-field-initializers -Wheader-hygiene $
+    -Wno-c++11-narrowing -Wno-char-subscripts $
+    -Wno-unneeded-internal-declaration -Wno-covered-switch-default $
+    -Wstring-conversion -Wno-deprecated-register -Wno-absolute-value
+cflags_c = -std=c99 -fcolor-diagnostics -fstack-protector-all
+cflags_cc = -std=gnu++0x -fno-rtti -fno-exceptions $
+    -fvisibility-inlines-hidden -fno-threadsafe-statics -fcolor-diagnostics $
+    -fstack-protector-all
+cflags_objc = $cflags_c
+cflags_objcc = $cflags_cc -fobjc-call-cxx-cdtors
+
+build obj/talk/base/libjingle.asyncfile.o: cxx ../../talk/base/asyncfile.cc
+build obj/talk/base/libjingle.asynchttprequest.o: cxx $
+    ../../talk/base/asynchttprequest.cc
+build obj/talk/base/libjingle.asyncinvoker.o: cxx $
+    ../../talk/base/asyncinvoker.cc
+build obj/talk/base/libjingle.asyncsocket.o: cxx $
+    ../../talk/base/asyncsocket.cc
+build obj/talk/base/libjingle.asynctcpsocket.o: cxx $
+    ../../talk/base/asynctcpsocket.cc
+build obj/talk/base/libjingle.asyncudpsocket.o: cxx $
+    ../../talk/base/asyncudpsocket.cc
+build obj/talk/base/libjingle.autodetectproxy.o: cxx $
+    ../../talk/base/autodetectproxy.cc
+build obj/talk/base/libjingle.bandwidthsmoother.o: cxx $
+    ../../talk/base/bandwidthsmoother.cc
+build obj/talk/base/libjingle.base64.o: cxx ../../talk/base/base64.cc
+build obj/talk/base/libjingle.bytebuffer.o: cxx ../../talk/base/bytebuffer.cc
+build obj/talk/base/libjingle.checks.o: cxx ../../talk/base/checks.cc
+build obj/talk/base/libjingle.common.o: cxx ../../talk/base/common.cc
+build obj/talk/base/libjingle.cpumonitor.o: cxx ../../talk/base/cpumonitor.cc
+build obj/talk/base/libjingle.crc32.o: cxx ../../talk/base/crc32.cc
+build obj/talk/base/libjingle.diskcache.o: cxx ../../talk/base/diskcache.cc
+build obj/talk/base/libjingle.event.o: cxx ../../talk/base/event.cc
+build obj/talk/base/libjingle.filelock.o: cxx ../../talk/base/filelock.cc
+build obj/talk/base/libjingle.fileutils.o: cxx ../../talk/base/fileutils.cc
+build obj/talk/base/libjingle.firewallsocketserver.o: cxx $
+    ../../talk/base/firewallsocketserver.cc
+build obj/talk/base/libjingle.flags.o: cxx ../../talk/base/flags.cc
+build obj/talk/base/libjingle.helpers.o: cxx ../../talk/base/helpers.cc
+build obj/talk/base/libjingle.httpbase.o: cxx ../../talk/base/httpbase.cc
+build obj/talk/base/libjingle.httpclient.o: cxx ../../talk/base/httpclient.cc
+build obj/talk/base/libjingle.httpcommon.o: cxx ../../talk/base/httpcommon.cc
+build obj/talk/base/libjingle.httprequest.o: cxx $
+    ../../talk/base/httprequest.cc
+build obj/talk/base/libjingle.httpserver.o: cxx ../../talk/base/httpserver.cc
+build obj/talk/base/libjingle.ifaddrs-android.o: cxx $
+    ../../talk/base/ifaddrs-android.cc
+build obj/talk/base/libjingle.ipaddress.o: cxx ../../talk/base/ipaddress.cc
+build obj/talk/base/libjingle.json.o: cxx ../../talk/base/json.cc
+build obj/talk/base/libjingle.logging.o: cxx ../../talk/base/logging.cc
+build obj/talk/base/libjingle.maccocoathreadhelper.o: objcxx $
+    ../../talk/base/maccocoathreadhelper.mm
+build obj/talk/base/libjingle.md5.o: cxx ../../talk/base/md5.cc
+build obj/talk/base/libjingle.messagedigest.o: cxx $
+    ../../talk/base/messagedigest.cc
+build obj/talk/base/libjingle.messagehandler.o: cxx $
+    ../../talk/base/messagehandler.cc
+build obj/talk/base/libjingle.messagequeue.o: cxx $
+    ../../talk/base/messagequeue.cc
+build obj/talk/base/libjingle.multipart.o: cxx ../../talk/base/multipart.cc
+build obj/talk/base/libjingle.natserver.o: cxx ../../talk/base/natserver.cc
+build obj/talk/base/libjingle.natsocketfactory.o: cxx $
+    ../../talk/base/natsocketfactory.cc
+build obj/talk/base/libjingle.nattypes.o: cxx ../../talk/base/nattypes.cc
+build obj/talk/base/libjingle.nethelpers.o: cxx ../../talk/base/nethelpers.cc
+build obj/talk/base/libjingle.network.o: cxx ../../talk/base/network.cc
+build obj/talk/base/libjingle.nssidentity.o: cxx $
+    ../../talk/base/nssidentity.cc
+build obj/talk/base/libjingle.nssstreamadapter.o: cxx $
+    ../../talk/base/nssstreamadapter.cc
+build obj/talk/base/libjingle.optionsfile.o: cxx $
+    ../../talk/base/optionsfile.cc
+build obj/talk/base/libjingle.pathutils.o: cxx ../../talk/base/pathutils.cc
+build obj/talk/base/libjingle.physicalsocketserver.o: cxx $
+    ../../talk/base/physicalsocketserver.cc
+build obj/talk/base/libjingle.profiler.o: cxx ../../talk/base/profiler.cc
+build obj/talk/base/libjingle.proxydetect.o: cxx $
+    ../../talk/base/proxydetect.cc
+build obj/talk/base/libjingle.proxyinfo.o: cxx ../../talk/base/proxyinfo.cc
+build obj/talk/base/libjingle.proxyserver.o: cxx $
+    ../../talk/base/proxyserver.cc
+build obj/talk/base/libjingle.ratelimiter.o: cxx $
+    ../../talk/base/ratelimiter.cc
+build obj/talk/base/libjingle.ratetracker.o: cxx $
+    ../../talk/base/ratetracker.cc
+build obj/talk/base/libjingle.sha1.o: cxx ../../talk/base/sha1.cc
+build obj/talk/base/libjingle.sharedexclusivelock.o: cxx $
+    ../../talk/base/sharedexclusivelock.cc
+build obj/talk/base/libjingle.signalthread.o: cxx $
+    ../../talk/base/signalthread.cc
+build obj/talk/base/libjingle.socketadapters.o: cxx $
+    ../../talk/base/socketadapters.cc
+build obj/talk/base/libjingle.socketaddress.o: cxx $
+    ../../talk/base/socketaddress.cc
+build obj/talk/base/libjingle.socketaddresspair.o: cxx $
+    ../../talk/base/socketaddresspair.cc
+build obj/talk/base/libjingle.socketpool.o: cxx ../../talk/base/socketpool.cc
+build obj/talk/base/libjingle.socketstream.o: cxx $
+    ../../talk/base/socketstream.cc
+build obj/talk/base/libjingle.ssladapter.o: cxx ../../talk/base/ssladapter.cc
+build obj/talk/base/libjingle.sslfingerprint.o: cxx $
+    ../../talk/base/sslfingerprint.cc
+build obj/talk/base/libjingle.sslidentity.o: cxx $
+    ../../talk/base/sslidentity.cc
+build obj/talk/base/libjingle.sslsocketfactory.o: cxx $
+    ../../talk/base/sslsocketfactory.cc
+build obj/talk/base/libjingle.sslstreamadapter.o: cxx $
+    ../../talk/base/sslstreamadapter.cc
+build obj/talk/base/libjingle.sslstreamadapterhelper.o: cxx $
+    ../../talk/base/sslstreamadapterhelper.cc
+build obj/talk/base/libjingle.stream.o: cxx ../../talk/base/stream.cc
+build obj/talk/base/libjingle.stringencode.o: cxx $
+    ../../talk/base/stringencode.cc
+build obj/talk/base/libjingle.stringutils.o: cxx $
+    ../../talk/base/stringutils.cc
+build obj/talk/base/libjingle.systeminfo.o: cxx ../../talk/base/systeminfo.cc
+build obj/talk/base/libjingle.task.o: cxx ../../talk/base/task.cc
+build obj/talk/base/libjingle.taskparent.o: cxx ../../talk/base/taskparent.cc
+build obj/talk/base/libjingle.taskrunner.o: cxx ../../talk/base/taskrunner.cc
+build obj/talk/base/libjingle.testclient.o: cxx ../../talk/base/testclient.cc
+build obj/talk/base/libjingle.thread.o: cxx ../../talk/base/thread.cc
+build obj/talk/base/libjingle.timeutils.o: cxx ../../talk/base/timeutils.cc
+build obj/talk/base/libjingle.timing.o: cxx ../../talk/base/timing.cc
+build obj/talk/base/libjingle.transformadapter.o: cxx $
+    ../../talk/base/transformadapter.cc
+build obj/talk/base/libjingle.urlencode.o: cxx ../../talk/base/urlencode.cc
+build obj/talk/base/libjingle.versionparsing.o: cxx $
+    ../../talk/base/versionparsing.cc
+build obj/talk/base/libjingle.virtualsocketserver.o: cxx $
+    ../../talk/base/virtualsocketserver.cc
+build obj/talk/base/libjingle.worker.o: cxx ../../talk/base/worker.cc
+build obj/talk/xmllite/libjingle.qname.o: cxx ../../talk/xmllite/qname.cc
+build obj/talk/xmllite/libjingle.xmlbuilder.o: cxx $
+    ../../talk/xmllite/xmlbuilder.cc
+build obj/talk/xmllite/libjingle.xmlconstants.o: cxx $
+    ../../talk/xmllite/xmlconstants.cc
+build obj/talk/xmllite/libjingle.xmlelement.o: cxx $
+    ../../talk/xmllite/xmlelement.cc
+build obj/talk/xmllite/libjingle.xmlnsstack.o: cxx $
+    ../../talk/xmllite/xmlnsstack.cc
+build obj/talk/xmllite/libjingle.xmlparser.o: cxx $
+    ../../talk/xmllite/xmlparser.cc
+build obj/talk/xmllite/libjingle.xmlprinter.o: cxx $
+    ../../talk/xmllite/xmlprinter.cc
+build obj/talk/xmpp/libjingle.chatroommoduleimpl.o: cxx $
+    ../../talk/xmpp/chatroommoduleimpl.cc
+build obj/talk/xmpp/libjingle.constants.o: cxx ../../talk/xmpp/constants.cc
+build obj/talk/xmpp/libjingle.discoitemsquerytask.o: cxx $
+    ../../talk/xmpp/discoitemsquerytask.cc
+build obj/talk/xmpp/libjingle.hangoutpubsubclient.o: cxx $
+    ../../talk/xmpp/hangoutpubsubclient.cc
+build obj/talk/xmpp/libjingle.iqtask.o: cxx ../../talk/xmpp/iqtask.cc
+build obj/talk/xmpp/libjingle.jid.o: cxx ../../talk/xmpp/jid.cc
+build obj/talk/xmpp/libjingle.moduleimpl.o: cxx ../../talk/xmpp/moduleimpl.cc
+build obj/talk/xmpp/libjingle.mucroomconfigtask.o: cxx $
+    ../../talk/xmpp/mucroomconfigtask.cc
+build obj/talk/xmpp/libjingle.mucroomdiscoverytask.o: cxx $
+    ../../talk/xmpp/mucroomdiscoverytask.cc
+build obj/talk/xmpp/libjingle.mucroomlookuptask.o: cxx $
+    ../../talk/xmpp/mucroomlookuptask.cc
+build obj/talk/xmpp/libjingle.mucroomuniquehangoutidtask.o: cxx $
+    ../../talk/xmpp/mucroomuniquehangoutidtask.cc
+build obj/talk/xmpp/libjingle.pingtask.o: cxx ../../talk/xmpp/pingtask.cc
+build obj/talk/xmpp/libjingle.presenceouttask.o: cxx $
+    ../../talk/xmpp/presenceouttask.cc
+build obj/talk/xmpp/libjingle.presencereceivetask.o: cxx $
+    ../../talk/xmpp/presencereceivetask.cc
+build obj/talk/xmpp/libjingle.presencestatus.o: cxx $
+    ../../talk/xmpp/presencestatus.cc
+build obj/talk/xmpp/libjingle.pubsub_task.o: cxx $
+    ../../talk/xmpp/pubsub_task.cc
+build obj/talk/xmpp/libjingle.pubsubclient.o: cxx $
+    ../../talk/xmpp/pubsubclient.cc
+build obj/talk/xmpp/libjingle.pubsubstateclient.o: cxx $
+    ../../talk/xmpp/pubsubstateclient.cc
+build obj/talk/xmpp/libjingle.pubsubtasks.o: cxx $
+    ../../talk/xmpp/pubsubtasks.cc
+build obj/talk/xmpp/libjingle.receivetask.o: cxx $
+    ../../talk/xmpp/receivetask.cc
+build obj/talk/xmpp/libjingle.rostermoduleimpl.o: cxx $
+    ../../talk/xmpp/rostermoduleimpl.cc
+build obj/talk/xmpp/libjingle.saslmechanism.o: cxx $
+    ../../talk/xmpp/saslmechanism.cc
+build obj/talk/xmpp/libjingle.xmppauth.o: cxx ../../talk/xmpp/xmppauth.cc
+build obj/talk/xmpp/libjingle.xmppclient.o: cxx ../../talk/xmpp/xmppclient.cc
+build obj/talk/xmpp/libjingle.xmppengineimpl.o: cxx $
+    ../../talk/xmpp/xmppengineimpl.cc
+build obj/talk/xmpp/libjingle.xmppengineimpl_iq.o: cxx $
+    ../../talk/xmpp/xmppengineimpl_iq.cc
+build obj/talk/xmpp/libjingle.xmpplogintask.o: cxx $
+    ../../talk/xmpp/xmpplogintask.cc
+build obj/talk/xmpp/libjingle.xmpppump.o: cxx ../../talk/xmpp/xmpppump.cc
+build obj/talk/xmpp/libjingle.xmppsocket.o: cxx ../../talk/xmpp/xmppsocket.cc
+build obj/talk/xmpp/libjingle.xmppstanzaparser.o: cxx $
+    ../../talk/xmpp/xmppstanzaparser.cc
+build obj/talk/xmpp/libjingle.xmpptask.o: cxx ../../talk/xmpp/xmpptask.cc
+build obj/talk/xmpp/libjingle.xmppthread.o: cxx ../../talk/xmpp/xmppthread.cc
+build obj/talk/base/libjingle.scoped_autorelease_pool.o: objcxx $
+    ../../talk/base/scoped_autorelease_pool.mm
+build obj/talk/base/libjingle.latebindingsymboltable.o: cxx $
+    ../../talk/base/latebindingsymboltable.cc
+build obj/talk/base/libjingle.posix.o: cxx ../../talk/base/posix.cc
+build obj/talk/base/libjingle.unixfilesystem.o: cxx $
+    ../../talk/base/unixfilesystem.cc
+
+build libjingle.a: alink obj/talk/base/libjingle.asyncfile.o $
+    obj/talk/base/libjingle.asynchttprequest.o $
+    obj/talk/base/libjingle.asyncinvoker.o $
+    obj/talk/base/libjingle.asyncsocket.o $
+    obj/talk/base/libjingle.asynctcpsocket.o $
+    obj/talk/base/libjingle.asyncudpsocket.o $
+    obj/talk/base/libjingle.autodetectproxy.o $
+    obj/talk/base/libjingle.bandwidthsmoother.o $
+    obj/talk/base/libjingle.base64.o obj/talk/base/libjingle.bytebuffer.o $
+    obj/talk/base/libjingle.checks.o obj/talk/base/libjingle.common.o $
+    obj/talk/base/libjingle.cpumonitor.o obj/talk/base/libjingle.crc32.o $
+    obj/talk/base/libjingle.diskcache.o obj/talk/base/libjingle.event.o $
+    obj/talk/base/libjingle.filelock.o obj/talk/base/libjingle.fileutils.o $
+    obj/talk/base/libjingle.firewallsocketserver.o $
+    obj/talk/base/libjingle.flags.o obj/talk/base/libjingle.helpers.o $
+    obj/talk/base/libjingle.httpbase.o obj/talk/base/libjingle.httpclient.o $
+    obj/talk/base/libjingle.httpcommon.o $
+    obj/talk/base/libjingle.httprequest.o $
+    obj/talk/base/libjingle.httpserver.o $
+    obj/talk/base/libjingle.ifaddrs-android.o $
+    obj/talk/base/libjingle.ipaddress.o obj/talk/base/libjingle.json.o $
+    obj/talk/base/libjingle.logging.o $
+    obj/talk/base/libjingle.maccocoathreadhelper.o $
+    obj/talk/base/libjingle.md5.o obj/talk/base/libjingle.messagedigest.o $
+    obj/talk/base/libjingle.messagehandler.o $
+    obj/talk/base/libjingle.messagequeue.o $
+    obj/talk/base/libjingle.multipart.o obj/talk/base/libjingle.natserver.o $
+    obj/talk/base/libjingle.natsocketfactory.o $
+    obj/talk/base/libjingle.nattypes.o obj/talk/base/libjingle.nethelpers.o $
+    obj/talk/base/libjingle.network.o obj/talk/base/libjingle.nssidentity.o $
+    obj/talk/base/libjingle.nssstreamadapter.o $
+    obj/talk/base/libjingle.optionsfile.o $
+    obj/talk/base/libjingle.pathutils.o $
+    obj/talk/base/libjingle.physicalsocketserver.o $
+    obj/talk/base/libjingle.profiler.o $
+    obj/talk/base/libjingle.proxydetect.o $
+    obj/talk/base/libjingle.proxyinfo.o $
+    obj/talk/base/libjingle.proxyserver.o $
+    obj/talk/base/libjingle.ratelimiter.o $
+    obj/talk/base/libjingle.ratetracker.o obj/talk/base/libjingle.sha1.o $
+    obj/talk/base/libjingle.sharedexclusivelock.o $
+    obj/talk/base/libjingle.signalthread.o $
+    obj/talk/base/libjingle.socketadapters.o $
+    obj/talk/base/libjingle.socketaddress.o $
+    obj/talk/base/libjingle.socketaddresspair.o $
+    obj/talk/base/libjingle.socketpool.o $
+    obj/talk/base/libjingle.socketstream.o $
+    obj/talk/base/libjingle.ssladapter.o $
+    obj/talk/base/libjingle.sslfingerprint.o $
+    obj/talk/base/libjingle.sslidentity.o $
+    obj/talk/base/libjingle.sslsocketfactory.o $
+    obj/talk/base/libjingle.sslstreamadapter.o $
+    obj/talk/base/libjingle.sslstreamadapterhelper.o $
+    obj/talk/base/libjingle.stream.o obj/talk/base/libjingle.stringencode.o $
+    obj/talk/base/libjingle.stringutils.o $
+    obj/talk/base/libjingle.systeminfo.o obj/talk/base/libjingle.task.o $
+    obj/talk/base/libjingle.taskparent.o $
+    obj/talk/base/libjingle.taskrunner.o $
+    obj/talk/base/libjingle.testclient.o obj/talk/base/libjingle.thread.o $
+    obj/talk/base/libjingle.timeutils.o obj/talk/base/libjingle.timing.o $
+    obj/talk/base/libjingle.transformadapter.o $
+    obj/talk/base/libjingle.urlencode.o $
+    obj/talk/base/libjingle.versionparsing.o $
+    obj/talk/base/libjingle.virtualsocketserver.o $
+    obj/talk/base/libjingle.worker.o obj/talk/xmllite/libjingle.qname.o $
+    obj/talk/xmllite/libjingle.xmlbuilder.o $
+    obj/talk/xmllite/libjingle.xmlconstants.o $
+    obj/talk/xmllite/libjingle.xmlelement.o $
+    obj/talk/xmllite/libjingle.xmlnsstack.o $
+    obj/talk/xmllite/libjingle.xmlparser.o $
+    obj/talk/xmllite/libjingle.xmlprinter.o $
+    obj/talk/xmpp/libjingle.chatroommoduleimpl.o $
+    obj/talk/xmpp/libjingle.constants.o $
+    obj/talk/xmpp/libjingle.discoitemsquerytask.o $
+    obj/talk/xmpp/libjingle.hangoutpubsubclient.o $
+    obj/talk/xmpp/libjingle.iqtask.o obj/talk/xmpp/libjingle.jid.o $
+    obj/talk/xmpp/libjingle.moduleimpl.o $
+    obj/talk/xmpp/libjingle.mucroomconfigtask.o $
+    obj/talk/xmpp/libjingle.mucroomdiscoverytask.o $
+    obj/talk/xmpp/libjingle.mucroomlookuptask.o $
+    obj/talk/xmpp/libjingle.mucroomuniquehangoutidtask.o $
+    obj/talk/xmpp/libjingle.pingtask.o $
+    obj/talk/xmpp/libjingle.presenceouttask.o $
+    obj/talk/xmpp/libjingle.presencereceivetask.o $
+    obj/talk/xmpp/libjingle.presencestatus.o $
+    obj/talk/xmpp/libjingle.pubsub_task.o $
+    obj/talk/xmpp/libjingle.pubsubclient.o $
+    obj/talk/xmpp/libjingle.pubsubstateclient.o $
+    obj/talk/xmpp/libjingle.pubsubtasks.o $
+    obj/talk/xmpp/libjingle.receivetask.o $
+    obj/talk/xmpp/libjingle.rostermoduleimpl.o $
+    obj/talk/xmpp/libjingle.saslmechanism.o $
+    obj/talk/xmpp/libjingle.xmppauth.o obj/talk/xmpp/libjingle.xmppclient.o $
+    obj/talk/xmpp/libjingle.xmppengineimpl.o $
+    obj/talk/xmpp/libjingle.xmppengineimpl_iq.o $
+    obj/talk/xmpp/libjingle.xmpplogintask.o $
+    obj/talk/xmpp/libjingle.xmpppump.o obj/talk/xmpp/libjingle.xmppsocket.o $
+    obj/talk/xmpp/libjingle.xmppstanzaparser.o $
+    obj/talk/xmpp/libjingle.xmpptask.o obj/talk/xmpp/libjingle.xmppthread.o $
+    obj/talk/base/libjingle.scoped_autorelease_pool.o $
+    obj/talk/base/libjingle.latebindingsymboltable.o $
+    obj/talk/base/libjingle.posix.o obj/talk/base/libjingle.unixfilesystem.o

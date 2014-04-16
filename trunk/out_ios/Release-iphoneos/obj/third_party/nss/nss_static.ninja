@@ -1,0 +1,934 @@
+defines = -DV8_DEPRECATION_WARNINGS -DBLINK_SCALE_FILTERS_AT_RECORD_TIME $
+    -DDISABLE_NACL -DCHROMIUM_BUILD -DUSE_LIBJPEG_TURBO=1 $
+    -DENABLE_CONFIGURATION_POLICY $
+    -DDISCARDABLE_MEMORY_ALWAYS_SUPPORTED_NATIVELY $
+    -DSYSTEM_NATIVELY_SIGNALS_MEMORY_PRESSURE -DENABLE_EGLIMAGE=1 $
+    -DCLD_VERSION=1 -DENABLE_SPELLCHECK=1 -DDISABLE_FTP_SUPPORT=1 $
+    -DMP_API_COMPATIBLE -DNSS_DISABLE_DBM -DNSS_STATIC $
+    -DNSS_USE_STATIC_LIBS -DRIJNDAEL_INCLUDE_TABLES '-DSHLIB_VERSION="3"' $
+    '-DSOFTOKEN_SHLIB_VERSION="3"' -DUSE_UTIL_DIRECTLY -DNSS_PKIX_NO_LDAP $
+    -DXP_UNIX -DDARWIN -DHAVE_STRERROR -DHAVE_BSD_FLOCK $
+    '-DSHLIB_SUFFIX="dylib"' '-DSHLIB_PREFIX="lib"' $
+    '-DSOFTOKEN_LIB_NAME="libsoftokn3.dylib"' -DNO_NSPR_10_SUPPORT $
+    -DNSPR_STATIC -DUSE_SYSTEM_SQLITE -DNDEBUG -DNVALGRIND $
+    -DDYNAMIC_ANNOTATIONS_ENABLED=0 -DNS_BLOCK_ASSERTIONS=1
+includes = -I../../third_party/nss/nss/lib/base $
+    -I../../third_party/nss/nss/lib/certdb $
+    -I../../third_party/nss/nss/lib/certhigh $
+    -I../../third_party/nss/nss/lib/cryptohi $
+    -I../../third_party/nss/nss/lib/dev $
+    -I../../third_party/nss/nss/lib/freebl $
+    -I../../third_party/nss/nss/lib/freebl/ecl $
+    -I../../third_party/nss/nss/lib/freebl/mpi $
+    -I../../third_party/nss/nss/lib/libpkix/include $
+    -I../../third_party/nss/nss/lib/libpkix/pkix/certsel $
+    -I../../third_party/nss/nss/lib/libpkix/pkix/checker $
+    -I../../third_party/nss/nss/lib/libpkix/pkix/crlsel $
+    -I../../third_party/nss/nss/lib/libpkix/pkix/params $
+    -I../../third_party/nss/nss/lib/libpkix/pkix/results $
+    -I../../third_party/nss/nss/lib/libpkix/pkix/store $
+    -I../../third_party/nss/nss/lib/libpkix/pkix/top $
+    -I../../third_party/nss/nss/lib/libpkix/pkix/util $
+    -I../../third_party/nss/nss/lib/libpkix/pkix_pl_nss/module $
+    -I../../third_party/nss/nss/lib/libpkix/pkix_pl_nss/pki $
+    -I../../third_party/nss/nss/lib/libpkix/pkix_pl_nss/system $
+    -I../../third_party/nss/nss/lib/nss $
+    -I../../third_party/nss/nss/lib/pk11wrap $
+    -I../../third_party/nss/nss/lib/pkcs7 $
+    -I../../third_party/nss/nss/lib/pki $
+    -I../../third_party/nss/nss/lib/smime $
+    -I../../third_party/nss/nss/lib/softoken $
+    -I../../third_party/nss/nss/lib/ssl $
+    -I../../third_party/nss/nss/lib/util $
+    -I../../third_party/nss/nspr/pr/include $
+    -I../../third_party/nss/nspr/lib/ds $
+    -I../../third_party/nss/nspr/lib/libc/include
+cflags = -isysroot $
+    /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS7.1.sdk $
+    -Os -gdwarf-2 -fvisibility=hidden -Wnewline-eof $
+    -miphoneos-version-min=6.0 -arch armv7 -Wendif-labels $
+    -Wno-unused-parameter -Wno-missing-field-initializers -Wheader-hygiene $
+    -Wno-c++11-narrowing -Wno-char-subscripts $
+    -Wno-unneeded-internal-declaration -Wno-covered-switch-default $
+    -Wstring-conversion -Wno-deprecated-register -Wno-absolute-value $
+    -Wno-conversion -Wno-incompatible-pointer-types $
+    -Wno-logical-op-parentheses -Wno-switch -Wno-tautological-compare
+cflags_c = -std=c99 -Xclang -load -Xclang $
+    /Users/cwebb/Sqwiggle/webrtc/trunk/tools/clang/scripts/../../../third_party/llvm-build/Release+Asserts/lib/libFindBadConstructs.dylib $
+    -Xclang -add-plugin -Xclang find-bad-constructs -fcolor-diagnostics $
+    -include ../../third_party/nss/nss/lib/freebl/build_config_mac.h
+cflags_cc = -std=gnu++0x -fno-rtti -fno-exceptions $
+    -fvisibility-inlines-hidden -fno-threadsafe-statics -Xclang -load $
+    -Xclang $
+    /Users/cwebb/Sqwiggle/webrtc/trunk/tools/clang/scripts/../../../third_party/llvm-build/Release+Asserts/lib/libFindBadConstructs.dylib $
+    -Xclang -add-plugin -Xclang find-bad-constructs -fcolor-diagnostics $
+    -include ../../third_party/nss/nss/lib/freebl/build_config_mac.h
+cflags_objc = $cflags_c
+cflags_objcc = $cflags_cc -fobjc-call-cxx-cdtors
+
+build obj/third_party/nss/nss/lib/base/nss_static.arena.o: cc $
+    ../../third_party/nss/nss/lib/base/arena.c
+build obj/third_party/nss/nss/lib/base/nss_static.error.o: cc $
+    ../../third_party/nss/nss/lib/base/error.c
+build obj/third_party/nss/nss/lib/base/nss_static.errorval.o: cc $
+    ../../third_party/nss/nss/lib/base/errorval.c
+build obj/third_party/nss/nss/lib/base/nss_static.hash.o: cc $
+    ../../third_party/nss/nss/lib/base/hash.c
+build obj/third_party/nss/nss/lib/base/nss_static.hashops.o: cc $
+    ../../third_party/nss/nss/lib/base/hashops.c
+build obj/third_party/nss/nss/lib/base/nss_static.item.o: cc $
+    ../../third_party/nss/nss/lib/base/item.c
+build obj/third_party/nss/nss/lib/base/nss_static.libc.o: cc $
+    ../../third_party/nss/nss/lib/base/libc.c
+build obj/third_party/nss/nss/lib/base/nss_static.list.o: cc $
+    ../../third_party/nss/nss/lib/base/list.c
+build obj/third_party/nss/nss/lib/base/nss_static.nssutf8.o: cc $
+    ../../third_party/nss/nss/lib/base/nssutf8.c
+build obj/third_party/nss/nss/lib/base/nss_static.tracker.o: cc $
+    ../../third_party/nss/nss/lib/base/tracker.c
+build obj/third_party/nss/nss/lib/certdb/nss_static.alg1485.o: cc $
+    ../../third_party/nss/nss/lib/certdb/alg1485.c
+build obj/third_party/nss/nss/lib/certdb/nss_static.certdb.o: cc $
+    ../../third_party/nss/nss/lib/certdb/certdb.c
+build obj/third_party/nss/nss/lib/certdb/nss_static.certv3.o: cc $
+    ../../third_party/nss/nss/lib/certdb/certv3.c
+build obj/third_party/nss/nss/lib/certdb/nss_static.certxutl.o: cc $
+    ../../third_party/nss/nss/lib/certdb/certxutl.c
+build obj/third_party/nss/nss/lib/certdb/nss_static.crl.o: cc $
+    ../../third_party/nss/nss/lib/certdb/crl.c
+build obj/third_party/nss/nss/lib/certdb/nss_static.genname.o: cc $
+    ../../third_party/nss/nss/lib/certdb/genname.c
+build obj/third_party/nss/nss/lib/certdb/nss_static.polcyxtn.o: cc $
+    ../../third_party/nss/nss/lib/certdb/polcyxtn.c
+build obj/third_party/nss/nss/lib/certdb/nss_static.secname.o: cc $
+    ../../third_party/nss/nss/lib/certdb/secname.c
+build obj/third_party/nss/nss/lib/certdb/nss_static.stanpcertdb.o: cc $
+    ../../third_party/nss/nss/lib/certdb/stanpcertdb.c
+build obj/third_party/nss/nss/lib/certdb/nss_static.xauthkid.o: cc $
+    ../../third_party/nss/nss/lib/certdb/xauthkid.c
+build obj/third_party/nss/nss/lib/certdb/nss_static.xbsconst.o: cc $
+    ../../third_party/nss/nss/lib/certdb/xbsconst.c
+build obj/third_party/nss/nss/lib/certdb/nss_static.xconst.o: cc $
+    ../../third_party/nss/nss/lib/certdb/xconst.c
+build obj/third_party/nss/nss/lib/certhigh/nss_static.certhigh.o: cc $
+    ../../third_party/nss/nss/lib/certhigh/certhigh.c
+build obj/third_party/nss/nss/lib/certhigh/nss_static.certhtml.o: cc $
+    ../../third_party/nss/nss/lib/certhigh/certhtml.c
+build obj/third_party/nss/nss/lib/certhigh/nss_static.certreq.o: cc $
+    ../../third_party/nss/nss/lib/certhigh/certreq.c
+build obj/third_party/nss/nss/lib/certhigh/nss_static.certvfy.o: cc $
+    ../../third_party/nss/nss/lib/certhigh/certvfy.c
+build obj/third_party/nss/nss/lib/certhigh/nss_static.certvfypkix.o: cc $
+    ../../third_party/nss/nss/lib/certhigh/certvfypkix.c
+build obj/third_party/nss/nss/lib/certhigh/nss_static.certvfypkixprint.o: $
+    cc ../../third_party/nss/nss/lib/certhigh/certvfypkixprint.c
+build obj/third_party/nss/nss/lib/certhigh/nss_static.crlv2.o: cc $
+    ../../third_party/nss/nss/lib/certhigh/crlv2.c
+build obj/third_party/nss/nss/lib/certhigh/nss_static.ocsp.o: cc $
+    ../../third_party/nss/nss/lib/certhigh/ocsp.c
+build obj/third_party/nss/nss/lib/certhigh/nss_static.ocspsig.o: cc $
+    ../../third_party/nss/nss/lib/certhigh/ocspsig.c
+build obj/third_party/nss/nss/lib/certhigh/nss_static.xcrldist.o: cc $
+    ../../third_party/nss/nss/lib/certhigh/xcrldist.c
+build obj/third_party/nss/nss/lib/cryptohi/nss_static.dsautil.o: cc $
+    ../../third_party/nss/nss/lib/cryptohi/dsautil.c
+build obj/third_party/nss/nss/lib/cryptohi/nss_static.sechash.o: cc $
+    ../../third_party/nss/nss/lib/cryptohi/sechash.c
+build obj/third_party/nss/nss/lib/cryptohi/nss_static.seckey.o: cc $
+    ../../third_party/nss/nss/lib/cryptohi/seckey.c
+build obj/third_party/nss/nss/lib/cryptohi/nss_static.secsign.o: cc $
+    ../../third_party/nss/nss/lib/cryptohi/secsign.c
+build obj/third_party/nss/nss/lib/cryptohi/nss_static.secvfy.o: cc $
+    ../../third_party/nss/nss/lib/cryptohi/secvfy.c
+build obj/third_party/nss/nss/lib/dev/nss_static.ckhelper.o: cc $
+    ../../third_party/nss/nss/lib/dev/ckhelper.c
+build obj/third_party/nss/nss/lib/dev/nss_static.devslot.o: cc $
+    ../../third_party/nss/nss/lib/dev/devslot.c
+build obj/third_party/nss/nss/lib/dev/nss_static.devtoken.o: cc $
+    ../../third_party/nss/nss/lib/dev/devtoken.c
+build obj/third_party/nss/nss/lib/dev/nss_static.devutil.o: cc $
+    ../../third_party/nss/nss/lib/dev/devutil.c
+build obj/third_party/nss/nss/lib/freebl/nss_static.aeskeywrap.o: cc $
+    ../../third_party/nss/nss/lib/freebl/aeskeywrap.c
+build obj/third_party/nss/nss/lib/freebl/nss_static.alg2268.o: cc $
+    ../../third_party/nss/nss/lib/freebl/alg2268.c
+build obj/third_party/nss/nss/lib/freebl/nss_static.alghmac.o: cc $
+    ../../third_party/nss/nss/lib/freebl/alghmac.c
+build obj/third_party/nss/nss/lib/freebl/nss_static.arcfive.o: cc $
+    ../../third_party/nss/nss/lib/freebl/arcfive.c
+build obj/third_party/nss/nss/lib/freebl/nss_static.arcfour.o: cc $
+    ../../third_party/nss/nss/lib/freebl/arcfour.c
+build obj/third_party/nss/nss/lib/freebl/nss_static.camellia.o: cc $
+    ../../third_party/nss/nss/lib/freebl/camellia.c
+build obj/third_party/nss/nss/lib/freebl/chacha20/nss_static.chacha20.o: cc $
+    ../../third_party/nss/nss/lib/freebl/chacha20/chacha20.c
+build obj/third_party/nss/nss/lib/freebl/nss_static.chacha20poly1305.o: cc $
+    ../../third_party/nss/nss/lib/freebl/chacha20poly1305.c
+build obj/third_party/nss/nss/lib/freebl/nss_static.ctr.o: cc $
+    ../../third_party/nss/nss/lib/freebl/ctr.c
+build obj/third_party/nss/nss/lib/freebl/nss_static.cts.o: cc $
+    ../../third_party/nss/nss/lib/freebl/cts.c
+build obj/third_party/nss/nss/lib/freebl/nss_static.des.o: cc $
+    ../../third_party/nss/nss/lib/freebl/des.c
+build obj/third_party/nss/nss/lib/freebl/nss_static.desblapi.o: cc $
+    ../../third_party/nss/nss/lib/freebl/desblapi.c
+build obj/third_party/nss/nss/lib/freebl/nss_static.dh.o: cc $
+    ../../third_party/nss/nss/lib/freebl/dh.c
+build obj/third_party/nss/nss/lib/freebl/nss_static.drbg.o: cc $
+    ../../third_party/nss/nss/lib/freebl/drbg.c
+build obj/third_party/nss/nss/lib/freebl/nss_static.dsa.o: cc $
+    ../../third_party/nss/nss/lib/freebl/dsa.c
+build obj/third_party/nss/nss/lib/freebl/nss_static.ec.o: cc $
+    ../../third_party/nss/nss/lib/freebl/ec.c
+build obj/third_party/nss/nss/lib/freebl/ecl/nss_static.ecl.o: cc $
+    ../../third_party/nss/nss/lib/freebl/ecl/ecl.c
+build obj/third_party/nss/nss/lib/freebl/ecl/nss_static.ecl_curve.o: cc $
+    ../../third_party/nss/nss/lib/freebl/ecl/ecl_curve.c
+build obj/third_party/nss/nss/lib/freebl/ecl/nss_static.ecl_gf.o: cc $
+    ../../third_party/nss/nss/lib/freebl/ecl/ecl_gf.c
+build obj/third_party/nss/nss/lib/freebl/ecl/nss_static.ecl_mult.o: cc $
+    ../../third_party/nss/nss/lib/freebl/ecl/ecl_mult.c
+build obj/third_party/nss/nss/lib/freebl/ecl/nss_static.ecp_256.o: cc $
+    ../../third_party/nss/nss/lib/freebl/ecl/ecp_256.c
+build obj/third_party/nss/nss/lib/freebl/ecl/nss_static.ecp_256_32.o: cc $
+    ../../third_party/nss/nss/lib/freebl/ecl/ecp_256_32.c
+build obj/third_party/nss/nss/lib/freebl/ecl/nss_static.ecp_384.o: cc $
+    ../../third_party/nss/nss/lib/freebl/ecl/ecp_384.c
+build obj/third_party/nss/nss/lib/freebl/ecl/nss_static.ecp_521.o: cc $
+    ../../third_party/nss/nss/lib/freebl/ecl/ecp_521.c
+build obj/third_party/nss/nss/lib/freebl/ecl/nss_static.ecp_aff.o: cc $
+    ../../third_party/nss/nss/lib/freebl/ecl/ecp_aff.c
+build obj/third_party/nss/nss/lib/freebl/ecl/nss_static.ecp_jac.o: cc $
+    ../../third_party/nss/nss/lib/freebl/ecl/ecp_jac.c
+build obj/third_party/nss/nss/lib/freebl/ecl/nss_static.ecp_jm.o: cc $
+    ../../third_party/nss/nss/lib/freebl/ecl/ecp_jm.c
+build obj/third_party/nss/nss/lib/freebl/ecl/nss_static.ecp_mont.o: cc $
+    ../../third_party/nss/nss/lib/freebl/ecl/ecp_mont.c
+build obj/third_party/nss/nss/lib/freebl/ecl/nss_static.ec_naf.o: cc $
+    ../../third_party/nss/nss/lib/freebl/ecl/ec_naf.c
+build obj/third_party/nss/nss/lib/freebl/nss_static.gcm.o: cc $
+    ../../third_party/nss/nss/lib/freebl/gcm.c
+build obj/third_party/nss/nss/lib/freebl/nss_static.hmacct.o: cc $
+    ../../third_party/nss/nss/lib/freebl/hmacct.c
+build obj/third_party/nss/nss/lib/freebl/nss_static.jpake.o: cc $
+    ../../third_party/nss/nss/lib/freebl/jpake.c
+build obj/third_party/nss/nss/lib/freebl/nss_static.md2.o: cc $
+    ../../third_party/nss/nss/lib/freebl/md2.c
+build obj/third_party/nss/nss/lib/freebl/nss_static.md5.o: cc $
+    ../../third_party/nss/nss/lib/freebl/md5.c
+build obj/third_party/nss/nss/lib/freebl/mpi/nss_static.mpcpucache.o: cc $
+    ../../third_party/nss/nss/lib/freebl/mpi/mpcpucache.c
+build obj/third_party/nss/nss/lib/freebl/mpi/nss_static.mpi.o: cc $
+    ../../third_party/nss/nss/lib/freebl/mpi/mpi.c
+build obj/third_party/nss/nss/lib/freebl/mpi/nss_static.mpi_arm_mac.o: cc $
+    ../../third_party/nss/nss/lib/freebl/mpi/mpi_arm_mac.c
+build obj/third_party/nss/nss/lib/freebl/mpi/nss_static.mplogic.o: cc $
+    ../../third_party/nss/nss/lib/freebl/mpi/mplogic.c
+build obj/third_party/nss/nss/lib/freebl/mpi/nss_static.mpmontg.o: cc $
+    ../../third_party/nss/nss/lib/freebl/mpi/mpmontg.c
+build obj/third_party/nss/nss/lib/freebl/mpi/nss_static.mpprime.o: cc $
+    ../../third_party/nss/nss/lib/freebl/mpi/mpprime.c
+build obj/third_party/nss/nss/lib/freebl/mpi/nss_static.mp_gf2m.o: cc $
+    ../../third_party/nss/nss/lib/freebl/mpi/mp_gf2m.c
+build obj/third_party/nss/nss/lib/freebl/poly1305/nss_static.poly1305.o: cc $
+    ../../third_party/nss/nss/lib/freebl/poly1305/poly1305.c
+build obj/third_party/nss/nss/lib/freebl/nss_static.pqg.o: cc $
+    ../../third_party/nss/nss/lib/freebl/pqg.c
+build obj/third_party/nss/nss/lib/freebl/nss_static.rawhash.o: cc $
+    ../../third_party/nss/nss/lib/freebl/rawhash.c
+build obj/third_party/nss/nss/lib/freebl/nss_static.rijndael.o: cc $
+    ../../third_party/nss/nss/lib/freebl/rijndael.c
+build obj/third_party/nss/nss/lib/freebl/nss_static.rsa.o: cc $
+    ../../third_party/nss/nss/lib/freebl/rsa.c
+build obj/third_party/nss/nss/lib/freebl/nss_static.rsapkcs.o: cc $
+    ../../third_party/nss/nss/lib/freebl/rsapkcs.c
+build obj/third_party/nss/nss/lib/freebl/nss_static.seed.o: cc $
+    ../../third_party/nss/nss/lib/freebl/seed.c
+build obj/third_party/nss/nss/lib/freebl/nss_static.sha512.o: cc $
+    ../../third_party/nss/nss/lib/freebl/sha512.c
+build obj/third_party/nss/nss/lib/freebl/nss_static.sha_fast.o: cc $
+    ../../third_party/nss/nss/lib/freebl/sha_fast.c
+build obj/third_party/nss/nss/lib/freebl/nss_static.shvfy.o: cc $
+    ../../third_party/nss/nss/lib/freebl/shvfy.c
+build obj/third_party/nss/nss/lib/freebl/nss_static.sysrand.o: cc $
+    ../../third_party/nss/nss/lib/freebl/sysrand.c
+build obj/third_party/nss/nss/lib/freebl/nss_static.tlsprfalg.o: cc $
+    ../../third_party/nss/nss/lib/freebl/tlsprfalg.c
+build $
+    obj/third_party/nss/nss/lib/libpkix/pkix/certsel/nss_static.pkix_certselector.o: $
+    cc ../../third_party/nss/nss/lib/libpkix/pkix/certsel/pkix_certselector.c
+build $
+    obj/third_party/nss/nss/lib/libpkix/pkix/certsel/nss_static.pkix_comcertselparams.o: $
+    cc $
+    ../../third_party/nss/nss/lib/libpkix/pkix/certsel/pkix_comcertselparams.c
+build $
+    obj/third_party/nss/nss/lib/libpkix/pkix/checker/nss_static.pkix_basicconstraintschecker.o: $
+    cc $
+    ../../third_party/nss/nss/lib/libpkix/pkix/checker/pkix_basicconstraintschecker.c
+build $
+    obj/third_party/nss/nss/lib/libpkix/pkix/checker/nss_static.pkix_certchainchecker.o: $
+    cc $
+    ../../third_party/nss/nss/lib/libpkix/pkix/checker/pkix_certchainchecker.c
+build $
+    obj/third_party/nss/nss/lib/libpkix/pkix/checker/nss_static.pkix_crlchecker.o: $
+    cc ../../third_party/nss/nss/lib/libpkix/pkix/checker/pkix_crlchecker.c
+build $
+    obj/third_party/nss/nss/lib/libpkix/pkix/checker/nss_static.pkix_ekuchecker.o: $
+    cc ../../third_party/nss/nss/lib/libpkix/pkix/checker/pkix_ekuchecker.c
+build $
+    obj/third_party/nss/nss/lib/libpkix/pkix/checker/nss_static.pkix_expirationchecker.o: $
+    cc $
+    ../../third_party/nss/nss/lib/libpkix/pkix/checker/pkix_expirationchecker.c
+build $
+    obj/third_party/nss/nss/lib/libpkix/pkix/checker/nss_static.pkix_namechainingchecker.o: $
+    cc $
+    ../../third_party/nss/nss/lib/libpkix/pkix/checker/pkix_namechainingchecker.c
+build $
+    obj/third_party/nss/nss/lib/libpkix/pkix/checker/nss_static.pkix_nameconstraintschecker.o: $
+    cc $
+    ../../third_party/nss/nss/lib/libpkix/pkix/checker/pkix_nameconstraintschecker.c
+build $
+    obj/third_party/nss/nss/lib/libpkix/pkix/checker/nss_static.pkix_ocspchecker.o: $
+    cc ../../third_party/nss/nss/lib/libpkix/pkix/checker/pkix_ocspchecker.c
+build $
+    obj/third_party/nss/nss/lib/libpkix/pkix/checker/nss_static.pkix_policychecker.o: $
+    cc ../../third_party/nss/nss/lib/libpkix/pkix/checker/pkix_policychecker.c
+build $
+    obj/third_party/nss/nss/lib/libpkix/pkix/checker/nss_static.pkix_revocationchecker.o: $
+    cc $
+    ../../third_party/nss/nss/lib/libpkix/pkix/checker/pkix_revocationchecker.c
+build $
+    obj/third_party/nss/nss/lib/libpkix/pkix/checker/nss_static.pkix_revocationmethod.o: $
+    cc $
+    ../../third_party/nss/nss/lib/libpkix/pkix/checker/pkix_revocationmethod.c
+build $
+    obj/third_party/nss/nss/lib/libpkix/pkix/checker/nss_static.pkix_signaturechecker.o: $
+    cc $
+    ../../third_party/nss/nss/lib/libpkix/pkix/checker/pkix_signaturechecker.c
+build $
+    obj/third_party/nss/nss/lib/libpkix/pkix/checker/nss_static.pkix_targetcertchecker.o: $
+    cc $
+    ../../third_party/nss/nss/lib/libpkix/pkix/checker/pkix_targetcertchecker.c
+build $
+    obj/third_party/nss/nss/lib/libpkix/pkix/crlsel/nss_static.pkix_comcrlselparams.o: $
+    cc $
+    ../../third_party/nss/nss/lib/libpkix/pkix/crlsel/pkix_comcrlselparams.c
+build $
+    obj/third_party/nss/nss/lib/libpkix/pkix/crlsel/nss_static.pkix_crlselector.o: $
+    cc ../../third_party/nss/nss/lib/libpkix/pkix/crlsel/pkix_crlselector.c
+build $
+    obj/third_party/nss/nss/lib/libpkix/pkix/params/nss_static.pkix_procparams.o: $
+    cc ../../third_party/nss/nss/lib/libpkix/pkix/params/pkix_procparams.c
+build $
+    obj/third_party/nss/nss/lib/libpkix/pkix/params/nss_static.pkix_resourcelimits.o: $
+    cc ../../third_party/nss/nss/lib/libpkix/pkix/params/pkix_resourcelimits.c
+build $
+    obj/third_party/nss/nss/lib/libpkix/pkix/params/nss_static.pkix_trustanchor.o: $
+    cc ../../third_party/nss/nss/lib/libpkix/pkix/params/pkix_trustanchor.c
+build $
+    obj/third_party/nss/nss/lib/libpkix/pkix/params/nss_static.pkix_valparams.o: $
+    cc ../../third_party/nss/nss/lib/libpkix/pkix/params/pkix_valparams.c
+build $
+    obj/third_party/nss/nss/lib/libpkix/pkix/results/nss_static.pkix_buildresult.o: $
+    cc ../../third_party/nss/nss/lib/libpkix/pkix/results/pkix_buildresult.c
+build $
+    obj/third_party/nss/nss/lib/libpkix/pkix/results/nss_static.pkix_policynode.o: $
+    cc ../../third_party/nss/nss/lib/libpkix/pkix/results/pkix_policynode.c
+build $
+    obj/third_party/nss/nss/lib/libpkix/pkix/results/nss_static.pkix_valresult.o: $
+    cc ../../third_party/nss/nss/lib/libpkix/pkix/results/pkix_valresult.c
+build $
+    obj/third_party/nss/nss/lib/libpkix/pkix/results/nss_static.pkix_verifynode.o: $
+    cc ../../third_party/nss/nss/lib/libpkix/pkix/results/pkix_verifynode.c
+build $
+    obj/third_party/nss/nss/lib/libpkix/pkix/store/nss_static.pkix_store.o: $
+    cc ../../third_party/nss/nss/lib/libpkix/pkix/store/pkix_store.c
+build obj/third_party/nss/nss/lib/libpkix/pkix/top/nss_static.pkix_build.o: $
+    cc ../../third_party/nss/nss/lib/libpkix/pkix/top/pkix_build.c
+build $
+    obj/third_party/nss/nss/lib/libpkix/pkix/top/nss_static.pkix_lifecycle.o: $
+    cc ../../third_party/nss/nss/lib/libpkix/pkix/top/pkix_lifecycle.c
+build $
+    obj/third_party/nss/nss/lib/libpkix/pkix/top/nss_static.pkix_validate.o: $
+    cc ../../third_party/nss/nss/lib/libpkix/pkix/top/pkix_validate.c
+build $
+    obj/third_party/nss/nss/lib/libpkix/pkix/util/nss_static.pkix_error.o: $
+    cc ../../third_party/nss/nss/lib/libpkix/pkix/util/pkix_error.c
+build $
+    obj/third_party/nss/nss/lib/libpkix/pkix/util/nss_static.pkix_errpaths.o: $
+    cc ../../third_party/nss/nss/lib/libpkix/pkix/util/pkix_errpaths.c
+build obj/third_party/nss/nss/lib/libpkix/pkix/util/nss_static.pkix_list.o: $
+    cc ../../third_party/nss/nss/lib/libpkix/pkix/util/pkix_list.c
+build $
+    obj/third_party/nss/nss/lib/libpkix/pkix/util/nss_static.pkix_logger.o: $
+    cc ../../third_party/nss/nss/lib/libpkix/pkix/util/pkix_logger.c
+build $
+    obj/third_party/nss/nss/lib/libpkix/pkix/util/nss_static.pkix_tools.o: $
+    cc ../../third_party/nss/nss/lib/libpkix/pkix/util/pkix_tools.c
+build $
+    obj/third_party/nss/nss/lib/libpkix/pkix_pl_nss/module/nss_static.pkix_pl_aiamgr.o: $
+    cc $
+    ../../third_party/nss/nss/lib/libpkix/pkix_pl_nss/module/pkix_pl_aiamgr.c
+build $
+    obj/third_party/nss/nss/lib/libpkix/pkix_pl_nss/module/nss_static.pkix_pl_colcertstore.o: $
+    cc $
+    ../../third_party/nss/nss/lib/libpkix/pkix_pl_nss/module/pkix_pl_colcertstore.c
+build $
+    obj/third_party/nss/nss/lib/libpkix/pkix_pl_nss/module/nss_static.pkix_pl_httpcertstore.o: $
+    cc $
+    ../../third_party/nss/nss/lib/libpkix/pkix_pl_nss/module/pkix_pl_httpcertstore.c
+build $
+    obj/third_party/nss/nss/lib/libpkix/pkix_pl_nss/module/nss_static.pkix_pl_httpdefaultclient.o: $
+    cc $
+    ../../third_party/nss/nss/lib/libpkix/pkix_pl_nss/module/pkix_pl_httpdefaultclient.c
+build $
+    obj/third_party/nss/nss/lib/libpkix/pkix_pl_nss/module/nss_static.pkix_pl_nsscontext.o: $
+    cc $
+    ../../third_party/nss/nss/lib/libpkix/pkix_pl_nss/module/pkix_pl_nsscontext.c
+build $
+    obj/third_party/nss/nss/lib/libpkix/pkix_pl_nss/module/nss_static.pkix_pl_pk11certstore.o: $
+    cc $
+    ../../third_party/nss/nss/lib/libpkix/pkix_pl_nss/module/pkix_pl_pk11certstore.c
+build $
+    obj/third_party/nss/nss/lib/libpkix/pkix_pl_nss/module/nss_static.pkix_pl_socket.o: $
+    cc $
+    ../../third_party/nss/nss/lib/libpkix/pkix_pl_nss/module/pkix_pl_socket.c
+build $
+    obj/third_party/nss/nss/lib/libpkix/pkix_pl_nss/pki/nss_static.pkix_pl_basicconstraints.o: $
+    cc $
+    ../../third_party/nss/nss/lib/libpkix/pkix_pl_nss/pki/pkix_pl_basicconstraints.c
+build $
+    obj/third_party/nss/nss/lib/libpkix/pkix_pl_nss/pki/nss_static.pkix_pl_cert.o: $
+    cc ../../third_party/nss/nss/lib/libpkix/pkix_pl_nss/pki/pkix_pl_cert.c
+build $
+    obj/third_party/nss/nss/lib/libpkix/pkix_pl_nss/pki/nss_static.pkix_pl_certpolicyinfo.o: $
+    cc $
+    ../../third_party/nss/nss/lib/libpkix/pkix_pl_nss/pki/pkix_pl_certpolicyinfo.c
+build $
+    obj/third_party/nss/nss/lib/libpkix/pkix_pl_nss/pki/nss_static.pkix_pl_certpolicymap.o: $
+    cc $
+    ../../third_party/nss/nss/lib/libpkix/pkix_pl_nss/pki/pkix_pl_certpolicymap.c
+build $
+    obj/third_party/nss/nss/lib/libpkix/pkix_pl_nss/pki/nss_static.pkix_pl_certpolicyqualifier.o: $
+    cc $
+    ../../third_party/nss/nss/lib/libpkix/pkix_pl_nss/pki/pkix_pl_certpolicyqualifier.c
+build $
+    obj/third_party/nss/nss/lib/libpkix/pkix_pl_nss/pki/nss_static.pkix_pl_crl.o: $
+    cc ../../third_party/nss/nss/lib/libpkix/pkix_pl_nss/pki/pkix_pl_crl.c
+build $
+    obj/third_party/nss/nss/lib/libpkix/pkix_pl_nss/pki/nss_static.pkix_pl_crldp.o: $
+    cc ../../third_party/nss/nss/lib/libpkix/pkix_pl_nss/pki/pkix_pl_crldp.c
+build $
+    obj/third_party/nss/nss/lib/libpkix/pkix_pl_nss/pki/nss_static.pkix_pl_crlentry.o: $
+    cc $
+    ../../third_party/nss/nss/lib/libpkix/pkix_pl_nss/pki/pkix_pl_crlentry.c
+build $
+    obj/third_party/nss/nss/lib/libpkix/pkix_pl_nss/pki/nss_static.pkix_pl_date.o: $
+    cc ../../third_party/nss/nss/lib/libpkix/pkix_pl_nss/pki/pkix_pl_date.c
+build $
+    obj/third_party/nss/nss/lib/libpkix/pkix_pl_nss/pki/nss_static.pkix_pl_generalname.o: $
+    cc $
+    ../../third_party/nss/nss/lib/libpkix/pkix_pl_nss/pki/pkix_pl_generalname.c
+build $
+    obj/third_party/nss/nss/lib/libpkix/pkix_pl_nss/pki/nss_static.pkix_pl_infoaccess.o: $
+    cc $
+    ../../third_party/nss/nss/lib/libpkix/pkix_pl_nss/pki/pkix_pl_infoaccess.c
+build $
+    obj/third_party/nss/nss/lib/libpkix/pkix_pl_nss/pki/nss_static.pkix_pl_nameconstraints.o: $
+    cc $
+    ../../third_party/nss/nss/lib/libpkix/pkix_pl_nss/pki/pkix_pl_nameconstraints.c
+build $
+    obj/third_party/nss/nss/lib/libpkix/pkix_pl_nss/pki/nss_static.pkix_pl_ocspcertid.o: $
+    cc $
+    ../../third_party/nss/nss/lib/libpkix/pkix_pl_nss/pki/pkix_pl_ocspcertid.c
+build $
+    obj/third_party/nss/nss/lib/libpkix/pkix_pl_nss/pki/nss_static.pkix_pl_ocsprequest.o: $
+    cc $
+    ../../third_party/nss/nss/lib/libpkix/pkix_pl_nss/pki/pkix_pl_ocsprequest.c
+build $
+    obj/third_party/nss/nss/lib/libpkix/pkix_pl_nss/pki/nss_static.pkix_pl_ocspresponse.o: $
+    cc $
+    ../../third_party/nss/nss/lib/libpkix/pkix_pl_nss/pki/pkix_pl_ocspresponse.c
+build $
+    obj/third_party/nss/nss/lib/libpkix/pkix_pl_nss/pki/nss_static.pkix_pl_publickey.o: $
+    cc $
+    ../../third_party/nss/nss/lib/libpkix/pkix_pl_nss/pki/pkix_pl_publickey.c
+build $
+    obj/third_party/nss/nss/lib/libpkix/pkix_pl_nss/pki/nss_static.pkix_pl_x500name.o: $
+    cc $
+    ../../third_party/nss/nss/lib/libpkix/pkix_pl_nss/pki/pkix_pl_x500name.c
+build $
+    obj/third_party/nss/nss/lib/libpkix/pkix_pl_nss/system/nss_static.pkix_pl_bigint.o: $
+    cc $
+    ../../third_party/nss/nss/lib/libpkix/pkix_pl_nss/system/pkix_pl_bigint.c
+build $
+    obj/third_party/nss/nss/lib/libpkix/pkix_pl_nss/system/nss_static.pkix_pl_bytearray.o: $
+    cc $
+    ../../third_party/nss/nss/lib/libpkix/pkix_pl_nss/system/pkix_pl_bytearray.c
+build $
+    obj/third_party/nss/nss/lib/libpkix/pkix_pl_nss/system/nss_static.pkix_pl_common.o: $
+    cc $
+    ../../third_party/nss/nss/lib/libpkix/pkix_pl_nss/system/pkix_pl_common.c
+build $
+    obj/third_party/nss/nss/lib/libpkix/pkix_pl_nss/system/nss_static.pkix_pl_error.o: $
+    cc $
+    ../../third_party/nss/nss/lib/libpkix/pkix_pl_nss/system/pkix_pl_error.c
+build $
+    obj/third_party/nss/nss/lib/libpkix/pkix_pl_nss/system/nss_static.pkix_pl_hashtable.o: $
+    cc $
+    ../../third_party/nss/nss/lib/libpkix/pkix_pl_nss/system/pkix_pl_hashtable.c
+build $
+    obj/third_party/nss/nss/lib/libpkix/pkix_pl_nss/system/nss_static.pkix_pl_lifecycle.o: $
+    cc $
+    ../../third_party/nss/nss/lib/libpkix/pkix_pl_nss/system/pkix_pl_lifecycle.c
+build $
+    obj/third_party/nss/nss/lib/libpkix/pkix_pl_nss/system/nss_static.pkix_pl_mem.o: $
+    cc ../../third_party/nss/nss/lib/libpkix/pkix_pl_nss/system/pkix_pl_mem.c
+build $
+    obj/third_party/nss/nss/lib/libpkix/pkix_pl_nss/system/nss_static.pkix_pl_monitorlock.o: $
+    cc $
+    ../../third_party/nss/nss/lib/libpkix/pkix_pl_nss/system/pkix_pl_monitorlock.c
+build $
+    obj/third_party/nss/nss/lib/libpkix/pkix_pl_nss/system/nss_static.pkix_pl_mutex.o: $
+    cc $
+    ../../third_party/nss/nss/lib/libpkix/pkix_pl_nss/system/pkix_pl_mutex.c
+build $
+    obj/third_party/nss/nss/lib/libpkix/pkix_pl_nss/system/nss_static.pkix_pl_object.o: $
+    cc $
+    ../../third_party/nss/nss/lib/libpkix/pkix_pl_nss/system/pkix_pl_object.c
+build $
+    obj/third_party/nss/nss/lib/libpkix/pkix_pl_nss/system/nss_static.pkix_pl_oid.o: $
+    cc ../../third_party/nss/nss/lib/libpkix/pkix_pl_nss/system/pkix_pl_oid.c
+build $
+    obj/third_party/nss/nss/lib/libpkix/pkix_pl_nss/system/nss_static.pkix_pl_primhash.o: $
+    cc $
+    ../../third_party/nss/nss/lib/libpkix/pkix_pl_nss/system/pkix_pl_primhash.c
+build $
+    obj/third_party/nss/nss/lib/libpkix/pkix_pl_nss/system/nss_static.pkix_pl_rwlock.o: $
+    cc $
+    ../../third_party/nss/nss/lib/libpkix/pkix_pl_nss/system/pkix_pl_rwlock.c
+build $
+    obj/third_party/nss/nss/lib/libpkix/pkix_pl_nss/system/nss_static.pkix_pl_string.o: $
+    cc $
+    ../../third_party/nss/nss/lib/libpkix/pkix_pl_nss/system/pkix_pl_string.c
+build obj/third_party/nss/nss/lib/nss/nss_static.nssinit.o: cc $
+    ../../third_party/nss/nss/lib/nss/nssinit.c
+build obj/third_party/nss/nss/lib/nss/nss_static.utilwrap.o: cc $
+    ../../third_party/nss/nss/lib/nss/utilwrap.c
+build obj/third_party/nss/nss/lib/pk11wrap/nss_static.dev3hack.o: cc $
+    ../../third_party/nss/nss/lib/pk11wrap/dev3hack.c
+build obj/third_party/nss/nss/lib/pk11wrap/nss_static.pk11akey.o: cc $
+    ../../third_party/nss/nss/lib/pk11wrap/pk11akey.c
+build obj/third_party/nss/nss/lib/pk11wrap/nss_static.pk11auth.o: cc $
+    ../../third_party/nss/nss/lib/pk11wrap/pk11auth.c
+build obj/third_party/nss/nss/lib/pk11wrap/nss_static.pk11cert.o: cc $
+    ../../third_party/nss/nss/lib/pk11wrap/pk11cert.c
+build obj/third_party/nss/nss/lib/pk11wrap/nss_static.pk11cxt.o: cc $
+    ../../third_party/nss/nss/lib/pk11wrap/pk11cxt.c
+build obj/third_party/nss/nss/lib/pk11wrap/nss_static.pk11err.o: cc $
+    ../../third_party/nss/nss/lib/pk11wrap/pk11err.c
+build obj/third_party/nss/nss/lib/pk11wrap/nss_static.pk11kea.o: cc $
+    ../../third_party/nss/nss/lib/pk11wrap/pk11kea.c
+build obj/third_party/nss/nss/lib/pk11wrap/nss_static.pk11list.o: cc $
+    ../../third_party/nss/nss/lib/pk11wrap/pk11list.c
+build obj/third_party/nss/nss/lib/pk11wrap/nss_static.pk11load.o: cc $
+    ../../third_party/nss/nss/lib/pk11wrap/pk11load.c
+build obj/third_party/nss/nss/lib/pk11wrap/nss_static.pk11mech.o: cc $
+    ../../third_party/nss/nss/lib/pk11wrap/pk11mech.c
+build obj/third_party/nss/nss/lib/pk11wrap/nss_static.pk11merge.o: cc $
+    ../../third_party/nss/nss/lib/pk11wrap/pk11merge.c
+build obj/third_party/nss/nss/lib/pk11wrap/nss_static.pk11nobj.o: cc $
+    ../../third_party/nss/nss/lib/pk11wrap/pk11nobj.c
+build obj/third_party/nss/nss/lib/pk11wrap/nss_static.pk11obj.o: cc $
+    ../../third_party/nss/nss/lib/pk11wrap/pk11obj.c
+build obj/third_party/nss/nss/lib/pk11wrap/nss_static.pk11pars.o: cc $
+    ../../third_party/nss/nss/lib/pk11wrap/pk11pars.c
+build obj/third_party/nss/nss/lib/pk11wrap/nss_static.pk11pbe.o: cc $
+    ../../third_party/nss/nss/lib/pk11wrap/pk11pbe.c
+build obj/third_party/nss/nss/lib/pk11wrap/nss_static.pk11pk12.o: cc $
+    ../../third_party/nss/nss/lib/pk11wrap/pk11pk12.c
+build obj/third_party/nss/nss/lib/pk11wrap/nss_static.pk11pqg.o: cc $
+    ../../third_party/nss/nss/lib/pk11wrap/pk11pqg.c
+build obj/third_party/nss/nss/lib/pk11wrap/nss_static.pk11sdr.o: cc $
+    ../../third_party/nss/nss/lib/pk11wrap/pk11sdr.c
+build obj/third_party/nss/nss/lib/pk11wrap/nss_static.pk11skey.o: cc $
+    ../../third_party/nss/nss/lib/pk11wrap/pk11skey.c
+build obj/third_party/nss/nss/lib/pk11wrap/nss_static.pk11slot.o: cc $
+    ../../third_party/nss/nss/lib/pk11wrap/pk11slot.c
+build obj/third_party/nss/nss/lib/pk11wrap/nss_static.pk11util.o: cc $
+    ../../third_party/nss/nss/lib/pk11wrap/pk11util.c
+build obj/third_party/nss/nss/lib/pkcs7/nss_static.certread.o: cc $
+    ../../third_party/nss/nss/lib/pkcs7/certread.c
+build obj/third_party/nss/nss/lib/pkcs7/nss_static.p7common.o: cc $
+    ../../third_party/nss/nss/lib/pkcs7/p7common.c
+build obj/third_party/nss/nss/lib/pkcs7/nss_static.p7create.o: cc $
+    ../../third_party/nss/nss/lib/pkcs7/p7create.c
+build obj/third_party/nss/nss/lib/pkcs7/nss_static.p7decode.o: cc $
+    ../../third_party/nss/nss/lib/pkcs7/p7decode.c
+build obj/third_party/nss/nss/lib/pkcs7/nss_static.p7encode.o: cc $
+    ../../third_party/nss/nss/lib/pkcs7/p7encode.c
+build obj/third_party/nss/nss/lib/pkcs7/nss_static.p7local.o: cc $
+    ../../third_party/nss/nss/lib/pkcs7/p7local.c
+build obj/third_party/nss/nss/lib/pkcs7/nss_static.secmime.o: cc $
+    ../../third_party/nss/nss/lib/pkcs7/secmime.c
+build obj/third_party/nss/nss/lib/pki/nss_static.asymmkey.o: cc $
+    ../../third_party/nss/nss/lib/pki/asymmkey.c
+build obj/third_party/nss/nss/lib/pki/nss_static.certdecode.o: cc $
+    ../../third_party/nss/nss/lib/pki/certdecode.c
+build obj/third_party/nss/nss/lib/pki/nss_static.certificate.o: cc $
+    ../../third_party/nss/nss/lib/pki/certificate.c
+build obj/third_party/nss/nss/lib/pki/nss_static.cryptocontext.o: cc $
+    ../../third_party/nss/nss/lib/pki/cryptocontext.c
+build obj/third_party/nss/nss/lib/pki/nss_static.pki3hack.o: cc $
+    ../../third_party/nss/nss/lib/pki/pki3hack.c
+build obj/third_party/nss/nss/lib/pki/nss_static.pkibase.o: cc $
+    ../../third_party/nss/nss/lib/pki/pkibase.c
+build obj/third_party/nss/nss/lib/pki/nss_static.pkistore.o: cc $
+    ../../third_party/nss/nss/lib/pki/pkistore.c
+build obj/third_party/nss/nss/lib/pki/nss_static.symmkey.o: cc $
+    ../../third_party/nss/nss/lib/pki/symmkey.c
+build obj/third_party/nss/nss/lib/pki/nss_static.tdcache.o: cc $
+    ../../third_party/nss/nss/lib/pki/tdcache.c
+build obj/third_party/nss/nss/lib/pki/nss_static.trustdomain.o: cc $
+    ../../third_party/nss/nss/lib/pki/trustdomain.c
+build obj/third_party/nss/nss/lib/softoken/nss_static.ecdecode.o: cc $
+    ../../third_party/nss/nss/lib/softoken/ecdecode.c
+build obj/third_party/nss/nss/lib/softoken/nss_static.fipsaudt.o: cc $
+    ../../third_party/nss/nss/lib/softoken/fipsaudt.c
+build obj/third_party/nss/nss/lib/softoken/nss_static.fipstest.o: cc $
+    ../../third_party/nss/nss/lib/softoken/fipstest.c
+build obj/third_party/nss/nss/lib/softoken/nss_static.fipstokn.o: cc $
+    ../../third_party/nss/nss/lib/softoken/fipstokn.c
+build obj/third_party/nss/nss/lib/softoken/nss_static.jpakesftk.o: cc $
+    ../../third_party/nss/nss/lib/softoken/jpakesftk.c
+build obj/third_party/nss/nss/lib/softoken/nss_static.lgglue.o: cc $
+    ../../third_party/nss/nss/lib/softoken/lgglue.c
+build obj/third_party/nss/nss/lib/softoken/nss_static.lowkey.o: cc $
+    ../../third_party/nss/nss/lib/softoken/lowkey.c
+build obj/third_party/nss/nss/lib/softoken/nss_static.lowpbe.o: cc $
+    ../../third_party/nss/nss/lib/softoken/lowpbe.c
+build obj/third_party/nss/nss/lib/softoken/nss_static.padbuf.o: cc $
+    ../../third_party/nss/nss/lib/softoken/padbuf.c
+build obj/third_party/nss/nss/lib/softoken/nss_static.pkcs11.o: cc $
+    ../../third_party/nss/nss/lib/softoken/pkcs11.c
+build obj/third_party/nss/nss/lib/softoken/nss_static.pkcs11c.o: cc $
+    ../../third_party/nss/nss/lib/softoken/pkcs11c.c
+build obj/third_party/nss/nss/lib/softoken/nss_static.pkcs11u.o: cc $
+    ../../third_party/nss/nss/lib/softoken/pkcs11u.c
+build obj/third_party/nss/nss/lib/softoken/nss_static.sdb.o: cc $
+    ../../third_party/nss/nss/lib/softoken/sdb.c
+build obj/third_party/nss/nss/lib/softoken/nss_static.sftkdb.o: cc $
+    ../../third_party/nss/nss/lib/softoken/sftkdb.c
+build obj/third_party/nss/nss/lib/softoken/nss_static.sftkhmac.o: cc $
+    ../../third_party/nss/nss/lib/softoken/sftkhmac.c
+build obj/third_party/nss/nss/lib/softoken/nss_static.sftkpars.o: cc $
+    ../../third_party/nss/nss/lib/softoken/sftkpars.c
+build obj/third_party/nss/nss/lib/softoken/nss_static.sftkpwd.o: cc $
+    ../../third_party/nss/nss/lib/softoken/sftkpwd.c
+build obj/third_party/nss/nss/lib/softoken/nss_static.softkver.o: cc $
+    ../../third_party/nss/nss/lib/softoken/softkver.c
+build obj/third_party/nss/nss/lib/softoken/nss_static.tlsprf.o: cc $
+    ../../third_party/nss/nss/lib/softoken/tlsprf.c
+build obj/third_party/nss/nss/lib/util/nss_static.derdec.o: cc $
+    ../../third_party/nss/nss/lib/util/derdec.c
+build obj/third_party/nss/nss/lib/util/nss_static.derenc.o: cc $
+    ../../third_party/nss/nss/lib/util/derenc.c
+build obj/third_party/nss/nss/lib/util/nss_static.dersubr.o: cc $
+    ../../third_party/nss/nss/lib/util/dersubr.c
+build obj/third_party/nss/nss/lib/util/nss_static.dertime.o: cc $
+    ../../third_party/nss/nss/lib/util/dertime.c
+build obj/third_party/nss/nss/lib/util/nss_static.errstrs.o: cc $
+    ../../third_party/nss/nss/lib/util/errstrs.c
+build obj/third_party/nss/nss/lib/util/nss_static.nssb64d.o: cc $
+    ../../third_party/nss/nss/lib/util/nssb64d.c
+build obj/third_party/nss/nss/lib/util/nss_static.nssb64e.o: cc $
+    ../../third_party/nss/nss/lib/util/nssb64e.c
+build obj/third_party/nss/nss/lib/util/nss_static.nssilock.o: cc $
+    ../../third_party/nss/nss/lib/util/nssilock.c
+build obj/third_party/nss/nss/lib/util/nss_static.nssrwlk.o: cc $
+    ../../third_party/nss/nss/lib/util/nssrwlk.c
+build obj/third_party/nss/nss/lib/util/nss_static.oidstring.o: cc $
+    ../../third_party/nss/nss/lib/util/oidstring.c
+build obj/third_party/nss/nss/lib/util/nss_static.portreg.o: cc $
+    ../../third_party/nss/nss/lib/util/portreg.c
+build obj/third_party/nss/nss/lib/util/nss_static.quickder.o: cc $
+    ../../third_party/nss/nss/lib/util/quickder.c
+build obj/third_party/nss/nss/lib/util/nss_static.secalgid.o: cc $
+    ../../third_party/nss/nss/lib/util/secalgid.c
+build obj/third_party/nss/nss/lib/util/nss_static.secasn1d.o: cc $
+    ../../third_party/nss/nss/lib/util/secasn1d.c
+build obj/third_party/nss/nss/lib/util/nss_static.secasn1e.o: cc $
+    ../../third_party/nss/nss/lib/util/secasn1e.c
+build obj/third_party/nss/nss/lib/util/nss_static.secasn1u.o: cc $
+    ../../third_party/nss/nss/lib/util/secasn1u.c
+build obj/third_party/nss/nss/lib/util/nss_static.secdig.o: cc $
+    ../../third_party/nss/nss/lib/util/secdig.c
+build obj/third_party/nss/nss/lib/util/nss_static.secitem.o: cc $
+    ../../third_party/nss/nss/lib/util/secitem.c
+build obj/third_party/nss/nss/lib/util/nss_static.secoid.o: cc $
+    ../../third_party/nss/nss/lib/util/secoid.c
+build obj/third_party/nss/nss/lib/util/nss_static.secport.o: cc $
+    ../../third_party/nss/nss/lib/util/secport.c
+build obj/third_party/nss/nss/lib/util/nss_static.sectime.o: cc $
+    ../../third_party/nss/nss/lib/util/sectime.c
+build obj/third_party/nss/nss/lib/util/nss_static.templates.o: cc $
+    ../../third_party/nss/nss/lib/util/templates.c
+build obj/third_party/nss/nss/lib/util/nss_static.utf8.o: cc $
+    ../../third_party/nss/nss/lib/util/utf8.c
+build obj/third_party/nss/nss/lib/util/nss_static.utilmod.o: cc $
+    ../../third_party/nss/nss/lib/util/utilmod.c
+build obj/third_party/nss/nss/lib/util/nss_static.utilpars.o: cc $
+    ../../third_party/nss/nss/lib/util/utilpars.c
+
+build libnss_static.a: alink $
+    obj/third_party/nss/nss/lib/base/nss_static.arena.o $
+    obj/third_party/nss/nss/lib/base/nss_static.error.o $
+    obj/third_party/nss/nss/lib/base/nss_static.errorval.o $
+    obj/third_party/nss/nss/lib/base/nss_static.hash.o $
+    obj/third_party/nss/nss/lib/base/nss_static.hashops.o $
+    obj/third_party/nss/nss/lib/base/nss_static.item.o $
+    obj/third_party/nss/nss/lib/base/nss_static.libc.o $
+    obj/third_party/nss/nss/lib/base/nss_static.list.o $
+    obj/third_party/nss/nss/lib/base/nss_static.nssutf8.o $
+    obj/third_party/nss/nss/lib/base/nss_static.tracker.o $
+    obj/third_party/nss/nss/lib/certdb/nss_static.alg1485.o $
+    obj/third_party/nss/nss/lib/certdb/nss_static.certdb.o $
+    obj/third_party/nss/nss/lib/certdb/nss_static.certv3.o $
+    obj/third_party/nss/nss/lib/certdb/nss_static.certxutl.o $
+    obj/third_party/nss/nss/lib/certdb/nss_static.crl.o $
+    obj/third_party/nss/nss/lib/certdb/nss_static.genname.o $
+    obj/third_party/nss/nss/lib/certdb/nss_static.polcyxtn.o $
+    obj/third_party/nss/nss/lib/certdb/nss_static.secname.o $
+    obj/third_party/nss/nss/lib/certdb/nss_static.stanpcertdb.o $
+    obj/third_party/nss/nss/lib/certdb/nss_static.xauthkid.o $
+    obj/third_party/nss/nss/lib/certdb/nss_static.xbsconst.o $
+    obj/third_party/nss/nss/lib/certdb/nss_static.xconst.o $
+    obj/third_party/nss/nss/lib/certhigh/nss_static.certhigh.o $
+    obj/third_party/nss/nss/lib/certhigh/nss_static.certhtml.o $
+    obj/third_party/nss/nss/lib/certhigh/nss_static.certreq.o $
+    obj/third_party/nss/nss/lib/certhigh/nss_static.certvfy.o $
+    obj/third_party/nss/nss/lib/certhigh/nss_static.certvfypkix.o $
+    obj/third_party/nss/nss/lib/certhigh/nss_static.certvfypkixprint.o $
+    obj/third_party/nss/nss/lib/certhigh/nss_static.crlv2.o $
+    obj/third_party/nss/nss/lib/certhigh/nss_static.ocsp.o $
+    obj/third_party/nss/nss/lib/certhigh/nss_static.ocspsig.o $
+    obj/third_party/nss/nss/lib/certhigh/nss_static.xcrldist.o $
+    obj/third_party/nss/nss/lib/cryptohi/nss_static.dsautil.o $
+    obj/third_party/nss/nss/lib/cryptohi/nss_static.sechash.o $
+    obj/third_party/nss/nss/lib/cryptohi/nss_static.seckey.o $
+    obj/third_party/nss/nss/lib/cryptohi/nss_static.secsign.o $
+    obj/third_party/nss/nss/lib/cryptohi/nss_static.secvfy.o $
+    obj/third_party/nss/nss/lib/dev/nss_static.ckhelper.o $
+    obj/third_party/nss/nss/lib/dev/nss_static.devslot.o $
+    obj/third_party/nss/nss/lib/dev/nss_static.devtoken.o $
+    obj/third_party/nss/nss/lib/dev/nss_static.devutil.o $
+    obj/third_party/nss/nss/lib/freebl/nss_static.aeskeywrap.o $
+    obj/third_party/nss/nss/lib/freebl/nss_static.alg2268.o $
+    obj/third_party/nss/nss/lib/freebl/nss_static.alghmac.o $
+    obj/third_party/nss/nss/lib/freebl/nss_static.arcfive.o $
+    obj/third_party/nss/nss/lib/freebl/nss_static.arcfour.o $
+    obj/third_party/nss/nss/lib/freebl/nss_static.camellia.o $
+    obj/third_party/nss/nss/lib/freebl/chacha20/nss_static.chacha20.o $
+    obj/third_party/nss/nss/lib/freebl/nss_static.chacha20poly1305.o $
+    obj/third_party/nss/nss/lib/freebl/nss_static.ctr.o $
+    obj/third_party/nss/nss/lib/freebl/nss_static.cts.o $
+    obj/third_party/nss/nss/lib/freebl/nss_static.des.o $
+    obj/third_party/nss/nss/lib/freebl/nss_static.desblapi.o $
+    obj/third_party/nss/nss/lib/freebl/nss_static.dh.o $
+    obj/third_party/nss/nss/lib/freebl/nss_static.drbg.o $
+    obj/third_party/nss/nss/lib/freebl/nss_static.dsa.o $
+    obj/third_party/nss/nss/lib/freebl/nss_static.ec.o $
+    obj/third_party/nss/nss/lib/freebl/ecl/nss_static.ecl.o $
+    obj/third_party/nss/nss/lib/freebl/ecl/nss_static.ecl_curve.o $
+    obj/third_party/nss/nss/lib/freebl/ecl/nss_static.ecl_gf.o $
+    obj/third_party/nss/nss/lib/freebl/ecl/nss_static.ecl_mult.o $
+    obj/third_party/nss/nss/lib/freebl/ecl/nss_static.ecp_256.o $
+    obj/third_party/nss/nss/lib/freebl/ecl/nss_static.ecp_256_32.o $
+    obj/third_party/nss/nss/lib/freebl/ecl/nss_static.ecp_384.o $
+    obj/third_party/nss/nss/lib/freebl/ecl/nss_static.ecp_521.o $
+    obj/third_party/nss/nss/lib/freebl/ecl/nss_static.ecp_aff.o $
+    obj/third_party/nss/nss/lib/freebl/ecl/nss_static.ecp_jac.o $
+    obj/third_party/nss/nss/lib/freebl/ecl/nss_static.ecp_jm.o $
+    obj/third_party/nss/nss/lib/freebl/ecl/nss_static.ecp_mont.o $
+    obj/third_party/nss/nss/lib/freebl/ecl/nss_static.ec_naf.o $
+    obj/third_party/nss/nss/lib/freebl/nss_static.gcm.o $
+    obj/third_party/nss/nss/lib/freebl/nss_static.hmacct.o $
+    obj/third_party/nss/nss/lib/freebl/nss_static.jpake.o $
+    obj/third_party/nss/nss/lib/freebl/nss_static.md2.o $
+    obj/third_party/nss/nss/lib/freebl/nss_static.md5.o $
+    obj/third_party/nss/nss/lib/freebl/mpi/nss_static.mpcpucache.o $
+    obj/third_party/nss/nss/lib/freebl/mpi/nss_static.mpi.o $
+    obj/third_party/nss/nss/lib/freebl/mpi/nss_static.mpi_arm_mac.o $
+    obj/third_party/nss/nss/lib/freebl/mpi/nss_static.mplogic.o $
+    obj/third_party/nss/nss/lib/freebl/mpi/nss_static.mpmontg.o $
+    obj/third_party/nss/nss/lib/freebl/mpi/nss_static.mpprime.o $
+    obj/third_party/nss/nss/lib/freebl/mpi/nss_static.mp_gf2m.o $
+    obj/third_party/nss/nss/lib/freebl/poly1305/nss_static.poly1305.o $
+    obj/third_party/nss/nss/lib/freebl/nss_static.pqg.o $
+    obj/third_party/nss/nss/lib/freebl/nss_static.rawhash.o $
+    obj/third_party/nss/nss/lib/freebl/nss_static.rijndael.o $
+    obj/third_party/nss/nss/lib/freebl/nss_static.rsa.o $
+    obj/third_party/nss/nss/lib/freebl/nss_static.rsapkcs.o $
+    obj/third_party/nss/nss/lib/freebl/nss_static.seed.o $
+    obj/third_party/nss/nss/lib/freebl/nss_static.sha512.o $
+    obj/third_party/nss/nss/lib/freebl/nss_static.sha_fast.o $
+    obj/third_party/nss/nss/lib/freebl/nss_static.shvfy.o $
+    obj/third_party/nss/nss/lib/freebl/nss_static.sysrand.o $
+    obj/third_party/nss/nss/lib/freebl/nss_static.tlsprfalg.o $
+    obj/third_party/nss/nss/lib/libpkix/pkix/certsel/nss_static.pkix_certselector.o $
+    obj/third_party/nss/nss/lib/libpkix/pkix/certsel/nss_static.pkix_comcertselparams.o $
+    obj/third_party/nss/nss/lib/libpkix/pkix/checker/nss_static.pkix_basicconstraintschecker.o $
+    obj/third_party/nss/nss/lib/libpkix/pkix/checker/nss_static.pkix_certchainchecker.o $
+    obj/third_party/nss/nss/lib/libpkix/pkix/checker/nss_static.pkix_crlchecker.o $
+    obj/third_party/nss/nss/lib/libpkix/pkix/checker/nss_static.pkix_ekuchecker.o $
+    obj/third_party/nss/nss/lib/libpkix/pkix/checker/nss_static.pkix_expirationchecker.o $
+    obj/third_party/nss/nss/lib/libpkix/pkix/checker/nss_static.pkix_namechainingchecker.o $
+    obj/third_party/nss/nss/lib/libpkix/pkix/checker/nss_static.pkix_nameconstraintschecker.o $
+    obj/third_party/nss/nss/lib/libpkix/pkix/checker/nss_static.pkix_ocspchecker.o $
+    obj/third_party/nss/nss/lib/libpkix/pkix/checker/nss_static.pkix_policychecker.o $
+    obj/third_party/nss/nss/lib/libpkix/pkix/checker/nss_static.pkix_revocationchecker.o $
+    obj/third_party/nss/nss/lib/libpkix/pkix/checker/nss_static.pkix_revocationmethod.o $
+    obj/third_party/nss/nss/lib/libpkix/pkix/checker/nss_static.pkix_signaturechecker.o $
+    obj/third_party/nss/nss/lib/libpkix/pkix/checker/nss_static.pkix_targetcertchecker.o $
+    obj/third_party/nss/nss/lib/libpkix/pkix/crlsel/nss_static.pkix_comcrlselparams.o $
+    obj/third_party/nss/nss/lib/libpkix/pkix/crlsel/nss_static.pkix_crlselector.o $
+    obj/third_party/nss/nss/lib/libpkix/pkix/params/nss_static.pkix_procparams.o $
+    obj/third_party/nss/nss/lib/libpkix/pkix/params/nss_static.pkix_resourcelimits.o $
+    obj/third_party/nss/nss/lib/libpkix/pkix/params/nss_static.pkix_trustanchor.o $
+    obj/third_party/nss/nss/lib/libpkix/pkix/params/nss_static.pkix_valparams.o $
+    obj/third_party/nss/nss/lib/libpkix/pkix/results/nss_static.pkix_buildresult.o $
+    obj/third_party/nss/nss/lib/libpkix/pkix/results/nss_static.pkix_policynode.o $
+    obj/third_party/nss/nss/lib/libpkix/pkix/results/nss_static.pkix_valresult.o $
+    obj/third_party/nss/nss/lib/libpkix/pkix/results/nss_static.pkix_verifynode.o $
+    obj/third_party/nss/nss/lib/libpkix/pkix/store/nss_static.pkix_store.o $
+    obj/third_party/nss/nss/lib/libpkix/pkix/top/nss_static.pkix_build.o $
+    obj/third_party/nss/nss/lib/libpkix/pkix/top/nss_static.pkix_lifecycle.o $
+    obj/third_party/nss/nss/lib/libpkix/pkix/top/nss_static.pkix_validate.o $
+    obj/third_party/nss/nss/lib/libpkix/pkix/util/nss_static.pkix_error.o $
+    obj/third_party/nss/nss/lib/libpkix/pkix/util/nss_static.pkix_errpaths.o $
+    obj/third_party/nss/nss/lib/libpkix/pkix/util/nss_static.pkix_list.o $
+    obj/third_party/nss/nss/lib/libpkix/pkix/util/nss_static.pkix_logger.o $
+    obj/third_party/nss/nss/lib/libpkix/pkix/util/nss_static.pkix_tools.o $
+    obj/third_party/nss/nss/lib/libpkix/pkix_pl_nss/module/nss_static.pkix_pl_aiamgr.o $
+    obj/third_party/nss/nss/lib/libpkix/pkix_pl_nss/module/nss_static.pkix_pl_colcertstore.o $
+    obj/third_party/nss/nss/lib/libpkix/pkix_pl_nss/module/nss_static.pkix_pl_httpcertstore.o $
+    obj/third_party/nss/nss/lib/libpkix/pkix_pl_nss/module/nss_static.pkix_pl_httpdefaultclient.o $
+    obj/third_party/nss/nss/lib/libpkix/pkix_pl_nss/module/nss_static.pkix_pl_nsscontext.o $
+    obj/third_party/nss/nss/lib/libpkix/pkix_pl_nss/module/nss_static.pkix_pl_pk11certstore.o $
+    obj/third_party/nss/nss/lib/libpkix/pkix_pl_nss/module/nss_static.pkix_pl_socket.o $
+    obj/third_party/nss/nss/lib/libpkix/pkix_pl_nss/pki/nss_static.pkix_pl_basicconstraints.o $
+    obj/third_party/nss/nss/lib/libpkix/pkix_pl_nss/pki/nss_static.pkix_pl_cert.o $
+    obj/third_party/nss/nss/lib/libpkix/pkix_pl_nss/pki/nss_static.pkix_pl_certpolicyinfo.o $
+    obj/third_party/nss/nss/lib/libpkix/pkix_pl_nss/pki/nss_static.pkix_pl_certpolicymap.o $
+    obj/third_party/nss/nss/lib/libpkix/pkix_pl_nss/pki/nss_static.pkix_pl_certpolicyqualifier.o $
+    obj/third_party/nss/nss/lib/libpkix/pkix_pl_nss/pki/nss_static.pkix_pl_crl.o $
+    obj/third_party/nss/nss/lib/libpkix/pkix_pl_nss/pki/nss_static.pkix_pl_crldp.o $
+    obj/third_party/nss/nss/lib/libpkix/pkix_pl_nss/pki/nss_static.pkix_pl_crlentry.o $
+    obj/third_party/nss/nss/lib/libpkix/pkix_pl_nss/pki/nss_static.pkix_pl_date.o $
+    obj/third_party/nss/nss/lib/libpkix/pkix_pl_nss/pki/nss_static.pkix_pl_generalname.o $
+    obj/third_party/nss/nss/lib/libpkix/pkix_pl_nss/pki/nss_static.pkix_pl_infoaccess.o $
+    obj/third_party/nss/nss/lib/libpkix/pkix_pl_nss/pki/nss_static.pkix_pl_nameconstraints.o $
+    obj/third_party/nss/nss/lib/libpkix/pkix_pl_nss/pki/nss_static.pkix_pl_ocspcertid.o $
+    obj/third_party/nss/nss/lib/libpkix/pkix_pl_nss/pki/nss_static.pkix_pl_ocsprequest.o $
+    obj/third_party/nss/nss/lib/libpkix/pkix_pl_nss/pki/nss_static.pkix_pl_ocspresponse.o $
+    obj/third_party/nss/nss/lib/libpkix/pkix_pl_nss/pki/nss_static.pkix_pl_publickey.o $
+    obj/third_party/nss/nss/lib/libpkix/pkix_pl_nss/pki/nss_static.pkix_pl_x500name.o $
+    obj/third_party/nss/nss/lib/libpkix/pkix_pl_nss/system/nss_static.pkix_pl_bigint.o $
+    obj/third_party/nss/nss/lib/libpkix/pkix_pl_nss/system/nss_static.pkix_pl_bytearray.o $
+    obj/third_party/nss/nss/lib/libpkix/pkix_pl_nss/system/nss_static.pkix_pl_common.o $
+    obj/third_party/nss/nss/lib/libpkix/pkix_pl_nss/system/nss_static.pkix_pl_error.o $
+    obj/third_party/nss/nss/lib/libpkix/pkix_pl_nss/system/nss_static.pkix_pl_hashtable.o $
+    obj/third_party/nss/nss/lib/libpkix/pkix_pl_nss/system/nss_static.pkix_pl_lifecycle.o $
+    obj/third_party/nss/nss/lib/libpkix/pkix_pl_nss/system/nss_static.pkix_pl_mem.o $
+    obj/third_party/nss/nss/lib/libpkix/pkix_pl_nss/system/nss_static.pkix_pl_monitorlock.o $
+    obj/third_party/nss/nss/lib/libpkix/pkix_pl_nss/system/nss_static.pkix_pl_mutex.o $
+    obj/third_party/nss/nss/lib/libpkix/pkix_pl_nss/system/nss_static.pkix_pl_object.o $
+    obj/third_party/nss/nss/lib/libpkix/pkix_pl_nss/system/nss_static.pkix_pl_oid.o $
+    obj/third_party/nss/nss/lib/libpkix/pkix_pl_nss/system/nss_static.pkix_pl_primhash.o $
+    obj/third_party/nss/nss/lib/libpkix/pkix_pl_nss/system/nss_static.pkix_pl_rwlock.o $
+    obj/third_party/nss/nss/lib/libpkix/pkix_pl_nss/system/nss_static.pkix_pl_string.o $
+    obj/third_party/nss/nss/lib/nss/nss_static.nssinit.o $
+    obj/third_party/nss/nss/lib/nss/nss_static.utilwrap.o $
+    obj/third_party/nss/nss/lib/pk11wrap/nss_static.dev3hack.o $
+    obj/third_party/nss/nss/lib/pk11wrap/nss_static.pk11akey.o $
+    obj/third_party/nss/nss/lib/pk11wrap/nss_static.pk11auth.o $
+    obj/third_party/nss/nss/lib/pk11wrap/nss_static.pk11cert.o $
+    obj/third_party/nss/nss/lib/pk11wrap/nss_static.pk11cxt.o $
+    obj/third_party/nss/nss/lib/pk11wrap/nss_static.pk11err.o $
+    obj/third_party/nss/nss/lib/pk11wrap/nss_static.pk11kea.o $
+    obj/third_party/nss/nss/lib/pk11wrap/nss_static.pk11list.o $
+    obj/third_party/nss/nss/lib/pk11wrap/nss_static.pk11load.o $
+    obj/third_party/nss/nss/lib/pk11wrap/nss_static.pk11mech.o $
+    obj/third_party/nss/nss/lib/pk11wrap/nss_static.pk11merge.o $
+    obj/third_party/nss/nss/lib/pk11wrap/nss_static.pk11nobj.o $
+    obj/third_party/nss/nss/lib/pk11wrap/nss_static.pk11obj.o $
+    obj/third_party/nss/nss/lib/pk11wrap/nss_static.pk11pars.o $
+    obj/third_party/nss/nss/lib/pk11wrap/nss_static.pk11pbe.o $
+    obj/third_party/nss/nss/lib/pk11wrap/nss_static.pk11pk12.o $
+    obj/third_party/nss/nss/lib/pk11wrap/nss_static.pk11pqg.o $
+    obj/third_party/nss/nss/lib/pk11wrap/nss_static.pk11sdr.o $
+    obj/third_party/nss/nss/lib/pk11wrap/nss_static.pk11skey.o $
+    obj/third_party/nss/nss/lib/pk11wrap/nss_static.pk11slot.o $
+    obj/third_party/nss/nss/lib/pk11wrap/nss_static.pk11util.o $
+    obj/third_party/nss/nss/lib/pkcs7/nss_static.certread.o $
+    obj/third_party/nss/nss/lib/pkcs7/nss_static.p7common.o $
+    obj/third_party/nss/nss/lib/pkcs7/nss_static.p7create.o $
+    obj/third_party/nss/nss/lib/pkcs7/nss_static.p7decode.o $
+    obj/third_party/nss/nss/lib/pkcs7/nss_static.p7encode.o $
+    obj/third_party/nss/nss/lib/pkcs7/nss_static.p7local.o $
+    obj/third_party/nss/nss/lib/pkcs7/nss_static.secmime.o $
+    obj/third_party/nss/nss/lib/pki/nss_static.asymmkey.o $
+    obj/third_party/nss/nss/lib/pki/nss_static.certdecode.o $
+    obj/third_party/nss/nss/lib/pki/nss_static.certificate.o $
+    obj/third_party/nss/nss/lib/pki/nss_static.cryptocontext.o $
+    obj/third_party/nss/nss/lib/pki/nss_static.pki3hack.o $
+    obj/third_party/nss/nss/lib/pki/nss_static.pkibase.o $
+    obj/third_party/nss/nss/lib/pki/nss_static.pkistore.o $
+    obj/third_party/nss/nss/lib/pki/nss_static.symmkey.o $
+    obj/third_party/nss/nss/lib/pki/nss_static.tdcache.o $
+    obj/third_party/nss/nss/lib/pki/nss_static.trustdomain.o $
+    obj/third_party/nss/nss/lib/softoken/nss_static.ecdecode.o $
+    obj/third_party/nss/nss/lib/softoken/nss_static.fipsaudt.o $
+    obj/third_party/nss/nss/lib/softoken/nss_static.fipstest.o $
+    obj/third_party/nss/nss/lib/softoken/nss_static.fipstokn.o $
+    obj/third_party/nss/nss/lib/softoken/nss_static.jpakesftk.o $
+    obj/third_party/nss/nss/lib/softoken/nss_static.lgglue.o $
+    obj/third_party/nss/nss/lib/softoken/nss_static.lowkey.o $
+    obj/third_party/nss/nss/lib/softoken/nss_static.lowpbe.o $
+    obj/third_party/nss/nss/lib/softoken/nss_static.padbuf.o $
+    obj/third_party/nss/nss/lib/softoken/nss_static.pkcs11.o $
+    obj/third_party/nss/nss/lib/softoken/nss_static.pkcs11c.o $
+    obj/third_party/nss/nss/lib/softoken/nss_static.pkcs11u.o $
+    obj/third_party/nss/nss/lib/softoken/nss_static.sdb.o $
+    obj/third_party/nss/nss/lib/softoken/nss_static.sftkdb.o $
+    obj/third_party/nss/nss/lib/softoken/nss_static.sftkhmac.o $
+    obj/third_party/nss/nss/lib/softoken/nss_static.sftkpars.o $
+    obj/third_party/nss/nss/lib/softoken/nss_static.sftkpwd.o $
+    obj/third_party/nss/nss/lib/softoken/nss_static.softkver.o $
+    obj/third_party/nss/nss/lib/softoken/nss_static.tlsprf.o $
+    obj/third_party/nss/nss/lib/util/nss_static.derdec.o $
+    obj/third_party/nss/nss/lib/util/nss_static.derenc.o $
+    obj/third_party/nss/nss/lib/util/nss_static.dersubr.o $
+    obj/third_party/nss/nss/lib/util/nss_static.dertime.o $
+    obj/third_party/nss/nss/lib/util/nss_static.errstrs.o $
+    obj/third_party/nss/nss/lib/util/nss_static.nssb64d.o $
+    obj/third_party/nss/nss/lib/util/nss_static.nssb64e.o $
+    obj/third_party/nss/nss/lib/util/nss_static.nssilock.o $
+    obj/third_party/nss/nss/lib/util/nss_static.nssrwlk.o $
+    obj/third_party/nss/nss/lib/util/nss_static.oidstring.o $
+    obj/third_party/nss/nss/lib/util/nss_static.portreg.o $
+    obj/third_party/nss/nss/lib/util/nss_static.quickder.o $
+    obj/third_party/nss/nss/lib/util/nss_static.secalgid.o $
+    obj/third_party/nss/nss/lib/util/nss_static.secasn1d.o $
+    obj/third_party/nss/nss/lib/util/nss_static.secasn1e.o $
+    obj/third_party/nss/nss/lib/util/nss_static.secasn1u.o $
+    obj/third_party/nss/nss/lib/util/nss_static.secdig.o $
+    obj/third_party/nss/nss/lib/util/nss_static.secitem.o $
+    obj/third_party/nss/nss/lib/util/nss_static.secoid.o $
+    obj/third_party/nss/nss/lib/util/nss_static.secport.o $
+    obj/third_party/nss/nss/lib/util/nss_static.sectime.o $
+    obj/third_party/nss/nss/lib/util/nss_static.templates.o $
+    obj/third_party/nss/nss/lib/util/nss_static.utf8.o $
+    obj/third_party/nss/nss/lib/util/nss_static.utilmod.o $
+    obj/third_party/nss/nss/lib/util/nss_static.utilpars.o || $
+    libsqlite_regexp.a
