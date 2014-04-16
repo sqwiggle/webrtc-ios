@@ -29,9 +29,15 @@ export GYP_DEFINES="$GYP_DEFINES OS=mac target_arch=x64"
 export GYP_GENERATOR_FLAGS="$GYP_GENERATOR_FLAGS output_dir=out_mac"
 }
 
+
+function upgradeSVN()
+{
+  pushd trunk
+  svn upgrade
+  popd
+}
 function buildios() {
 echo "-- building webrtc ios"
-svn upgrade
 wrios && gclient runhooks && ninja -C out_ios/Debug-iphoneos
 echo "-- webrtc has been sucessfully built"
 }
@@ -48,6 +54,7 @@ exit 1
 }
 
 #fetch || fail
+upgradeSVN || fail
 wrios || fail
 buildios || fail
 #launch || fail
