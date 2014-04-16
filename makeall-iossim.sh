@@ -36,9 +36,10 @@ function upgradeSVN()
   svn upgrade
   popd
 }
+
 function buildios() {
 echo "-- building webrtc ios"
-wrios && gclient runhooks && ninja -C out_ios/Debug-iphoneos
+gclient runhooks && ninja -C out_ios/Debug-iphoneos
 echo "-- webrtc has been sucessfully built"
 }
 
