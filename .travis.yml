@@ -6,7 +6,6 @@ install:
   - popd
   - brew install ninja
 script:
-  - ls
   - makeall-iossim.sh 
 notifications:
   email: false

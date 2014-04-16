@@ -39,7 +39,7 @@ function upgradeSVN()
 
 function buildios() {
 echo "-- building webrtc ios"
-gclient runhooks && ninja -C out_ios/Debug-iphoneos
+gclient runhooks && ninja -C trunk/out_ios/Debug-iphoneos
 echo "-- webrtc has been sucessfully built"
 }
 
