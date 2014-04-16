@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>BuildMachineOSBuild</key>
+	<string>13C64</string>
+	<key>CFBundleDevelopmentRegion</key>
+	<string>en</string>
+	<key>CFBundleDisplayName</key>
+	<string>libjingle_peerconnection_objc_test</string>
+	<key>CFBundleExecutable</key>
+	<string>libjingle_peerconnection_objc_test</string>
+	<key>CFBundleIdentifier</key>
+	<string>com.Google.libjingle_peerconnection_objc_test</string>
+	<key>CFBundleInfoDictionaryVersion</key>
+	<string>6.0</string>
+	<key>CFBundleName</key>
+	<string>libjingle_peerconnection_objc_test</string>
+	<key>CFBundlePackageType</key>
+	<string>APPL</string>
+	<key>CFBundleShortVersionString</key>
+	<string>1.0</string>
+	<key>CFBundleSupportedPlatforms</key>
+	<array>
+		<string>iPhoneOS</string>
+	</array>
+	<key>CFBundleVersion</key>
+	<string>1.0</string>
+	<key>DTPlatformName</key>
+	<string>iphoneos</string>
+	<key>DTPlatformVersion</key>
+	<string>7.1</string>
+	<key>DTSDKBuild</key>
+	<string>11D167</string>
+	<key>DTSDKName</key>
+	<string>iphoneos</string>
+	<key>DTXcode</key>
+	<string>0510</string>
+	<key>DTXcodeBuild</key>
+	<string>5B130a</string>
+	<key>UIDeviceFamily</key>
+	<array>
+		<integer>1</integer>
+		<integer>2</integer>
+	</array>
+</dict>
+</plist>

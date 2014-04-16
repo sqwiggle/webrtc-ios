@@ -40,6 +40,7 @@ function upgradeSVN()
 function buildios() {
 echo "-- building webrtc ios"
 pushd trunk
+ls
 ninja -C out_ios/Debug-iphoneos
 popd
 echo "-- webrtc has been sucessfully built"
