@@ -1,15 +1,15 @@
 build obj/webrtc/modules/audio_processing_neon.actions_depends.stamp: stamp $
     obj/webrtc/modules/audio_processing/gen_nsx_core_neon_offsets_h.actions_rules_copies.stamp $
     obj/webrtc/modules/audio_processing/gen_aecm_core_neon_offsets_h.actions_rules_copies.stamp $
-    lib_core_neon_offsets.a
+    gen/audio_processing/asm_offsets/lib_core_neon_offsets.a
 
 build obj/webrtc/modules/audio_processing_neon.compile_depends.stamp: stamp $
     obj/webrtc/modules/audio_processing/gen_nsx_core_neon_offsets_h.actions_rules_copies.stamp $
     obj/webrtc/modules/audio_processing/gen_aecm_core_neon_offsets_h.actions_rules_copies.stamp
 
 defines = -DV8_DEPRECATION_WARNINGS -DBLINK_SCALE_FILTERS_AT_RECORD_TIME $
-    -DDISABLE_NACL -DCHROMIUM_BUILD -DUSE_LIBJPEG_TURBO=1 $
-    -DENABLE_CONFIGURATION_POLICY $
+    -DDISABLE_NACL -DCHROMIUM_BUILD -DCR_CLANG_REVISION=206824 $
+    -DUSE_LIBJPEG_TURBO=1 -DENABLE_CONFIGURATION_POLICY $
     -DDISCARDABLE_MEMORY_ALWAYS_SUPPORTED_NATIVELY $
     -DSYSTEM_NATIVELY_SIGNALS_MEMORY_PRESSURE -DENABLE_EGLIMAGE=1 $
     -DCLD_VERSION=1 -DENABLE_SPELLCHECK=1 -DDISABLE_FTP_SUPPORT=1 $
@@ -17,7 +17,7 @@ defines = -DV8_DEPRECATION_WARNINGS -DBLINK_SCALE_FILTERS_AT_RECORD_TIME $
     -DWEBRTC_ARCH_ARM_NEON -DWEBRTC_POSIX -DWEBRTC_MAC -DWEBRTC_IOS $
     -D__STDC_CONSTANT_MACROS -D__STDC_FORMAT_MACROS $
     -DDYNAMIC_ANNOTATIONS_ENABLED=1 -DWTF_USE_DYNAMIC_ANNOTATIONS=1
-includes = -I../.. -I../.. -Igen/audio_processing/asm_offsets $
+includes = -I../.. -Igen/audio_processing/asm_offsets $
     -I../../webrtc/common_audio/resampler/include $
     -I../../webrtc/common_audio/signal_processing/include $
     -I../../webrtc/common_audio/vad/include
@@ -28,7 +28,7 @@ cflags = -isysroot $
     -Wno-unused-parameter -Wno-missing-field-initializers -Wheader-hygiene $
     -Wno-c++11-narrowing -Wno-char-subscripts $
     -Wno-unneeded-internal-declaration -Wno-covered-switch-default $
-    -Wstring-conversion -Wno-deprecated-register -Wno-absolute-value
+    -Wstring-conversion -Wno-deprecated-register -Wno-selector-type-mismatch
 cflags_c = -std=c99 -fcolor-diagnostics -fstack-protector-all
 cflags_cc = -std=gnu++0x -fno-rtti -fno-exceptions $
     -fvisibility-inlines-hidden -fno-threadsafe-statics -fcolor-diagnostics $
@@ -37,6 +37,10 @@ cflags_objc = $cflags_c -Wobjc-missing-property-synthesis
 cflags_objcc = $cflags_cc -Wobjc-missing-property-synthesis $
     -fobjc-call-cxx-cdtors
 
+build $
+    obj/webrtc/modules/audio_processing/aec/audio_processing_neon.aec_core_neon.o: $
+    cc ../../webrtc/modules/audio_processing/aec/aec_core_neon.c || $
+    obj/webrtc/modules/audio_processing_neon.compile_depends.stamp
 build $
     obj/webrtc/modules/audio_processing/aecm/audio_processing_neon.aecm_core_neon.o: $
     cc ../../webrtc/modules/audio_processing/aecm/aecm_core_neon.S || $
@@ -47,6 +51,9 @@ build $
     obj/webrtc/modules/audio_processing_neon.compile_depends.stamp
 
 build libaudio_processing_neon.a: alink $
+    obj/webrtc/modules/audio_processing/aec/audio_processing_neon.aec_core_neon.o $
     obj/webrtc/modules/audio_processing/aecm/audio_processing_neon.aecm_core_neon.o $
     obj/webrtc/modules/audio_processing/ns/audio_processing_neon.nsx_core_neon.o $
     || obj/webrtc/modules/audio_processing_neon.actions_depends.stamp
+  libtool_flags = -framework Foundation -framework Security -framework $
+      SystemConfiguration -framework UIKit

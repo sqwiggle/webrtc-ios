@@ -23,8 +23,7 @@ struct macroblockd;
 /* Encoder forward decls */
 struct macroblock;
 struct vp9_variance_vtable;
-
-#define DEC_MVCOSTS int *mvjcost, int *mvcost[2]
+struct search_site_config;
 struct mv;
 union int_mv;
 struct yv12_buffer_config;
@@ -185,7 +184,7 @@ void vp9_dc_top_predictor_4x4_c(uint8_t *dst, ptrdiff_t y_stride, const uint8_t 
 void vp9_dc_top_predictor_8x8_c(uint8_t *dst, ptrdiff_t y_stride, const uint8_t *above, const uint8_t *left);
 #define vp9_dc_top_predictor_8x8 vp9_dc_top_predictor_8x8_c
 
-int vp9_diamond_search_sad_c(const struct macroblock *x, struct mv *ref_mv, struct mv *best_mv, int search_param, int sad_per_bit, int *num00, const struct vp9_variance_vtable *fn_ptr, DEC_MVCOSTS, const struct mv *center_mv);
+int vp9_diamond_search_sad_c(const struct macroblock *x, const struct search_site_config *cfg,  struct mv *ref_mv, struct mv *best_mv, int search_param, int sad_per_bit, int *num00, const struct vp9_variance_vtable *fn_ptr, const struct mv *center_mv);
 #define vp9_diamond_search_sad vp9_diamond_search_sad_c
 
 void vp9_fdct16x16_c(const int16_t *input, int16_t *output, int stride);
@@ -212,10 +211,10 @@ void vp9_fht4x4_c(const int16_t *input, int16_t *output, int stride, int tx_type
 void vp9_fht8x8_c(const int16_t *input, int16_t *output, int stride, int tx_type);
 #define vp9_fht8x8 vp9_fht8x8_c
 
-int vp9_full_range_search_c(const struct macroblock *x, struct mv *ref_mv, struct mv *best_mv, int search_param, int sad_per_bit, int *num00, const struct vp9_variance_vtable *fn_ptr, DEC_MVCOSTS, const struct mv *center_mv);
+int vp9_full_range_search_c(const struct macroblock *x, const struct search_site_config *cfg, struct mv *ref_mv, struct mv *best_mv, int search_param, int sad_per_bit, int *num00, const struct vp9_variance_vtable *fn_ptr, const struct mv *center_mv);
 #define vp9_full_range_search vp9_full_range_search_c
 
-int vp9_full_search_sad_c(const struct macroblock *x, const struct mv *ref_mv, int sad_per_bit, int distance, const struct vp9_variance_vtable *fn_ptr, DEC_MVCOSTS, const struct mv *center_mv, struct mv *best_mv);
+int vp9_full_search_sad_c(const struct macroblock *x, const struct mv *ref_mv, int sad_per_bit, int distance, const struct vp9_variance_vtable *fn_ptr, const struct mv *center_mv, struct mv *best_mv);
 #define vp9_full_search_sad vp9_full_search_sad_c
 
 void vp9_fwht4x4_c(const int16_t *input, int16_t *output, int stride);
@@ -223,9 +222,6 @@ void vp9_fwht4x4_c(const int16_t *input, int16_t *output, int stride);
 
 unsigned int vp9_get_mb_ss_c(const int16_t *);
 #define vp9_get_mb_ss vp9_get_mb_ss_c
-
-void vp9_get_sse_sum_8x8_c(const uint8_t *src_ptr, int source_stride, const uint8_t *ref_ptr, int ref_stride, unsigned int *sse, int *sum);
-#define vp9_get_sse_sum_8x8 vp9_get_sse_sum_8x8_c
 
 void vp9_h_predictor_16x16_c(uint8_t *dst, ptrdiff_t y_stride, const uint8_t *above, const uint8_t *left);
 #define vp9_h_predictor_16x16 vp9_h_predictor_16x16_c
@@ -263,8 +259,8 @@ void vp9_idct4x4_16_add_c(const int16_t *input, uint8_t *dest, int dest_stride);
 void vp9_idct4x4_1_add_c(const int16_t *input, uint8_t *dest, int dest_stride);
 #define vp9_idct4x4_1_add vp9_idct4x4_1_add_c
 
-void vp9_idct8x8_10_add_c(const int16_t *input, uint8_t *dest, int dest_stride);
-#define vp9_idct8x8_10_add vp9_idct8x8_10_add_c
+void vp9_idct8x8_12_add_c(const int16_t *input, uint8_t *dest, int dest_stride);
+#define vp9_idct8x8_12_add vp9_idct8x8_12_add_c
 
 void vp9_idct8x8_1_add_c(const int16_t *input, uint8_t *dest, int dest_stride);
 #define vp9_idct8x8_1_add vp9_idct8x8_1_add_c
@@ -338,7 +334,7 @@ void vp9_quantize_b_c(const int16_t *coeff_ptr, intptr_t n_coeffs, int skip_bloc
 void vp9_quantize_b_32x32_c(const int16_t *coeff_ptr, intptr_t n_coeffs, int skip_block, const int16_t *zbin_ptr, const int16_t *round_ptr, const int16_t *quant_ptr, const int16_t *quant_shift_ptr, int16_t *qcoeff_ptr, int16_t *dqcoeff_ptr, const int16_t *dequant_ptr, int zbin_oq_value, uint16_t *eob_ptr, const int16_t *scan, const int16_t *iscan);
 #define vp9_quantize_b_32x32 vp9_quantize_b_32x32_c
 
-int vp9_refining_search_sad_c(const struct macroblock *x, struct mv *ref_mv, int sad_per_bit, int distance, const struct vp9_variance_vtable *fn_ptr, DEC_MVCOSTS, const struct mv *center_mv);
+int vp9_refining_search_sad_c(const struct macroblock *x, struct mv *ref_mv, int sad_per_bit, int distance, const struct vp9_variance_vtable *fn_ptr, const struct mv *center_mv);
 #define vp9_refining_search_sad vp9_refining_search_sad_c
 
 unsigned int vp9_sad16x16_c(const uint8_t *src_ptr, int source_stride, const uint8_t *ref_ptr, int  ref_stride, unsigned int max_sad);
@@ -545,12 +541,6 @@ unsigned int vp9_sub_pixel_avg_variance8x4_c(const uint8_t *src_ptr, int source_
 unsigned int vp9_sub_pixel_avg_variance8x8_c(const uint8_t *src_ptr, int source_stride, int xoffset, int  yoffset, const uint8_t *ref_ptr, int ref_stride, unsigned int *sse, const uint8_t *second_pred);
 #define vp9_sub_pixel_avg_variance8x8 vp9_sub_pixel_avg_variance8x8_c
 
-unsigned int vp9_sub_pixel_mse32x32_c(const uint8_t *src_ptr, int  source_stride, int  xoffset, int  yoffset, const uint8_t *ref_ptr, int ref_stride, unsigned int *sse);
-#define vp9_sub_pixel_mse32x32 vp9_sub_pixel_mse32x32_c
-
-unsigned int vp9_sub_pixel_mse64x64_c(const uint8_t *src_ptr, int  source_stride, int  xoffset, int  yoffset, const uint8_t *ref_ptr, int ref_stride, unsigned int *sse);
-#define vp9_sub_pixel_mse64x64 vp9_sub_pixel_mse64x64_c
-
 unsigned int vp9_sub_pixel_variance16x16_c(const uint8_t *src_ptr, int source_stride, int xoffset, int  yoffset, const uint8_t *ref_ptr, int ref_stride, unsigned int *sse);
 #define vp9_sub_pixel_variance16x16 vp9_sub_pixel_variance16x16_c
 
@@ -659,34 +649,8 @@ unsigned int vp9_variance8x4_c(const uint8_t *src_ptr, int source_stride, const 
 unsigned int vp9_variance8x8_c(const uint8_t *src_ptr, int source_stride, const uint8_t *ref_ptr, int ref_stride, unsigned int *sse);
 #define vp9_variance8x8 vp9_variance8x8_c
 
-unsigned int vp9_variance_halfpixvar16x16_h_c(const uint8_t *src_ptr, int source_stride, const uint8_t *ref_ptr, int ref_stride, unsigned int *sse);
-#define vp9_variance_halfpixvar16x16_h vp9_variance_halfpixvar16x16_h_c
-
-unsigned int vp9_variance_halfpixvar16x16_hv_c(const uint8_t *src_ptr, int source_stride, const uint8_t *ref_ptr, int ref_stride, unsigned int *sse);
-#define vp9_variance_halfpixvar16x16_hv vp9_variance_halfpixvar16x16_hv_c
-
-unsigned int vp9_variance_halfpixvar16x16_v_c(const uint8_t *src_ptr, int source_stride, const uint8_t *ref_ptr, int ref_stride, unsigned int *sse);
-#define vp9_variance_halfpixvar16x16_v vp9_variance_halfpixvar16x16_v_c
-
-unsigned int vp9_variance_halfpixvar32x32_h_c(const uint8_t *src_ptr, int source_stride, const uint8_t *ref_ptr, int ref_stride, unsigned int *sse);
-#define vp9_variance_halfpixvar32x32_h vp9_variance_halfpixvar32x32_h_c
-
-unsigned int vp9_variance_halfpixvar32x32_hv_c(const uint8_t *src_ptr, int source_stride, const uint8_t *ref_ptr, int ref_stride, unsigned int *sse);
-#define vp9_variance_halfpixvar32x32_hv vp9_variance_halfpixvar32x32_hv_c
-
-unsigned int vp9_variance_halfpixvar32x32_v_c(const uint8_t *src_ptr, int source_stride, const uint8_t *ref_ptr, int ref_stride, unsigned int *sse);
-#define vp9_variance_halfpixvar32x32_v vp9_variance_halfpixvar32x32_v_c
-
-unsigned int vp9_variance_halfpixvar64x64_h_c(const uint8_t *src_ptr, int source_stride, const uint8_t *ref_ptr, int ref_stride, unsigned int *sse);
-#define vp9_variance_halfpixvar64x64_h vp9_variance_halfpixvar64x64_h_c
-
-unsigned int vp9_variance_halfpixvar64x64_hv_c(const uint8_t *src_ptr, int source_stride, const uint8_t *ref_ptr, int ref_stride, unsigned int *sse);
-#define vp9_variance_halfpixvar64x64_hv vp9_variance_halfpixvar64x64_hv_c
-
-unsigned int vp9_variance_halfpixvar64x64_v_c(const uint8_t *src_ptr, int source_stride, const uint8_t *ref_ptr, int ref_stride, unsigned int *sse);
-#define vp9_variance_halfpixvar64x64_v vp9_variance_halfpixvar64x64_v_c
-
 void vp9_rtcd(void);
+
 #include "vpx_config.h"
 
 #ifdef RTCD_C
@@ -696,7 +660,6 @@ static void setup_rtcd_internal(void)
     int flags = arm_cpu_caps();
 
     (void)flags;
-
 
 }
 #endif

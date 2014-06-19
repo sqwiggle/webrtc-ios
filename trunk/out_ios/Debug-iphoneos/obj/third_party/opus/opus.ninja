@@ -1,14 +1,16 @@
 defines = -DV8_DEPRECATION_WARNINGS -DBLINK_SCALE_FILTERS_AT_RECORD_TIME $
-    -DDISABLE_NACL -DCHROMIUM_BUILD -DUSE_LIBJPEG_TURBO=1 $
-    -DENABLE_CONFIGURATION_POLICY $
+    -DDISABLE_NACL -DCHROMIUM_BUILD -DCR_CLANG_REVISION=206824 $
+    -DUSE_LIBJPEG_TURBO=1 -DENABLE_CONFIGURATION_POLICY $
     -DDISCARDABLE_MEMORY_ALWAYS_SUPPORTED_NATIVELY $
     -DSYSTEM_NATIVELY_SIGNALS_MEMORY_PRESSURE -DENABLE_EGLIMAGE=1 $
     -DCLD_VERSION=1 -DENABLE_SPELLCHECK=1 -DDISABLE_FTP_SUPPORT=1 $
     -DOPUS_BUILD -DOPUS_EXPORT= -DHAVE_LRINT -DHAVE_LRINTF -DVAR_ARRAYS $
-    -DDYNAMIC_ANNOTATIONS_ENABLED=1 -DWTF_USE_DYNAMIC_ANNOTATIONS=1
+    -DFIXED_POINT -DOPUS_ARM_ASM -DOPUS_ARM_INLINE_ASM $
+    -DOPUS_ARM_INLINE_EDSP -DDYNAMIC_ANNOTATIONS_ENABLED=1 $
+    -DWTF_USE_DYNAMIC_ANNOTATIONS=1
 includes = -I../../third_party/opus/src/celt $
     -I../../third_party/opus/src/include -I../../third_party/opus/src/silk $
-    -I../../third_party/opus/src/silk/float
+    -I../../third_party/opus/src/silk/fixed
 cflags = -isysroot $
     /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS7.1.sdk $
     -O0 -gdwarf-2 -fvisibility=hidden -Wnewline-eof $
@@ -16,7 +18,8 @@ cflags = -isysroot $
     -Wno-unused-parameter -Wno-missing-field-initializers -Wheader-hygiene $
     -Wno-c++11-narrowing -Wno-char-subscripts $
     -Wno-unneeded-internal-declaration -Wno-covered-switch-default $
-    -Wstring-conversion -Wno-deprecated-register -Wno-absolute-value
+    -Wstring-conversion -Wno-deprecated-register $
+    -Wno-selector-type-mismatch -Wno-#pragma-messages
 cflags_c = -std=c99 -Xclang -load -Xclang $
     /Users/cwebb/Sqwiggle/webrtc/trunk/tools/clang/scripts/../../../third_party/llvm-build/Release+Asserts/lib/libFindBadConstructs.dylib $
     -Xclang -add-plugin -Xclang find-bad-constructs -fcolor-diagnostics $
@@ -112,70 +115,58 @@ build obj/third_party/opus/src/silk/opus.encode_indices.o: cc $
     ../../third_party/opus/src/silk/encode_indices.c
 build obj/third_party/opus/src/silk/opus.encode_pulses.o: cc $
     ../../third_party/opus/src/silk/encode_pulses.c
-build obj/third_party/opus/src/silk/float/opus.apply_sine_window_FLP.o: cc $
-    ../../third_party/opus/src/silk/float/apply_sine_window_FLP.c
-build obj/third_party/opus/src/silk/float/opus.autocorrelation_FLP.o: cc $
-    ../../third_party/opus/src/silk/float/autocorrelation_FLP.c
-build obj/third_party/opus/src/silk/float/opus.burg_modified_FLP.o: cc $
-    ../../third_party/opus/src/silk/float/burg_modified_FLP.c
-build obj/third_party/opus/src/silk/float/opus.bwexpander_FLP.o: cc $
-    ../../third_party/opus/src/silk/float/bwexpander_FLP.c
-build obj/third_party/opus/src/silk/float/opus.corrMatrix_FLP.o: cc $
-    ../../third_party/opus/src/silk/float/corrMatrix_FLP.c
-build obj/third_party/opus/src/silk/float/opus.encode_frame_FLP.o: cc $
-    ../../third_party/opus/src/silk/float/encode_frame_FLP.c
-build obj/third_party/opus/src/silk/float/opus.energy_FLP.o: cc $
-    ../../third_party/opus/src/silk/float/energy_FLP.c
-build obj/third_party/opus/src/silk/float/opus.find_LPC_FLP.o: cc $
-    ../../third_party/opus/src/silk/float/find_LPC_FLP.c
-build obj/third_party/opus/src/silk/float/opus.find_LTP_FLP.o: cc $
-    ../../third_party/opus/src/silk/float/find_LTP_FLP.c
-build obj/third_party/opus/src/silk/float/opus.find_pitch_lags_FLP.o: cc $
-    ../../third_party/opus/src/silk/float/find_pitch_lags_FLP.c
-build obj/third_party/opus/src/silk/float/opus.find_pred_coefs_FLP.o: cc $
-    ../../third_party/opus/src/silk/float/find_pred_coefs_FLP.c
-build obj/third_party/opus/src/silk/float/opus.inner_product_FLP.o: cc $
-    ../../third_party/opus/src/silk/float/inner_product_FLP.c
-build obj/third_party/opus/src/silk/float/opus.k2a_FLP.o: cc $
-    ../../third_party/opus/src/silk/float/k2a_FLP.c
-build obj/third_party/opus/src/silk/float/opus.levinsondurbin_FLP.o: cc $
-    ../../third_party/opus/src/silk/float/levinsondurbin_FLP.c
-build obj/third_party/opus/src/silk/float/opus.LPC_analysis_filter_FLP.o: $
-    cc ../../third_party/opus/src/silk/float/LPC_analysis_filter_FLP.c
-build obj/third_party/opus/src/silk/float/opus.LPC_inv_pred_gain_FLP.o: cc $
-    ../../third_party/opus/src/silk/float/LPC_inv_pred_gain_FLP.c
-build obj/third_party/opus/src/silk/float/opus.LTP_analysis_filter_FLP.o: $
-    cc ../../third_party/opus/src/silk/float/LTP_analysis_filter_FLP.c
-build obj/third_party/opus/src/silk/float/opus.LTP_scale_ctrl_FLP.o: cc $
-    ../../third_party/opus/src/silk/float/LTP_scale_ctrl_FLP.c
-build obj/third_party/opus/src/silk/float/opus.noise_shape_analysis_FLP.o: $
-    cc ../../third_party/opus/src/silk/float/noise_shape_analysis_FLP.c
-build obj/third_party/opus/src/silk/float/opus.pitch_analysis_core_FLP.o: $
-    cc ../../third_party/opus/src/silk/float/pitch_analysis_core_FLP.c
-build obj/third_party/opus/src/silk/float/opus.prefilter_FLP.o: cc $
-    ../../third_party/opus/src/silk/float/prefilter_FLP.c
-build obj/third_party/opus/src/silk/float/opus.process_gains_FLP.o: cc $
-    ../../third_party/opus/src/silk/float/process_gains_FLP.c
+build obj/third_party/opus/src/silk/fixed/opus.apply_sine_window_FIX.o: cc $
+    ../../third_party/opus/src/silk/fixed/apply_sine_window_FIX.c
+build obj/third_party/opus/src/silk/fixed/opus.autocorr_FIX.o: cc $
+    ../../third_party/opus/src/silk/fixed/autocorr_FIX.c
+build obj/third_party/opus/src/silk/fixed/opus.burg_modified_FIX.o: cc $
+    ../../third_party/opus/src/silk/fixed/burg_modified_FIX.c
+build obj/third_party/opus/src/silk/fixed/opus.corrMatrix_FIX.o: cc $
+    ../../third_party/opus/src/silk/fixed/corrMatrix_FIX.c
+build obj/third_party/opus/src/silk/fixed/opus.encode_frame_FIX.o: cc $
+    ../../third_party/opus/src/silk/fixed/encode_frame_FIX.c
+build obj/third_party/opus/src/silk/fixed/opus.find_LPC_FIX.o: cc $
+    ../../third_party/opus/src/silk/fixed/find_LPC_FIX.c
+build obj/third_party/opus/src/silk/fixed/opus.find_LTP_FIX.o: cc $
+    ../../third_party/opus/src/silk/fixed/find_LTP_FIX.c
+build obj/third_party/opus/src/silk/fixed/opus.find_pitch_lags_FIX.o: cc $
+    ../../third_party/opus/src/silk/fixed/find_pitch_lags_FIX.c
+build obj/third_party/opus/src/silk/fixed/opus.find_pred_coefs_FIX.o: cc $
+    ../../third_party/opus/src/silk/fixed/find_pred_coefs_FIX.c
+build obj/third_party/opus/src/silk/fixed/opus.k2a_FIX.o: cc $
+    ../../third_party/opus/src/silk/fixed/k2a_FIX.c
+build obj/third_party/opus/src/silk/fixed/opus.k2a_Q16_FIX.o: cc $
+    ../../third_party/opus/src/silk/fixed/k2a_Q16_FIX.c
+build obj/third_party/opus/src/silk/fixed/opus.LTP_analysis_filter_FIX.o: $
+    cc ../../third_party/opus/src/silk/fixed/LTP_analysis_filter_FIX.c
+build obj/third_party/opus/src/silk/fixed/opus.LTP_scale_ctrl_FIX.o: cc $
+    ../../third_party/opus/src/silk/fixed/LTP_scale_ctrl_FIX.c
+build obj/third_party/opus/src/silk/fixed/opus.noise_shape_analysis_FIX.o: $
+    cc ../../third_party/opus/src/silk/fixed/noise_shape_analysis_FIX.c
+build obj/third_party/opus/src/silk/fixed/opus.pitch_analysis_core_FIX.o: $
+    cc ../../third_party/opus/src/silk/fixed/pitch_analysis_core_FIX.c
+build obj/third_party/opus/src/silk/fixed/opus.prefilter_FIX.o: cc $
+    ../../third_party/opus/src/silk/fixed/prefilter_FIX.c
+build obj/third_party/opus/src/silk/fixed/opus.process_gains_FIX.o: cc $
+    ../../third_party/opus/src/silk/fixed/process_gains_FIX.c
 build $
-    obj/third_party/opus/src/silk/float/opus.regularize_correlations_FLP.o: $
-    cc ../../third_party/opus/src/silk/float/regularize_correlations_FLP.c
-build obj/third_party/opus/src/silk/float/opus.residual_energy_FLP.o: cc $
-    ../../third_party/opus/src/silk/float/residual_energy_FLP.c
-build obj/third_party/opus/src/silk/float/opus.scale_copy_vector_FLP.o: cc $
-    ../../third_party/opus/src/silk/float/scale_copy_vector_FLP.c
-build obj/third_party/opus/src/silk/float/opus.scale_vector_FLP.o: cc $
-    ../../third_party/opus/src/silk/float/scale_vector_FLP.c
-build obj/third_party/opus/src/silk/float/opus.schur_FLP.o: cc $
-    ../../third_party/opus/src/silk/float/schur_FLP.c
-build obj/third_party/opus/src/silk/float/opus.solve_LS_FLP.o: cc $
-    ../../third_party/opus/src/silk/float/solve_LS_FLP.c
-build obj/third_party/opus/src/silk/float/opus.sort_FLP.o: cc $
-    ../../third_party/opus/src/silk/float/sort_FLP.c
+    obj/third_party/opus/src/silk/fixed/opus.regularize_correlations_FIX.o: $
+    cc ../../third_party/opus/src/silk/fixed/regularize_correlations_FIX.c
+build obj/third_party/opus/src/silk/fixed/opus.residual_energy16_FIX.o: cc $
+    ../../third_party/opus/src/silk/fixed/residual_energy16_FIX.c
+build obj/third_party/opus/src/silk/fixed/opus.residual_energy_FIX.o: cc $
+    ../../third_party/opus/src/silk/fixed/residual_energy_FIX.c
+build obj/third_party/opus/src/silk/fixed/opus.schur64_FIX.o: cc $
+    ../../third_party/opus/src/silk/fixed/schur64_FIX.c
+build obj/third_party/opus/src/silk/fixed/opus.schur_FIX.o: cc $
+    ../../third_party/opus/src/silk/fixed/schur_FIX.c
+build obj/third_party/opus/src/silk/fixed/opus.solve_LS_FIX.o: cc $
+    ../../third_party/opus/src/silk/fixed/solve_LS_FIX.c
+build obj/third_party/opus/src/silk/fixed/opus.vector_ops_FIX.o: cc $
+    ../../third_party/opus/src/silk/fixed/vector_ops_FIX.c
 build $
-    obj/third_party/opus/src/silk/float/opus.warped_autocorrelation_FLP.o: $
-    cc ../../third_party/opus/src/silk/float/warped_autocorrelation_FLP.c
-build obj/third_party/opus/src/silk/float/opus.wrappers_FLP.o: cc $
-    ../../third_party/opus/src/silk/float/wrappers_FLP.c
+    obj/third_party/opus/src/silk/fixed/opus.warped_autocorrelation_FIX.o: $
+    cc ../../third_party/opus/src/silk/fixed/warped_autocorrelation_FIX.c
 build obj/third_party/opus/src/silk/opus.gain_quant.o: cc $
     ../../third_party/opus/src/silk/gain_quant.c
 build obj/third_party/opus/src/silk/opus.HP_variable_cutoff.o: cc $
@@ -344,37 +335,31 @@ build libopus.a: alink obj/third_party/opus/src/celt/opus.bands.o $
     obj/third_party/opus/src/silk/opus.enc_API.o $
     obj/third_party/opus/src/silk/opus.encode_indices.o $
     obj/third_party/opus/src/silk/opus.encode_pulses.o $
-    obj/third_party/opus/src/silk/float/opus.apply_sine_window_FLP.o $
-    obj/third_party/opus/src/silk/float/opus.autocorrelation_FLP.o $
-    obj/third_party/opus/src/silk/float/opus.burg_modified_FLP.o $
-    obj/third_party/opus/src/silk/float/opus.bwexpander_FLP.o $
-    obj/third_party/opus/src/silk/float/opus.corrMatrix_FLP.o $
-    obj/third_party/opus/src/silk/float/opus.encode_frame_FLP.o $
-    obj/third_party/opus/src/silk/float/opus.energy_FLP.o $
-    obj/third_party/opus/src/silk/float/opus.find_LPC_FLP.o $
-    obj/third_party/opus/src/silk/float/opus.find_LTP_FLP.o $
-    obj/third_party/opus/src/silk/float/opus.find_pitch_lags_FLP.o $
-    obj/third_party/opus/src/silk/float/opus.find_pred_coefs_FLP.o $
-    obj/third_party/opus/src/silk/float/opus.inner_product_FLP.o $
-    obj/third_party/opus/src/silk/float/opus.k2a_FLP.o $
-    obj/third_party/opus/src/silk/float/opus.levinsondurbin_FLP.o $
-    obj/third_party/opus/src/silk/float/opus.LPC_analysis_filter_FLP.o $
-    obj/third_party/opus/src/silk/float/opus.LPC_inv_pred_gain_FLP.o $
-    obj/third_party/opus/src/silk/float/opus.LTP_analysis_filter_FLP.o $
-    obj/third_party/opus/src/silk/float/opus.LTP_scale_ctrl_FLP.o $
-    obj/third_party/opus/src/silk/float/opus.noise_shape_analysis_FLP.o $
-    obj/third_party/opus/src/silk/float/opus.pitch_analysis_core_FLP.o $
-    obj/third_party/opus/src/silk/float/opus.prefilter_FLP.o $
-    obj/third_party/opus/src/silk/float/opus.process_gains_FLP.o $
-    obj/third_party/opus/src/silk/float/opus.regularize_correlations_FLP.o $
-    obj/third_party/opus/src/silk/float/opus.residual_energy_FLP.o $
-    obj/third_party/opus/src/silk/float/opus.scale_copy_vector_FLP.o $
-    obj/third_party/opus/src/silk/float/opus.scale_vector_FLP.o $
-    obj/third_party/opus/src/silk/float/opus.schur_FLP.o $
-    obj/third_party/opus/src/silk/float/opus.solve_LS_FLP.o $
-    obj/third_party/opus/src/silk/float/opus.sort_FLP.o $
-    obj/third_party/opus/src/silk/float/opus.warped_autocorrelation_FLP.o $
-    obj/third_party/opus/src/silk/float/opus.wrappers_FLP.o $
+    obj/third_party/opus/src/silk/fixed/opus.apply_sine_window_FIX.o $
+    obj/third_party/opus/src/silk/fixed/opus.autocorr_FIX.o $
+    obj/third_party/opus/src/silk/fixed/opus.burg_modified_FIX.o $
+    obj/third_party/opus/src/silk/fixed/opus.corrMatrix_FIX.o $
+    obj/third_party/opus/src/silk/fixed/opus.encode_frame_FIX.o $
+    obj/third_party/opus/src/silk/fixed/opus.find_LPC_FIX.o $
+    obj/third_party/opus/src/silk/fixed/opus.find_LTP_FIX.o $
+    obj/third_party/opus/src/silk/fixed/opus.find_pitch_lags_FIX.o $
+    obj/third_party/opus/src/silk/fixed/opus.find_pred_coefs_FIX.o $
+    obj/third_party/opus/src/silk/fixed/opus.k2a_FIX.o $
+    obj/third_party/opus/src/silk/fixed/opus.k2a_Q16_FIX.o $
+    obj/third_party/opus/src/silk/fixed/opus.LTP_analysis_filter_FIX.o $
+    obj/third_party/opus/src/silk/fixed/opus.LTP_scale_ctrl_FIX.o $
+    obj/third_party/opus/src/silk/fixed/opus.noise_shape_analysis_FIX.o $
+    obj/third_party/opus/src/silk/fixed/opus.pitch_analysis_core_FIX.o $
+    obj/third_party/opus/src/silk/fixed/opus.prefilter_FIX.o $
+    obj/third_party/opus/src/silk/fixed/opus.process_gains_FIX.o $
+    obj/third_party/opus/src/silk/fixed/opus.regularize_correlations_FIX.o $
+    obj/third_party/opus/src/silk/fixed/opus.residual_energy16_FIX.o $
+    obj/third_party/opus/src/silk/fixed/opus.residual_energy_FIX.o $
+    obj/third_party/opus/src/silk/fixed/opus.schur64_FIX.o $
+    obj/third_party/opus/src/silk/fixed/opus.schur_FIX.o $
+    obj/third_party/opus/src/silk/fixed/opus.solve_LS_FIX.o $
+    obj/third_party/opus/src/silk/fixed/opus.vector_ops_FIX.o $
+    obj/third_party/opus/src/silk/fixed/opus.warped_autocorrelation_FIX.o $
     obj/third_party/opus/src/silk/opus.gain_quant.o $
     obj/third_party/opus/src/silk/opus.HP_variable_cutoff.o $
     obj/third_party/opus/src/silk/opus.init_decoder.o $

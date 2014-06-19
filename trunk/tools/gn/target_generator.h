@@ -49,6 +49,7 @@ class TargetGenerator {
   const BuildSettings* GetBuildSettings() const;
 
   void FillSources();
+  void FillPublic();
   void FillSourcePrereqs();
   void FillConfigs();
   void FillOutputs();
@@ -62,7 +63,6 @@ class TargetGenerator {
   void FillDependentConfigs();  // Includes all types of dependent configs.
   void FillData();
   void FillDependencies();  // Includes data dependencies.
-  void FillHardDep();
 
   // Reads configs/deps from the given var name, and uses the given setting on
   // the target to save them.

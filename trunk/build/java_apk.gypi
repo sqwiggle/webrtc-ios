@@ -44,8 +44,6 @@
 #  resource_dir - The directory for resources.
 #  R_package - A custom Java package to generate the resource file R.java in.
 #    By default, the package given in AndroidManifest.xml will be used.
-#  java_strings_grd - The name of the grd file from which to generate localized
-#    strings.xml files, if any.
 #  use_chromium_linker - Enable the content dynamic linker that allows sharing the
 #    RELRO section of the native libraries between the different processes.
 #  enable_chromium_linker_tests - Enable the content dynamic linker test support
@@ -70,7 +68,6 @@
     'additional_res_dirs': [],
     'additional_res_packages': [],
     'is_test_apk%': 0,
-    'java_strings_grd%': '',
     'resource_input_paths': [],
     'intermediate_dir': '<(PRODUCT_DIR)/<(_target_name)',
     'asset_location%': '<(intermediate_dir)/assets',
@@ -109,7 +106,7 @@
     'final_apk_path%': '<(PRODUCT_DIR)/apks/<(apk_name).apk',
     'incomplete_apk_path': '<(intermediate_dir)/<(apk_name)-incomplete.apk',
     'apk_install_record': '<(intermediate_dir)/apk_install.record.stamp',
-    'device_intermediate_dir': '/data/local/tmp/chromium/<(_target_name)/<(CONFIGURATION_NAME)',
+    'device_intermediate_dir': '/data/data/org.chromium.gyp_managed_install/<(_target_name)/<(CONFIGURATION_NAME)',
     'symlink_script_host_path': '<(intermediate_dir)/create_symlinks.sh',
     'symlink_script_device_path': '<(device_intermediate_dir)/create_symlinks.sh',
     'create_standalone_apk%': 1,
@@ -133,9 +130,9 @@
           'apk_package_native_libs_dir': '<(intermediate_dir)/libs',
         }],
         ['is_test_apk == 0 and emma_coverage != 0', {
-          'emma_instrument': 1,
+          'emma_instrument%': 1,
         },{
-          'emma_instrument': 0,
+          'emma_instrument%': 0,
         }],
       ],
     },
@@ -143,7 +140,7 @@
     'native_lib_version_name%': '',
     'use_chromium_linker%' : 0,
     'enable_chromium_linker_tests%': 0,
-    'emma_instrument': '<(emma_instrument)',
+    'emma_instrument%': '<(emma_instrument)',
     'apk_package_native_libs_dir': '<(apk_package_native_libs_dir)',
     'unsigned_standalone_apk_path': '<(unsigned_standalone_apk_path)',
     'extra_native_libs': [],
@@ -153,7 +150,7 @@
   # cannot be lifted in a dependent to all_dependent_settings.
   'all_dependent_settings': {
     'variables': {
-      'apk_output_jar_path': '<(PRODUCT_DIR)/lib.java/<(jar_name)',
+      'apk_output_jar_path': '<(jar_path)',
     },
   },
   'conditions': [
@@ -188,7 +185,7 @@
           '<(SHARED_LIB_DIR)/<(native_lib_target).>(android_product_extension)'
         ],
         'package_input_paths': [
-          '<(apk_package_native_libs_dir)/<(android_app_abi)/<(android_gdbserver_executable)',
+          '<(apk_package_native_libs_dir)/<(android_app_abi)/gdbserver',
         ],
       },
       'copies': [
@@ -199,7 +196,6 @@
           'destination': '<(apk_package_native_libs_dir)/<(android_app_abi)',
           'files': [
             '<(android_gdbserver)',
-            '<@(extra_native_libs)',
           ],
         },
       ],
@@ -391,29 +387,6 @@
             'output_apk_path': '<(final_apk_path)',
           },
           'includes': [ 'android/finalize_apk_action.gypi']
-        },
-      ],
-    }],
-    ['java_strings_grd != ""', {
-      'variables': {
-        'res_grit_dir': '<(SHARED_INTERMEDIATE_DIR)/<(package_name)_apk/res_grit',
-        'additional_res_dirs': ['<(res_grit_dir)'],
-        # grit_grd_file is used by grit_action.gypi, included below.
-        'grit_grd_file': '<(java_in_dir)/strings/<(java_strings_grd)',
-        'resource_input_paths': [
-          '<!@pymod_do_main(grit_info <@(grit_defines) --outputs "<(res_grit_dir)" <(grit_grd_file))'
-        ],
-      },
-      'actions': [
-        {
-          'action_name': 'generate_localized_strings_xml',
-          'variables': {
-            'grit_additional_defines': ['-E', 'ANDROID_JAVA_TAGGED_ONLY=false'],
-            'grit_out_dir': '<(res_grit_dir)',
-            # resource_ids is unneeded since we don't generate .h headers.
-            'grit_resource_ids': '',
-          },
-          'includes': ['../build/grit_action.gypi'],
         },
       ],
     }],
@@ -614,7 +587,6 @@
       'message': 'Obfuscating <(_target_name)',
       'inputs': [
         '<(DEPTH)/build/android/ant/apk-obfuscate.xml',
-        '<(DEPTH)/build/android/ant/create-test-jar.js',
         '<(DEPTH)/build/android/gyp/util/build_utils.py',
         '<(DEPTH)/build/android/gyp/ant.py',
         '<(android_manifest_path)',
@@ -629,19 +601,15 @@
       'action': [
         'python', '<(DEPTH)/build/android/gyp/ant.py',
         '-quiet',
-        '-DADDITIONAL_SRC_DIRS=>(additional_src_dirs)',
         '-DANDROID_MANIFEST=<(android_manifest_path)',
         '-DANDROID_SDK_JAR=<(android_sdk_jar)',
         '-DANDROID_SDK_ROOT=<(android_sdk_root)',
         '-DANDROID_SDK_VERSION=<(android_sdk_version)',
         '-DANDROID_SDK_TOOLS=<(android_sdk_tools)',
         '-DAPK_NAME=<(apk_name)',
-        '-DCREATE_TEST_JAR_PATH=<(DEPTH)/build/android/ant/create-test-jar.js',
         '-DCONFIGURATION_NAME=<(CONFIGURATION_NAME)',
-        '-DGENERATED_SRC_DIRS=>(generated_src_dirs)',
         '-DINPUT_JARS_PATHS=>(input_jars_paths)',
         '-DIS_TEST_APK=<(is_test_apk)',
-        '-DJAR_PATH=<(PRODUCT_DIR)/lib.java/<(jar_name)',
         '-DOBFUSCATED_JAR_PATH=<(obfuscated_jar_path)',
         '-DOUT_DIR=<(intermediate_dir)',
         '-DPROGUARD_ENABLED=<(proguard_enabled)',
@@ -660,8 +628,6 @@
         'conditions': [
           ['emma_instrument != 0', {
             'dex_no_locals': 1,
-          }],
-          ['emma_instrument != 0 and is_test_apk == 0', {
             'dex_input_paths': [ '<(emma_device_jar)' ],
           }],
         ],

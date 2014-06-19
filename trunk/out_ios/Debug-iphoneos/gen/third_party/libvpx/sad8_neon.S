@@ -36,6 +36,7 @@
 
 _vp8_sad8x8_neon:
 	vp8_sad8x8_neon: @
+    vpush           {d8-d15}
     vld1.8          {d0}, [r0], r1
     vld1.8          {d8}, [r2], r3
 
@@ -81,6 +82,7 @@ _vp8_sad8x8_neon:
 
     vmov.32         r0, d0[0]
 
+    vpop            {d8-d15}
     bx              lr
 
     @
@@ -94,6 +96,7 @@ _vp8_sad8x8_neon:
 
 _vp8_sad8x16_neon:
 	vp8_sad8x16_neon: @
+    vpush           {d8-d15}
     vld1.8          {d0}, [r0], r1
     vld1.8          {d8}, [r2], r3
 
@@ -179,6 +182,7 @@ _vp8_sad8x16_neon:
 
     vmov.32         r0, d0[0]
 
+    vpop            {d8-d15}
     bx              lr
 
     @
@@ -192,6 +196,7 @@ _vp8_sad8x16_neon:
 
 _vp8_sad4x4_neon:
 	vp8_sad4x4_neon: @
+    vpush           {d8-d15}
     vld1.8          {d0}, [r0], r1
     vld1.8          {d8}, [r2], r3
 
@@ -215,6 +220,7 @@ _vp8_sad4x4_neon:
     vpaddl.u32      d0, d1
     vmov.32         r0, d0[0]
 
+    vpop            {d8-d15}
     bx              lr
 
     @

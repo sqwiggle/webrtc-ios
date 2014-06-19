@@ -1,6 +1,6 @@
 defines = -DV8_DEPRECATION_WARNINGS -DBLINK_SCALE_FILTERS_AT_RECORD_TIME $
-    -DDISABLE_NACL -DCHROMIUM_BUILD -DUSE_LIBJPEG_TURBO=1 $
-    -DENABLE_CONFIGURATION_POLICY $
+    -DDISABLE_NACL -DCHROMIUM_BUILD -DCR_CLANG_REVISION=206824 $
+    -DUSE_LIBJPEG_TURBO=1 -DENABLE_CONFIGURATION_POLICY $
     -DDISCARDABLE_MEMORY_ALWAYS_SUPPORTED_NATIVELY $
     -DSYSTEM_NATIVELY_SIGNALS_MEMORY_PRESSURE -DENABLE_EGLIMAGE=1 $
     -DCLD_VERSION=1 -DENABLE_SPELLCHECK=1 -DDISABLE_FTP_SUPPORT=1 $
@@ -8,7 +8,7 @@ defines = -DV8_DEPRECATION_WARNINGS -DBLINK_SCALE_FILTERS_AT_RECORD_TIME $
     -DWEBRTC_ARCH_ARM_NEON -DWEBRTC_POSIX -DWEBRTC_MAC -DWEBRTC_IOS $
     -D__STDC_CONSTANT_MACROS -D__STDC_FORMAT_MACROS $
     -DDYNAMIC_ANNOTATIONS_ENABLED=1 -DWTF_USE_DYNAMIC_ANNOTATIONS=1
-includes = -I../.. -I../.. $
+includes = -I../.. $
     -I../../webrtc/modules/audio_coding/codecs/ilbc/interface $
     -I../../webrtc -I../../webrtc/common_audio/resampler/include $
     -I../../webrtc/common_audio/signal_processing/include $
@@ -20,7 +20,7 @@ cflags = -isysroot $
     -Wno-unused-parameter -Wno-missing-field-initializers -Wheader-hygiene $
     -Wno-c++11-narrowing -Wno-char-subscripts $
     -Wno-unneeded-internal-declaration -Wno-covered-switch-default $
-    -Wstring-conversion -Wno-deprecated-register -Wno-absolute-value
+    -Wstring-conversion -Wno-deprecated-register -Wno-selector-type-mismatch
 cflags_c = -std=c99 -fcolor-diagnostics -fstack-protector-all
 cflags_cc = -std=gnu++0x -fno-rtti -fno-exceptions $
     -fvisibility-inlines-hidden -fno-threadsafe-statics -fcolor-diagnostics $
@@ -253,3 +253,5 @@ build libiLBC.a: alink $
     obj/webrtc/modules/audio_coding/codecs/ilbc/iLBC.vq4.o $
     obj/webrtc/modules/audio_coding/codecs/ilbc/iLBC.window32_w32.o $
     obj/webrtc/modules/audio_coding/codecs/ilbc/iLBC.xcorr_coef.o
+  libtool_flags = -framework Foundation -framework Security -framework $
+      SystemConfiguration -framework UIKit

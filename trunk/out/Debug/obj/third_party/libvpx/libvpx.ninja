@@ -24,340 +24,338 @@ rule libvpx_target_assemble_13936bc60f3639b9f2d9aa76ae52e0a2
   description = RULE Compile assembly ${source}
   restat = 1
 
+build obj/third_party/libvpx/libvpx.assemble.stamp: stamp yasm $
+    gen/third_party/libvpx/vp8_asm_enc_offsets.asm || $
+    obj/third_party/libvpx/libvpx.actions_depends.stamp
+
 build gen/third_party/libvpx/x86inc.o: $
     libvpx_target_assemble_13936bc60f3639b9f2d9aa76ae52e0a2 $
     ../../third_party/libvpx/source/libvpx/third_party/x86inc/x86inc.asm | $
-    yasm || obj/third_party/libvpx/libvpx.actions_depends.stamp
+    obj/third_party/libvpx/libvpx.assemble.stamp
   source = source/libvpx/third_party/x86inc/x86inc.asm
   root = x86inc
 build gen/third_party/libvpx/dequantize_mmx.o: $
     libvpx_target_assemble_13936bc60f3639b9f2d9aa76ae52e0a2 $
     ../../third_party/libvpx/source/libvpx/vp8/common/x86/dequantize_mmx.asm $
-    | yasm || obj/third_party/libvpx/libvpx.actions_depends.stamp
+    | obj/third_party/libvpx/libvpx.assemble.stamp
   source = source/libvpx/vp8/common/x86/dequantize_mmx.asm
   root = dequantize_mmx
 build gen/third_party/libvpx/idctllm_mmx.o: $
     libvpx_target_assemble_13936bc60f3639b9f2d9aa76ae52e0a2 $
     ../../third_party/libvpx/source/libvpx/vp8/common/x86/idctllm_mmx.asm | $
-    yasm || obj/third_party/libvpx/libvpx.actions_depends.stamp
+    obj/third_party/libvpx/libvpx.assemble.stamp
   source = source/libvpx/vp8/common/x86/idctllm_mmx.asm
   root = idctllm_mmx
 build gen/third_party/libvpx/idctllm_sse2.o: $
     libvpx_target_assemble_13936bc60f3639b9f2d9aa76ae52e0a2 $
     ../../third_party/libvpx/source/libvpx/vp8/common/x86/idctllm_sse2.asm $
-    | yasm || obj/third_party/libvpx/libvpx.actions_depends.stamp
+    | obj/third_party/libvpx/libvpx.assemble.stamp
   source = source/libvpx/vp8/common/x86/idctllm_sse2.asm
   root = idctllm_sse2
 build gen/third_party/libvpx/iwalsh_mmx.o: $
     libvpx_target_assemble_13936bc60f3639b9f2d9aa76ae52e0a2 $
     ../../third_party/libvpx/source/libvpx/vp8/common/x86/iwalsh_mmx.asm | $
-    yasm || obj/third_party/libvpx/libvpx.actions_depends.stamp
+    obj/third_party/libvpx/libvpx.assemble.stamp
   source = source/libvpx/vp8/common/x86/iwalsh_mmx.asm
   root = iwalsh_mmx
 build gen/third_party/libvpx/iwalsh_sse2.o: $
     libvpx_target_assemble_13936bc60f3639b9f2d9aa76ae52e0a2 $
     ../../third_party/libvpx/source/libvpx/vp8/common/x86/iwalsh_sse2.asm | $
-    yasm || obj/third_party/libvpx/libvpx.actions_depends.stamp
+    obj/third_party/libvpx/libvpx.assemble.stamp
   source = source/libvpx/vp8/common/x86/iwalsh_sse2.asm
   root = iwalsh_sse2
 build gen/third_party/libvpx/loopfilter_mmx.o: $
     libvpx_target_assemble_13936bc60f3639b9f2d9aa76ae52e0a2 $
     ../../third_party/libvpx/source/libvpx/vp8/common/x86/loopfilter_mmx.asm $
-    | yasm || obj/third_party/libvpx/libvpx.actions_depends.stamp
+    | obj/third_party/libvpx/libvpx.assemble.stamp
   source = source/libvpx/vp8/common/x86/loopfilter_mmx.asm
   root = loopfilter_mmx
 build gen/third_party/libvpx/loopfilter_sse2.o: $
     libvpx_target_assemble_13936bc60f3639b9f2d9aa76ae52e0a2 $
     ../../third_party/libvpx/source/libvpx/vp8/common/x86/loopfilter_sse2.asm $
-    | yasm || obj/third_party/libvpx/libvpx.actions_depends.stamp
+    | obj/third_party/libvpx/libvpx.assemble.stamp
   source = source/libvpx/vp8/common/x86/loopfilter_sse2.asm
   root = loopfilter_sse2
 build gen/third_party/libvpx/mfqe_sse2.o: $
     libvpx_target_assemble_13936bc60f3639b9f2d9aa76ae52e0a2 $
     ../../third_party/libvpx/source/libvpx/vp8/common/x86/mfqe_sse2.asm | $
-    yasm || obj/third_party/libvpx/libvpx.actions_depends.stamp
+    obj/third_party/libvpx/libvpx.assemble.stamp
   source = source/libvpx/vp8/common/x86/mfqe_sse2.asm
   root = mfqe_sse2
 build gen/third_party/libvpx/postproc_mmx.o: $
     libvpx_target_assemble_13936bc60f3639b9f2d9aa76ae52e0a2 $
     ../../third_party/libvpx/source/libvpx/vp8/common/x86/postproc_mmx.asm $
-    | yasm || obj/third_party/libvpx/libvpx.actions_depends.stamp
+    | obj/third_party/libvpx/libvpx.assemble.stamp
   source = source/libvpx/vp8/common/x86/postproc_mmx.asm
   root = postproc_mmx
 build gen/third_party/libvpx/postproc_sse2.o: $
     libvpx_target_assemble_13936bc60f3639b9f2d9aa76ae52e0a2 $
     ../../third_party/libvpx/source/libvpx/vp8/common/x86/postproc_sse2.asm $
-    | yasm || obj/third_party/libvpx/libvpx.actions_depends.stamp
+    | obj/third_party/libvpx/libvpx.assemble.stamp
   source = source/libvpx/vp8/common/x86/postproc_sse2.asm
   root = postproc_sse2
 build gen/third_party/libvpx/recon_mmx.o: $
     libvpx_target_assemble_13936bc60f3639b9f2d9aa76ae52e0a2 $
     ../../third_party/libvpx/source/libvpx/vp8/common/x86/recon_mmx.asm | $
-    yasm || obj/third_party/libvpx/libvpx.actions_depends.stamp
+    obj/third_party/libvpx/libvpx.assemble.stamp
   source = source/libvpx/vp8/common/x86/recon_mmx.asm
   root = recon_mmx
 build gen/third_party/libvpx/recon_sse2.o: $
     libvpx_target_assemble_13936bc60f3639b9f2d9aa76ae52e0a2 $
     ../../third_party/libvpx/source/libvpx/vp8/common/x86/recon_sse2.asm | $
-    yasm || obj/third_party/libvpx/libvpx.actions_depends.stamp
+    obj/third_party/libvpx/libvpx.assemble.stamp
   source = source/libvpx/vp8/common/x86/recon_sse2.asm
   root = recon_sse2
 build gen/third_party/libvpx/sad_mmx.o: $
     libvpx_target_assemble_13936bc60f3639b9f2d9aa76ae52e0a2 $
     ../../third_party/libvpx/source/libvpx/vp8/common/x86/sad_mmx.asm | $
-    yasm || obj/third_party/libvpx/libvpx.actions_depends.stamp
+    obj/third_party/libvpx/libvpx.assemble.stamp
   source = source/libvpx/vp8/common/x86/sad_mmx.asm
   root = sad_mmx
 build gen/third_party/libvpx/sad_sse2.o: $
     libvpx_target_assemble_13936bc60f3639b9f2d9aa76ae52e0a2 $
     ../../third_party/libvpx/source/libvpx/vp8/common/x86/sad_sse2.asm | $
-    yasm || obj/third_party/libvpx/libvpx.actions_depends.stamp
+    obj/third_party/libvpx/libvpx.assemble.stamp
   source = source/libvpx/vp8/common/x86/sad_sse2.asm
   root = sad_sse2
 build gen/third_party/libvpx/sad_sse3.o: $
     libvpx_target_assemble_13936bc60f3639b9f2d9aa76ae52e0a2 $
     ../../third_party/libvpx/source/libvpx/vp8/common/x86/sad_sse3.asm | $
-    yasm || obj/third_party/libvpx/libvpx.actions_depends.stamp
+    obj/third_party/libvpx/libvpx.assemble.stamp
   source = source/libvpx/vp8/common/x86/sad_sse3.asm
   root = sad_sse3
 build gen/third_party/libvpx/sad_sse4.o: $
     libvpx_target_assemble_13936bc60f3639b9f2d9aa76ae52e0a2 $
     ../../third_party/libvpx/source/libvpx/vp8/common/x86/sad_sse4.asm | $
-    yasm || obj/third_party/libvpx/libvpx.actions_depends.stamp
+    obj/third_party/libvpx/libvpx.assemble.stamp
   source = source/libvpx/vp8/common/x86/sad_sse4.asm
   root = sad_sse4
 build gen/third_party/libvpx/sad_ssse3.o: $
     libvpx_target_assemble_13936bc60f3639b9f2d9aa76ae52e0a2 $
     ../../third_party/libvpx/source/libvpx/vp8/common/x86/sad_ssse3.asm | $
-    yasm || obj/third_party/libvpx/libvpx.actions_depends.stamp
+    obj/third_party/libvpx/libvpx.assemble.stamp
   source = source/libvpx/vp8/common/x86/sad_ssse3.asm
   root = sad_ssse3
 build gen/third_party/libvpx/subpixel_mmx.o: $
     libvpx_target_assemble_13936bc60f3639b9f2d9aa76ae52e0a2 $
     ../../third_party/libvpx/source/libvpx/vp8/common/x86/subpixel_mmx.asm $
-    | yasm || obj/third_party/libvpx/libvpx.actions_depends.stamp
+    | obj/third_party/libvpx/libvpx.assemble.stamp
   source = source/libvpx/vp8/common/x86/subpixel_mmx.asm
   root = subpixel_mmx
 build gen/third_party/libvpx/subpixel_sse2.o: $
     libvpx_target_assemble_13936bc60f3639b9f2d9aa76ae52e0a2 $
     ../../third_party/libvpx/source/libvpx/vp8/common/x86/subpixel_sse2.asm $
-    | yasm || obj/third_party/libvpx/libvpx.actions_depends.stamp
+    | obj/third_party/libvpx/libvpx.assemble.stamp
   source = source/libvpx/vp8/common/x86/subpixel_sse2.asm
   root = subpixel_sse2
 build gen/third_party/libvpx/subpixel_ssse3.o: $
     libvpx_target_assemble_13936bc60f3639b9f2d9aa76ae52e0a2 $
     ../../third_party/libvpx/source/libvpx/vp8/common/x86/subpixel_ssse3.asm $
-    | yasm || obj/third_party/libvpx/libvpx.actions_depends.stamp
+    | obj/third_party/libvpx/libvpx.assemble.stamp
   source = source/libvpx/vp8/common/x86/subpixel_ssse3.asm
   root = subpixel_ssse3
 build gen/third_party/libvpx/variance_impl_mmx.o: $
     libvpx_target_assemble_13936bc60f3639b9f2d9aa76ae52e0a2 $
     ../../third_party/libvpx/source/libvpx/vp8/common/x86/variance_impl_mmx.asm $
-    | yasm || obj/third_party/libvpx/libvpx.actions_depends.stamp
+    | obj/third_party/libvpx/libvpx.assemble.stamp
   source = source/libvpx/vp8/common/x86/variance_impl_mmx.asm
   root = variance_impl_mmx
 build gen/third_party/libvpx/variance_impl_sse2.o: $
     libvpx_target_assemble_13936bc60f3639b9f2d9aa76ae52e0a2 $
     ../../third_party/libvpx/source/libvpx/vp8/common/x86/variance_impl_sse2.asm $
-    | yasm || obj/third_party/libvpx/libvpx.actions_depends.stamp
+    | obj/third_party/libvpx/libvpx.assemble.stamp
   source = source/libvpx/vp8/common/x86/variance_impl_sse2.asm
   root = variance_impl_sse2
 build gen/third_party/libvpx/variance_impl_ssse3.o: $
     libvpx_target_assemble_13936bc60f3639b9f2d9aa76ae52e0a2 $
     ../../third_party/libvpx/source/libvpx/vp8/common/x86/variance_impl_ssse3.asm $
-    | yasm || obj/third_party/libvpx/libvpx.actions_depends.stamp
+    | obj/third_party/libvpx/libvpx.assemble.stamp
   source = source/libvpx/vp8/common/x86/variance_impl_ssse3.asm
   root = variance_impl_ssse3
 build gen/third_party/libvpx/dct_mmx.o: $
     libvpx_target_assemble_13936bc60f3639b9f2d9aa76ae52e0a2 $
     ../../third_party/libvpx/source/libvpx/vp8/encoder/x86/dct_mmx.asm | $
-    yasm || obj/third_party/libvpx/libvpx.actions_depends.stamp
+    obj/third_party/libvpx/libvpx.assemble.stamp
   source = source/libvpx/vp8/encoder/x86/dct_mmx.asm
   root = dct_mmx
 build gen/third_party/libvpx/dct_sse2.o: $
     libvpx_target_assemble_13936bc60f3639b9f2d9aa76ae52e0a2 $
     ../../third_party/libvpx/source/libvpx/vp8/encoder/x86/dct_sse2.asm | $
-    yasm || obj/third_party/libvpx/libvpx.actions_depends.stamp
+    obj/third_party/libvpx/libvpx.assemble.stamp
   source = source/libvpx/vp8/encoder/x86/dct_sse2.asm
   root = dct_sse2
 build gen/third_party/libvpx/encodeopt.o: $
     libvpx_target_assemble_13936bc60f3639b9f2d9aa76ae52e0a2 $
     ../../third_party/libvpx/source/libvpx/vp8/encoder/x86/encodeopt.asm | $
-    yasm || obj/third_party/libvpx/libvpx.actions_depends.stamp
+    obj/third_party/libvpx/libvpx.assemble.stamp
   source = source/libvpx/vp8/encoder/x86/encodeopt.asm
   root = encodeopt
 build gen/third_party/libvpx/fwalsh_sse2.o: $
     libvpx_target_assemble_13936bc60f3639b9f2d9aa76ae52e0a2 $
     ../../third_party/libvpx/source/libvpx/vp8/encoder/x86/fwalsh_sse2.asm $
-    | yasm || obj/third_party/libvpx/libvpx.actions_depends.stamp
+    | obj/third_party/libvpx/libvpx.assemble.stamp
   source = source/libvpx/vp8/encoder/x86/fwalsh_sse2.asm
   root = fwalsh_sse2
 build gen/third_party/libvpx/quantize_mmx.o: $
     libvpx_target_assemble_13936bc60f3639b9f2d9aa76ae52e0a2 $
     ../../third_party/libvpx/source/libvpx/vp8/encoder/x86/quantize_mmx.asm $
-    | yasm || obj/third_party/libvpx/libvpx.actions_depends.stamp
+    | obj/third_party/libvpx/libvpx.assemble.stamp
   source = source/libvpx/vp8/encoder/x86/quantize_mmx.asm
   root = quantize_mmx
 build gen/third_party/libvpx/quantize_sse4.o: $
     libvpx_target_assemble_13936bc60f3639b9f2d9aa76ae52e0a2 $
     ../../third_party/libvpx/source/libvpx/vp8/encoder/x86/quantize_sse4.asm $
-    | yasm || obj/third_party/libvpx/libvpx.actions_depends.stamp
+    | obj/third_party/libvpx/libvpx.assemble.stamp
   source = source/libvpx/vp8/encoder/x86/quantize_sse4.asm
   root = quantize_sse4
-build gen/third_party/libvpx/quantize_ssse3.o: $
-    libvpx_target_assemble_13936bc60f3639b9f2d9aa76ae52e0a2 $
-    ../../third_party/libvpx/source/libvpx/vp8/encoder/x86/quantize_ssse3.asm $
-    | yasm || obj/third_party/libvpx/libvpx.actions_depends.stamp
-  source = source/libvpx/vp8/encoder/x86/quantize_ssse3.asm
-  root = quantize_ssse3
 build gen/third_party/libvpx/subtract_mmx.o: $
     libvpx_target_assemble_13936bc60f3639b9f2d9aa76ae52e0a2 $
     ../../third_party/libvpx/source/libvpx/vp8/encoder/x86/subtract_mmx.asm $
-    | yasm || obj/third_party/libvpx/libvpx.actions_depends.stamp
+    | obj/third_party/libvpx/libvpx.assemble.stamp
   source = source/libvpx/vp8/encoder/x86/subtract_mmx.asm
   root = subtract_mmx
 build gen/third_party/libvpx/subtract_sse2.o: $
     libvpx_target_assemble_13936bc60f3639b9f2d9aa76ae52e0a2 $
     ../../third_party/libvpx/source/libvpx/vp8/encoder/x86/subtract_sse2.asm $
-    | yasm || obj/third_party/libvpx/libvpx.actions_depends.stamp
+    | obj/third_party/libvpx/libvpx.assemble.stamp
   source = source/libvpx/vp8/encoder/x86/subtract_sse2.asm
   root = subtract_sse2
 build gen/third_party/libvpx/vp9_copy_sse2.o: $
     libvpx_target_assemble_13936bc60f3639b9f2d9aa76ae52e0a2 $
     ../../third_party/libvpx/source/libvpx/vp9/common/x86/vp9_copy_sse2.asm $
-    | yasm || obj/third_party/libvpx/libvpx.actions_depends.stamp
+    | obj/third_party/libvpx/libvpx.assemble.stamp
   source = source/libvpx/vp9/common/x86/vp9_copy_sse2.asm
   root = vp9_copy_sse2
 build gen/third_party/libvpx/vp9_intrapred_sse2.o: $
     libvpx_target_assemble_13936bc60f3639b9f2d9aa76ae52e0a2 $
     ../../third_party/libvpx/source/libvpx/vp9/common/x86/vp9_intrapred_sse2.asm $
-    | yasm || obj/third_party/libvpx/libvpx.actions_depends.stamp
+    | obj/third_party/libvpx/libvpx.assemble.stamp
   source = source/libvpx/vp9/common/x86/vp9_intrapred_sse2.asm
   root = vp9_intrapred_sse2
 build gen/third_party/libvpx/vp9_intrapred_ssse3.o: $
     libvpx_target_assemble_13936bc60f3639b9f2d9aa76ae52e0a2 $
     ../../third_party/libvpx/source/libvpx/vp9/common/x86/vp9_intrapred_ssse3.asm $
-    | yasm || obj/third_party/libvpx/libvpx.actions_depends.stamp
+    | obj/third_party/libvpx/libvpx.assemble.stamp
   source = source/libvpx/vp9/common/x86/vp9_intrapred_ssse3.asm
   root = vp9_intrapred_ssse3
 build gen/third_party/libvpx/vp9_loopfilter_mmx.o: $
     libvpx_target_assemble_13936bc60f3639b9f2d9aa76ae52e0a2 $
     ../../third_party/libvpx/source/libvpx/vp9/common/x86/vp9_loopfilter_mmx.asm $
-    | yasm || obj/third_party/libvpx/libvpx.actions_depends.stamp
+    | obj/third_party/libvpx/libvpx.assemble.stamp
   source = source/libvpx/vp9/common/x86/vp9_loopfilter_mmx.asm
   root = vp9_loopfilter_mmx
 build gen/third_party/libvpx/vp9_subpixel_8t_sse2.o: $
     libvpx_target_assemble_13936bc60f3639b9f2d9aa76ae52e0a2 $
     ../../third_party/libvpx/source/libvpx/vp9/common/x86/vp9_subpixel_8t_sse2.asm $
-    | yasm || obj/third_party/libvpx/libvpx.actions_depends.stamp
+    | obj/third_party/libvpx/libvpx.assemble.stamp
   source = source/libvpx/vp9/common/x86/vp9_subpixel_8t_sse2.asm
   root = vp9_subpixel_8t_sse2
 build gen/third_party/libvpx/vp9_subpixel_8t_ssse3.o: $
     libvpx_target_assemble_13936bc60f3639b9f2d9aa76ae52e0a2 $
     ../../third_party/libvpx/source/libvpx/vp9/common/x86/vp9_subpixel_8t_ssse3.asm $
-    | yasm || obj/third_party/libvpx/libvpx.actions_depends.stamp
+    | obj/third_party/libvpx/libvpx.assemble.stamp
   source = source/libvpx/vp9/common/x86/vp9_subpixel_8t_ssse3.asm
   root = vp9_subpixel_8t_ssse3
 build gen/third_party/libvpx/vp9_subpixel_bilinear_sse2.o: $
     libvpx_target_assemble_13936bc60f3639b9f2d9aa76ae52e0a2 $
     ../../third_party/libvpx/source/libvpx/vp9/common/x86/vp9_subpixel_bilinear_sse2.asm $
-    | yasm || obj/third_party/libvpx/libvpx.actions_depends.stamp
+    | obj/third_party/libvpx/libvpx.assemble.stamp
   source = source/libvpx/vp9/common/x86/vp9_subpixel_bilinear_sse2.asm
   root = vp9_subpixel_bilinear_sse2
 build gen/third_party/libvpx/vp9_subpixel_bilinear_ssse3.o: $
     libvpx_target_assemble_13936bc60f3639b9f2d9aa76ae52e0a2 $
     ../../third_party/libvpx/source/libvpx/vp9/common/x86/vp9_subpixel_bilinear_ssse3.asm $
-    | yasm || obj/third_party/libvpx/libvpx.actions_depends.stamp
+    | obj/third_party/libvpx/libvpx.assemble.stamp
   source = source/libvpx/vp9/common/x86/vp9_subpixel_bilinear_ssse3.asm
   root = vp9_subpixel_bilinear_ssse3
+build gen/third_party/libvpx/vp9_dct_mmx.o: $
+    libvpx_target_assemble_13936bc60f3639b9f2d9aa76ae52e0a2 $
+    ../../third_party/libvpx/source/libvpx/vp9/encoder/x86/vp9_dct_mmx.asm $
+    | obj/third_party/libvpx/libvpx.assemble.stamp
+  source = source/libvpx/vp9/encoder/x86/vp9_dct_mmx.asm
+  root = vp9_dct_mmx
 build gen/third_party/libvpx/vp9_error_sse2.o: $
     libvpx_target_assemble_13936bc60f3639b9f2d9aa76ae52e0a2 $
     ../../third_party/libvpx/source/libvpx/vp9/encoder/x86/vp9_error_sse2.asm $
-    | yasm || obj/third_party/libvpx/libvpx.actions_depends.stamp
+    | obj/third_party/libvpx/libvpx.assemble.stamp
   source = source/libvpx/vp9/encoder/x86/vp9_error_sse2.asm
   root = vp9_error_sse2
 build gen/third_party/libvpx/vp9_sad4d_sse2.o: $
     libvpx_target_assemble_13936bc60f3639b9f2d9aa76ae52e0a2 $
     ../../third_party/libvpx/source/libvpx/vp9/encoder/x86/vp9_sad4d_sse2.asm $
-    | yasm || obj/third_party/libvpx/libvpx.actions_depends.stamp
+    | obj/third_party/libvpx/libvpx.assemble.stamp
   source = source/libvpx/vp9/encoder/x86/vp9_sad4d_sse2.asm
   root = vp9_sad4d_sse2
 build gen/third_party/libvpx/vp9_sad_mmx.o: $
     libvpx_target_assemble_13936bc60f3639b9f2d9aa76ae52e0a2 $
     ../../third_party/libvpx/source/libvpx/vp9/encoder/x86/vp9_sad_mmx.asm $
-    | yasm || obj/third_party/libvpx/libvpx.actions_depends.stamp
+    | obj/third_party/libvpx/libvpx.assemble.stamp
   source = source/libvpx/vp9/encoder/x86/vp9_sad_mmx.asm
   root = vp9_sad_mmx
 build gen/third_party/libvpx/vp9_sad_sse2.o: $
     libvpx_target_assemble_13936bc60f3639b9f2d9aa76ae52e0a2 $
     ../../third_party/libvpx/source/libvpx/vp9/encoder/x86/vp9_sad_sse2.asm $
-    | yasm || obj/third_party/libvpx/libvpx.actions_depends.stamp
+    | obj/third_party/libvpx/libvpx.assemble.stamp
   source = source/libvpx/vp9/encoder/x86/vp9_sad_sse2.asm
   root = vp9_sad_sse2
 build gen/third_party/libvpx/vp9_sad_sse3.o: $
     libvpx_target_assemble_13936bc60f3639b9f2d9aa76ae52e0a2 $
     ../../third_party/libvpx/source/libvpx/vp9/encoder/x86/vp9_sad_sse3.asm $
-    | yasm || obj/third_party/libvpx/libvpx.actions_depends.stamp
+    | obj/third_party/libvpx/libvpx.assemble.stamp
   source = source/libvpx/vp9/encoder/x86/vp9_sad_sse3.asm
   root = vp9_sad_sse3
 build gen/third_party/libvpx/vp9_sad_sse4.o: $
     libvpx_target_assemble_13936bc60f3639b9f2d9aa76ae52e0a2 $
     ../../third_party/libvpx/source/libvpx/vp9/encoder/x86/vp9_sad_sse4.asm $
-    | yasm || obj/third_party/libvpx/libvpx.actions_depends.stamp
+    | obj/third_party/libvpx/libvpx.assemble.stamp
   source = source/libvpx/vp9/encoder/x86/vp9_sad_sse4.asm
   root = vp9_sad_sse4
 build gen/third_party/libvpx/vp9_sad_ssse3.o: $
     libvpx_target_assemble_13936bc60f3639b9f2d9aa76ae52e0a2 $
     ../../third_party/libvpx/source/libvpx/vp9/encoder/x86/vp9_sad_ssse3.asm $
-    | yasm || obj/third_party/libvpx/libvpx.actions_depends.stamp
+    | obj/third_party/libvpx/libvpx.assemble.stamp
   source = source/libvpx/vp9/encoder/x86/vp9_sad_ssse3.asm
   root = vp9_sad_ssse3
 build gen/third_party/libvpx/vp9_subpel_variance.o: $
     libvpx_target_assemble_13936bc60f3639b9f2d9aa76ae52e0a2 $
     ../../third_party/libvpx/source/libvpx/vp9/encoder/x86/vp9_subpel_variance.asm $
-    | yasm || obj/third_party/libvpx/libvpx.actions_depends.stamp
+    | obj/third_party/libvpx/libvpx.assemble.stamp
   source = source/libvpx/vp9/encoder/x86/vp9_subpel_variance.asm
   root = vp9_subpel_variance
-build gen/third_party/libvpx/vp9_subpel_variance_impl_sse2.o: $
-    libvpx_target_assemble_13936bc60f3639b9f2d9aa76ae52e0a2 $
-    ../../third_party/libvpx/source/libvpx/vp9/encoder/x86/vp9_subpel_variance_impl_sse2.asm $
-    | yasm || obj/third_party/libvpx/libvpx.actions_depends.stamp
-  source = source/libvpx/vp9/encoder/x86/vp9_subpel_variance_impl_sse2.asm
-  root = vp9_subpel_variance_impl_sse2
 build gen/third_party/libvpx/vp9_subtract_sse2.o: $
     libvpx_target_assemble_13936bc60f3639b9f2d9aa76ae52e0a2 $
     ../../third_party/libvpx/source/libvpx/vp9/encoder/x86/vp9_subtract_sse2.asm $
-    | yasm || obj/third_party/libvpx/libvpx.actions_depends.stamp
+    | obj/third_party/libvpx/libvpx.assemble.stamp
   source = source/libvpx/vp9/encoder/x86/vp9_subtract_sse2.asm
   root = vp9_subtract_sse2
 build gen/third_party/libvpx/vp9_temporal_filter_apply_sse2.o: $
     libvpx_target_assemble_13936bc60f3639b9f2d9aa76ae52e0a2 $
     ../../third_party/libvpx/source/libvpx/vp9/encoder/x86/vp9_temporal_filter_apply_sse2.asm $
-    | yasm || obj/third_party/libvpx/libvpx.actions_depends.stamp
+    | obj/third_party/libvpx/libvpx.assemble.stamp
   source = source/libvpx/vp9/encoder/x86/vp9_temporal_filter_apply_sse2.asm
   root = vp9_temporal_filter_apply_sse2
 build gen/third_party/libvpx/vp9_variance_impl_mmx.o: $
     libvpx_target_assemble_13936bc60f3639b9f2d9aa76ae52e0a2 $
     ../../third_party/libvpx/source/libvpx/vp9/encoder/x86/vp9_variance_impl_mmx.asm $
-    | yasm || obj/third_party/libvpx/libvpx.actions_depends.stamp
+    | obj/third_party/libvpx/libvpx.assemble.stamp
   source = source/libvpx/vp9/encoder/x86/vp9_variance_impl_mmx.asm
   root = vp9_variance_impl_mmx
 build gen/third_party/libvpx/vp9_variance_impl_sse2.o: $
     libvpx_target_assemble_13936bc60f3639b9f2d9aa76ae52e0a2 $
     ../../third_party/libvpx/source/libvpx/vp9/encoder/x86/vp9_variance_impl_sse2.asm $
-    | yasm || obj/third_party/libvpx/libvpx.actions_depends.stamp
+    | obj/third_party/libvpx/libvpx.assemble.stamp
   source = source/libvpx/vp9/encoder/x86/vp9_variance_impl_sse2.asm
   root = vp9_variance_impl_sse2
 build gen/third_party/libvpx/emms.o: $
     libvpx_target_assemble_13936bc60f3639b9f2d9aa76ae52e0a2 $
-    ../../third_party/libvpx/source/libvpx/vpx_ports/emms.asm | yasm || $
-    obj/third_party/libvpx/libvpx.actions_depends.stamp
+    ../../third_party/libvpx/source/libvpx/vpx_ports/emms.asm | $
+    obj/third_party/libvpx/libvpx.assemble.stamp
   source = source/libvpx/vpx_ports/emms.asm
   root = emms
 build gen/third_party/libvpx/x86_abi_support.o: $
     libvpx_target_assemble_13936bc60f3639b9f2d9aa76ae52e0a2 $
     ../../third_party/libvpx/source/libvpx/vpx_ports/x86_abi_support.asm | $
-    yasm || obj/third_party/libvpx/libvpx.actions_depends.stamp
+    obj/third_party/libvpx/libvpx.assemble.stamp
   source = source/libvpx/vpx_ports/x86_abi_support.asm
   root = x86_abi_support
 build obj/third_party/libvpx/libvpx.actions_rules_copies.stamp: stamp $
@@ -385,7 +383,6 @@ build obj/third_party/libvpx/libvpx.actions_rules_copies.stamp: stamp $
     gen/third_party/libvpx/encodeopt.o gen/third_party/libvpx/fwalsh_sse2.o $
     gen/third_party/libvpx/quantize_mmx.o $
     gen/third_party/libvpx/quantize_sse4.o $
-    gen/third_party/libvpx/quantize_ssse3.o $
     gen/third_party/libvpx/subtract_mmx.o $
     gen/third_party/libvpx/subtract_sse2.o $
     gen/third_party/libvpx/vp9_copy_sse2.o $
@@ -396,6 +393,7 @@ build obj/third_party/libvpx/libvpx.actions_rules_copies.stamp: stamp $
     gen/third_party/libvpx/vp9_subpixel_8t_ssse3.o $
     gen/third_party/libvpx/vp9_subpixel_bilinear_sse2.o $
     gen/third_party/libvpx/vp9_subpixel_bilinear_ssse3.o $
+    gen/third_party/libvpx/vp9_dct_mmx.o $
     gen/third_party/libvpx/vp9_error_sse2.o $
     gen/third_party/libvpx/vp9_sad4d_sse2.o $
     gen/third_party/libvpx/vp9_sad_mmx.o $
@@ -404,7 +402,6 @@ build obj/third_party/libvpx/libvpx.actions_rules_copies.stamp: stamp $
     gen/third_party/libvpx/vp9_sad_sse4.o $
     gen/third_party/libvpx/vp9_sad_ssse3.o $
     gen/third_party/libvpx/vp9_subpel_variance.o $
-    gen/third_party/libvpx/vp9_subpel_variance_impl_sse2.o $
     gen/third_party/libvpx/vp9_subtract_sse2.o $
     gen/third_party/libvpx/vp9_temporal_filter_apply_sse2.o $
     gen/third_party/libvpx/vp9_variance_impl_mmx.o $
@@ -412,21 +409,22 @@ build obj/third_party/libvpx/libvpx.actions_rules_copies.stamp: stamp $
     gen/third_party/libvpx/emms.o gen/third_party/libvpx/x86_abi_support.o
 
 defines = -DV8_DEPRECATION_WARNINGS -DBLINK_SCALE_FILTERS_AT_RECORD_TIME $
-    -DCHROMIUM_BUILD -DUSE_LIBJPEG_TURBO=1 -DENABLE_ONE_CLICK_SIGNIN $
-    -DENABLE_REMOTING=1 -DENABLE_WEBRTC=1 -DENABLE_PEPPER_CDMS $
-    -DENABLE_CONFIGURATION_POLICY -DENABLE_INPUT_SPEECH $
+    -D__ASSERT_MACROS_DEFINE_VERSIONS_WITHOUT_UNDERSCORE=0 -DCHROMIUM_BUILD $
+    -DCR_CLANG_REVISION=206824 -DUSE_LIBJPEG_TURBO=1 $
+    -DENABLE_ONE_CLICK_SIGNIN -DENABLE_REMOTING=1 -DENABLE_WEBRTC=1 $
+    -DENABLE_PEPPER_CDMS -DENABLE_CONFIGURATION_POLICY $
     -DENABLE_NOTIFICATIONS -DENABLE_HIDPI=1 $
     -DDISCARDABLE_MEMORY_ALWAYS_SUPPORTED_NATIVELY $
     -DSYSTEM_NATIVELY_SIGNALS_MEMORY_PRESSURE -DENABLE_EGLIMAGE=1 $
     -DENABLE_TASK_MANAGER=1 -DENABLE_EXTENSIONS=1 $
     -DENABLE_PLUGIN_INSTALLATION=1 -DENABLE_PLUGINS=1 $
     -DENABLE_SESSION_SERVICE=1 -DENABLE_THEMES=1 -DENABLE_AUTOFILL_DIALOG=1 $
-    -DENABLE_BACKGROUND=1 -DENABLE_AUTOMATION=1 -DENABLE_GOOGLE_NOW=1 $
-    -DCLD_VERSION=2 -DENABLE_FULL_PRINTING=1 -DENABLE_PRINTING=1 $
-    -DENABLE_SPELLCHECK=1 -DENABLE_CAPTIVE_PORTAL_DETECTION=1 $
-    -DENABLE_APP_LIST=1 -DENABLE_SETTINGS_APP=1 -DENABLE_MANAGED_USERS=1 $
-    -DENABLE_SERVICE_DISCOVERY=1 -DDYNAMIC_ANNOTATIONS_ENABLED=1 $
-    -DWTF_USE_DYNAMIC_ANNOTATIONS=1
+    -DENABLE_BACKGROUND=1 -DENABLE_GOOGLE_NOW=1 -DCLD_VERSION=2 $
+    -DENABLE_FULL_PRINTING=1 -DENABLE_PRINTING=1 -DENABLE_SPELLCHECK=1 $
+    -DENABLE_CAPTIVE_PORTAL_DETECTION=1 -DENABLE_APP_LIST=1 $
+    -DENABLE_SETTINGS_APP=1 -DENABLE_MANAGED_USERS=1 $
+    -DENABLE_SERVICE_DISCOVERY=1 -DENABLE_WIFI_BOOTSTRAPPING=1 $
+    -DDYNAMIC_ANNOTATIONS_ENABLED=1 -DWTF_USE_DYNAMIC_ANNOTATIONS=1
 includes = -I../../third_party/libvpx/source/config/mac/ia32 $
     -I../../third_party/libvpx/source/config $
     -I../../third_party/libvpx/source/libvpx $
@@ -441,8 +439,8 @@ cflags = -isysroot $
     -Wno-unused-parameter -Wno-missing-field-initializers -Wheader-hygiene $
     -Wno-c++11-narrowing -Wno-char-subscripts $
     -Wno-unneeded-internal-declaration -Wno-covered-switch-default $
-    -Wstring-conversion -Wno-deprecated-register -Wno-absolute-value $
-    -Wno-conversion -Wno-parentheses-equality
+    -Wstring-conversion -Wno-deprecated-register $
+    -Wno-selector-type-mismatch -Wno-conversion -Wno-parentheses-equality
 cflags_c = -std=c99 -Xclang -load -Xclang $
     /Users/cwebb/Sqwiggle/webrtc/trunk/tools/clang/scripts/../../../third_party/llvm-build/Release+Asserts/lib/libFindBadConstructs.dylib $
     -Xclang -add-plugin -Xclang find-bad-constructs -fcolor-diagnostics $
@@ -768,6 +766,10 @@ build $
     cc ../../third_party/libvpx/source/libvpx/vp9/decoder/vp9_decodemv.c || $
     obj/third_party/libvpx/libvpx.actions_rules_copies.stamp
 build $
+    obj/third_party/libvpx/source/libvpx/vp9/decoder/libvpx.vp9_decoder.o: $
+    cc ../../third_party/libvpx/source/libvpx/vp9/decoder/vp9_decoder.c || $
+    obj/third_party/libvpx/libvpx.actions_rules_copies.stamp
+build $
     obj/third_party/libvpx/source/libvpx/vp9/decoder/libvpx.vp9_detokenize.o: $
     cc ../../third_party/libvpx/source/libvpx/vp9/decoder/vp9_detokenize.c $
     || obj/third_party/libvpx/libvpx.actions_rules_copies.stamp
@@ -780,9 +782,10 @@ build $
     cc ../../third_party/libvpx/source/libvpx/vp9/decoder/vp9_dthread.c || $
     obj/third_party/libvpx/libvpx.actions_rules_copies.stamp
 build $
-    obj/third_party/libvpx/source/libvpx/vp9/decoder/libvpx.vp9_onyxd_if.o: $
-    cc ../../third_party/libvpx/source/libvpx/vp9/decoder/vp9_onyxd_if.c || $
-    obj/third_party/libvpx/libvpx.actions_rules_copies.stamp
+    obj/third_party/libvpx/source/libvpx/vp9/decoder/libvpx.vp9_read_bit_buffer.o: $
+    cc $
+    ../../third_party/libvpx/source/libvpx/vp9/decoder/vp9_read_bit_buffer.c $
+    || obj/third_party/libvpx/libvpx.actions_rules_copies.stamp
 build obj/third_party/libvpx/source/libvpx/vp9/decoder/libvpx.vp9_reader.o: $
     cc ../../third_party/libvpx/source/libvpx/vp9/decoder/vp9_reader.c || $
     obj/third_party/libvpx/libvpx.actions_rules_copies.stamp
@@ -790,9 +793,31 @@ build obj/third_party/libvpx/source/libvpx/vp9/decoder/libvpx.vp9_thread.o: $
     cc ../../third_party/libvpx/source/libvpx/vp9/decoder/vp9_thread.c || $
     obj/third_party/libvpx/libvpx.actions_rules_copies.stamp
 build $
+    obj/third_party/libvpx/source/libvpx/vp9/encoder/libvpx.vp9_aq_complexity.o: $
+    cc $
+    ../../third_party/libvpx/source/libvpx/vp9/encoder/vp9_aq_complexity.c $
+    || obj/third_party/libvpx/libvpx.actions_rules_copies.stamp
+build $
+    obj/third_party/libvpx/source/libvpx/vp9/encoder/libvpx.vp9_aq_cyclicrefresh.o: $
+    cc $
+    ../../third_party/libvpx/source/libvpx/vp9/encoder/vp9_aq_cyclicrefresh.c $
+    || obj/third_party/libvpx/libvpx.actions_rules_copies.stamp
+build $
+    obj/third_party/libvpx/source/libvpx/vp9/encoder/libvpx.vp9_aq_variance.o: $
+    cc ../../third_party/libvpx/source/libvpx/vp9/encoder/vp9_aq_variance.c $
+    || obj/third_party/libvpx/libvpx.actions_rules_copies.stamp
+build $
     obj/third_party/libvpx/source/libvpx/vp9/encoder/libvpx.vp9_bitstream.o: $
     cc ../../third_party/libvpx/source/libvpx/vp9/encoder/vp9_bitstream.c $
     || obj/third_party/libvpx/libvpx.actions_rules_copies.stamp
+build $
+    obj/third_party/libvpx/source/libvpx/vp9/encoder/libvpx.vp9_context_tree.o: $
+    cc $
+    ../../third_party/libvpx/source/libvpx/vp9/encoder/vp9_context_tree.c $
+    || obj/third_party/libvpx/libvpx.actions_rules_copies.stamp
+build obj/third_party/libvpx/source/libvpx/vp9/encoder/libvpx.vp9_cost.o: $
+    cc ../../third_party/libvpx/source/libvpx/vp9/encoder/vp9_cost.c || $
+    obj/third_party/libvpx/libvpx.actions_rules_copies.stamp
 build obj/third_party/libvpx/source/libvpx/vp9/encoder/libvpx.vp9_dct.o: cc $
     ../../third_party/libvpx/source/libvpx/vp9/encoder/vp9_dct.c || $
     obj/third_party/libvpx/libvpx.actions_rules_copies.stamp
@@ -807,6 +832,10 @@ build $
 build $
     obj/third_party/libvpx/source/libvpx/vp9/encoder/libvpx.vp9_encodemv.o: $
     cc ../../third_party/libvpx/source/libvpx/vp9/encoder/vp9_encodemv.c || $
+    obj/third_party/libvpx/libvpx.actions_rules_copies.stamp
+build $
+    obj/third_party/libvpx/source/libvpx/vp9/encoder/libvpx.vp9_encoder.o: $
+    cc ../../third_party/libvpx/source/libvpx/vp9/encoder/vp9_encoder.c || $
     obj/third_party/libvpx/libvpx.actions_rules_copies.stamp
 build obj/third_party/libvpx/source/libvpx/vp9/encoder/libvpx.vp9_extend.o: $
     cc ../../third_party/libvpx/source/libvpx/vp9/encoder/vp9_extend.c || $
@@ -825,10 +854,6 @@ build $
     obj/third_party/libvpx/libvpx.actions_rules_copies.stamp
 build obj/third_party/libvpx/source/libvpx/vp9/encoder/libvpx.vp9_mcomp.o: $
     cc ../../third_party/libvpx/source/libvpx/vp9/encoder/vp9_mcomp.c || $
-    obj/third_party/libvpx/libvpx.actions_rules_copies.stamp
-build $
-    obj/third_party/libvpx/source/libvpx/vp9/encoder/libvpx.vp9_onyx_if.o: $
-    cc ../../third_party/libvpx/source/libvpx/vp9/encoder/vp9_onyx_if.c || $
     obj/third_party/libvpx/libvpx.actions_rules_copies.stamp
 build $
     obj/third_party/libvpx/source/libvpx/vp9/encoder/libvpx.vp9_picklpf.o: $
@@ -860,9 +885,19 @@ build $
     cc $
     ../../third_party/libvpx/source/libvpx/vp9/encoder/vp9_segmentation.c $
     || obj/third_party/libvpx/libvpx.actions_rules_copies.stamp
+build $
+    obj/third_party/libvpx/source/libvpx/vp9/encoder/libvpx.vp9_speed_features.o: $
+    cc $
+    ../../third_party/libvpx/source/libvpx/vp9/encoder/vp9_speed_features.c $
+    || obj/third_party/libvpx/libvpx.actions_rules_copies.stamp
 build obj/third_party/libvpx/source/libvpx/vp9/encoder/libvpx.vp9_subexp.o: $
     cc ../../third_party/libvpx/source/libvpx/vp9/encoder/vp9_subexp.c || $
     obj/third_party/libvpx/libvpx.actions_rules_copies.stamp
+build $
+    obj/third_party/libvpx/source/libvpx/vp9/encoder/libvpx.vp9_svc_layercontext.o: $
+    cc $
+    ../../third_party/libvpx/source/libvpx/vp9/encoder/vp9_svc_layercontext.c $
+    || obj/third_party/libvpx/libvpx.actions_rules_copies.stamp
 build $
     obj/third_party/libvpx/source/libvpx/vp9/encoder/libvpx.vp9_temporal_filter.o: $
     cc $
@@ -876,13 +911,15 @@ build $
     obj/third_party/libvpx/source/libvpx/vp9/encoder/libvpx.vp9_treewriter.o: $
     cc ../../third_party/libvpx/source/libvpx/vp9/encoder/vp9_treewriter.c $
     || obj/third_party/libvpx/libvpx.actions_rules_copies.stamp
-build obj/third_party/libvpx/source/libvpx/vp9/encoder/libvpx.vp9_vaq.o: cc $
-    ../../third_party/libvpx/source/libvpx/vp9/encoder/vp9_vaq.c || $
-    obj/third_party/libvpx/libvpx.actions_rules_copies.stamp
 build $
     obj/third_party/libvpx/source/libvpx/vp9/encoder/libvpx.vp9_variance.o: $
     cc ../../third_party/libvpx/source/libvpx/vp9/encoder/vp9_variance.c || $
     obj/third_party/libvpx/libvpx.actions_rules_copies.stamp
+build $
+    obj/third_party/libvpx/source/libvpx/vp9/encoder/libvpx.vp9_write_bit_buffer.o: $
+    cc $
+    ../../third_party/libvpx/source/libvpx/vp9/encoder/vp9_write_bit_buffer.c $
+    || obj/third_party/libvpx/libvpx.actions_rules_copies.stamp
 build obj/third_party/libvpx/source/libvpx/vp9/encoder/libvpx.vp9_writer.o: $
     cc ../../third_party/libvpx/source/libvpx/vp9/encoder/vp9_writer.c || $
     obj/third_party/libvpx/libvpx.actions_rules_copies.stamp
@@ -1029,23 +1066,29 @@ build libvpx.a: alink $
     obj/third_party/libvpx/source/libvpx/vp9/common/x86/libvpx.vp9_asm_stubs.o $
     obj/third_party/libvpx/source/libvpx/vp9/decoder/libvpx.vp9_decodeframe.o $
     obj/third_party/libvpx/source/libvpx/vp9/decoder/libvpx.vp9_decodemv.o $
+    obj/third_party/libvpx/source/libvpx/vp9/decoder/libvpx.vp9_decoder.o $
     obj/third_party/libvpx/source/libvpx/vp9/decoder/libvpx.vp9_detokenize.o $
     obj/third_party/libvpx/source/libvpx/vp9/decoder/libvpx.vp9_dsubexp.o $
     obj/third_party/libvpx/source/libvpx/vp9/decoder/libvpx.vp9_dthread.o $
-    obj/third_party/libvpx/source/libvpx/vp9/decoder/libvpx.vp9_onyxd_if.o $
+    obj/third_party/libvpx/source/libvpx/vp9/decoder/libvpx.vp9_read_bit_buffer.o $
     obj/third_party/libvpx/source/libvpx/vp9/decoder/libvpx.vp9_reader.o $
     obj/third_party/libvpx/source/libvpx/vp9/decoder/libvpx.vp9_thread.o $
+    obj/third_party/libvpx/source/libvpx/vp9/encoder/libvpx.vp9_aq_complexity.o $
+    obj/third_party/libvpx/source/libvpx/vp9/encoder/libvpx.vp9_aq_cyclicrefresh.o $
+    obj/third_party/libvpx/source/libvpx/vp9/encoder/libvpx.vp9_aq_variance.o $
     obj/third_party/libvpx/source/libvpx/vp9/encoder/libvpx.vp9_bitstream.o $
+    obj/third_party/libvpx/source/libvpx/vp9/encoder/libvpx.vp9_context_tree.o $
+    obj/third_party/libvpx/source/libvpx/vp9/encoder/libvpx.vp9_cost.o $
     obj/third_party/libvpx/source/libvpx/vp9/encoder/libvpx.vp9_dct.o $
     obj/third_party/libvpx/source/libvpx/vp9/encoder/libvpx.vp9_encodeframe.o $
     obj/third_party/libvpx/source/libvpx/vp9/encoder/libvpx.vp9_encodemb.o $
     obj/third_party/libvpx/source/libvpx/vp9/encoder/libvpx.vp9_encodemv.o $
+    obj/third_party/libvpx/source/libvpx/vp9/encoder/libvpx.vp9_encoder.o $
     obj/third_party/libvpx/source/libvpx/vp9/encoder/libvpx.vp9_extend.o $
     obj/third_party/libvpx/source/libvpx/vp9/encoder/libvpx.vp9_firstpass.o $
     obj/third_party/libvpx/source/libvpx/vp9/encoder/libvpx.vp9_lookahead.o $
     obj/third_party/libvpx/source/libvpx/vp9/encoder/libvpx.vp9_mbgraph.o $
     obj/third_party/libvpx/source/libvpx/vp9/encoder/libvpx.vp9_mcomp.o $
-    obj/third_party/libvpx/source/libvpx/vp9/encoder/libvpx.vp9_onyx_if.o $
     obj/third_party/libvpx/source/libvpx/vp9/encoder/libvpx.vp9_picklpf.o $
     obj/third_party/libvpx/source/libvpx/vp9/encoder/libvpx.vp9_pickmode.o $
     obj/third_party/libvpx/source/libvpx/vp9/encoder/libvpx.vp9_quantize.o $
@@ -1054,12 +1097,14 @@ build libvpx.a: alink $
     obj/third_party/libvpx/source/libvpx/vp9/encoder/libvpx.vp9_resize.o $
     obj/third_party/libvpx/source/libvpx/vp9/encoder/libvpx.vp9_sad.o $
     obj/third_party/libvpx/source/libvpx/vp9/encoder/libvpx.vp9_segmentation.o $
+    obj/third_party/libvpx/source/libvpx/vp9/encoder/libvpx.vp9_speed_features.o $
     obj/third_party/libvpx/source/libvpx/vp9/encoder/libvpx.vp9_subexp.o $
+    obj/third_party/libvpx/source/libvpx/vp9/encoder/libvpx.vp9_svc_layercontext.o $
     obj/third_party/libvpx/source/libvpx/vp9/encoder/libvpx.vp9_temporal_filter.o $
     obj/third_party/libvpx/source/libvpx/vp9/encoder/libvpx.vp9_tokenize.o $
     obj/third_party/libvpx/source/libvpx/vp9/encoder/libvpx.vp9_treewriter.o $
-    obj/third_party/libvpx/source/libvpx/vp9/encoder/libvpx.vp9_vaq.o $
     obj/third_party/libvpx/source/libvpx/vp9/encoder/libvpx.vp9_variance.o $
+    obj/third_party/libvpx/source/libvpx/vp9/encoder/libvpx.vp9_write_bit_buffer.o $
     obj/third_party/libvpx/source/libvpx/vp9/encoder/libvpx.vp9_writer.o $
     obj/third_party/libvpx/source/libvpx/vp9/libvpx.vp9_cx_iface.o $
     obj/third_party/libvpx/source/libvpx/vp9/libvpx.vp9_dx_iface.o $
@@ -1099,7 +1144,6 @@ build libvpx.a: alink $
     gen/third_party/libvpx/encodeopt.o gen/third_party/libvpx/fwalsh_sse2.o $
     gen/third_party/libvpx/quantize_mmx.o $
     gen/third_party/libvpx/quantize_sse4.o $
-    gen/third_party/libvpx/quantize_ssse3.o $
     gen/third_party/libvpx/subtract_mmx.o $
     gen/third_party/libvpx/subtract_sse2.o $
     gen/third_party/libvpx/vp9_copy_sse2.o $
@@ -1110,6 +1154,7 @@ build libvpx.a: alink $
     gen/third_party/libvpx/vp9_subpixel_8t_ssse3.o $
     gen/third_party/libvpx/vp9_subpixel_bilinear_sse2.o $
     gen/third_party/libvpx/vp9_subpixel_bilinear_ssse3.o $
+    gen/third_party/libvpx/vp9_dct_mmx.o $
     gen/third_party/libvpx/vp9_error_sse2.o $
     gen/third_party/libvpx/vp9_sad4d_sse2.o $
     gen/third_party/libvpx/vp9_sad_mmx.o $
@@ -1118,7 +1163,6 @@ build libvpx.a: alink $
     gen/third_party/libvpx/vp9_sad_sse4.o $
     gen/third_party/libvpx/vp9_sad_ssse3.o $
     gen/third_party/libvpx/vp9_subpel_variance.o $
-    gen/third_party/libvpx/vp9_subpel_variance_impl_sse2.o $
     gen/third_party/libvpx/vp9_subtract_sse2.o $
     gen/third_party/libvpx/vp9_temporal_filter_apply_sse2.o $
     gen/third_party/libvpx/vp9_variance_impl_mmx.o $

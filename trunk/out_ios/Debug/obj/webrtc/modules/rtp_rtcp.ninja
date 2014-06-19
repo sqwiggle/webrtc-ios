@@ -1,6 +1,6 @@
 defines = -DV8_DEPRECATION_WARNINGS -DBLINK_SCALE_FILTERS_AT_RECORD_TIME $
-    -DDISABLE_NACL -DCHROMIUM_BUILD -DUSE_LIBJPEG_TURBO=1 $
-    -DENABLE_CONFIGURATION_POLICY $
+    -DDISABLE_NACL -DCHROMIUM_BUILD -DCR_CLANG_REVISION=206824 $
+    -DUSE_LIBJPEG_TURBO=1 -DENABLE_CONFIGURATION_POLICY $
     -DDISCARDABLE_MEMORY_ALWAYS_SUPPORTED_NATIVELY $
     -DSYSTEM_NATIVELY_SIGNALS_MEMORY_PRESSURE -DENABLE_EGLIMAGE=1 $
     -DCLD_VERSION=1 -DENABLE_SPELLCHECK=1 -DDISABLE_FTP_SUPPORT=1 $
@@ -8,7 +8,7 @@ defines = -DV8_DEPRECATION_WARNINGS -DBLINK_SCALE_FILTERS_AT_RECORD_TIME $
     -DWEBRTC_ARCH_ARM_NEON -DWEBRTC_POSIX -DWEBRTC_MAC -DWEBRTC_IOS $
     -D__STDC_CONSTANT_MACROS -D__STDC_FORMAT_MACROS $
     -DDYNAMIC_ANNOTATIONS_ENABLED=1 -DWTF_USE_DYNAMIC_ANNOTATIONS=1
-includes = -I../.. -I../.. -I../../webrtc/system_wrappers/interface
+includes = -I../.. -I../../webrtc/system_wrappers/interface
 cflags = -isysroot $
     /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator7.1.sdk $
     -O0 -gdwarf-2 -fvisibility=hidden -Werror -Wnewline-eof $
@@ -16,7 +16,7 @@ cflags = -isysroot $
     -Wno-unused-parameter -Wno-missing-field-initializers -Wheader-hygiene $
     -Wno-c++11-narrowing -Wno-char-subscripts $
     -Wno-unneeded-internal-declaration -Wno-covered-switch-default $
-    -Wstring-conversion -Wno-deprecated-register -Wno-absolute-value
+    -Wstring-conversion -Wno-deprecated-register -Wno-selector-type-mismatch
 cflags_c = -std=c99 -fcolor-diagnostics -fstack-protector-all
 cflags_cc = -std=gnu++0x -fno-rtti -fno-exceptions $
     -fvisibility-inlines-hidden -fno-threadsafe-statics -fcolor-diagnostics $
@@ -32,6 +32,9 @@ build obj/webrtc/modules/rtp_rtcp/source/rtp_rtcp.fec_receiver_impl.o: cxx $
 build $
     obj/webrtc/modules/rtp_rtcp/source/rtp_rtcp.receive_statistics_impl.o: $
     cxx ../../webrtc/modules/rtp_rtcp/source/receive_statistics_impl.cc
+build $
+    obj/webrtc/modules/rtp_rtcp/source/rtp_rtcp.remote_ntp_time_estimator.o: $
+    cxx ../../webrtc/modules/rtp_rtcp/source/remote_ntp_time_estimator.cc
 build obj/webrtc/modules/rtp_rtcp/source/rtp_rtcp.rtp_header_parser.o: cxx $
     ../../webrtc/modules/rtp_rtcp/source/rtp_header_parser.cc
 build obj/webrtc/modules/rtp_rtcp/source/rtp_rtcp.rtp_rtcp_impl.o: cxx $
@@ -93,6 +96,7 @@ build librtp_rtcp.a: alink $
     obj/webrtc/modules/rtp_rtcp/source/rtp_rtcp.bitrate.o $
     obj/webrtc/modules/rtp_rtcp/source/rtp_rtcp.fec_receiver_impl.o $
     obj/webrtc/modules/rtp_rtcp/source/rtp_rtcp.receive_statistics_impl.o $
+    obj/webrtc/modules/rtp_rtcp/source/rtp_rtcp.remote_ntp_time_estimator.o $
     obj/webrtc/modules/rtp_rtcp/source/rtp_rtcp.rtp_header_parser.o $
     obj/webrtc/modules/rtp_rtcp/source/rtp_rtcp.rtp_rtcp_impl.o $
     obj/webrtc/modules/rtp_rtcp/source/rtp_rtcp.rtcp_packet.o $
@@ -119,3 +123,5 @@ build librtp_rtcp.a: alink $
     obj/webrtc/modules/rtp_rtcp/source/rtp_rtcp.rtp_sender_video.o $
     obj/webrtc/modules/rtp_rtcp/source/rtp_rtcp.rtp_format_vp8.o $
     obj/webrtc/modules/rtp_rtcp/source/rtp_rtcp.vp8_partition_aggregator.o
+  libtool_flags = -framework Foundation -framework Security -framework $
+      SystemConfiguration -framework UIKit

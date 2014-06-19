@@ -68,7 +68,7 @@ def GetEnvironment(host_obj, testing, extra_env_vars=None):
     sys.exit(1)
   env = json.loads(json_env)
   env['GYP_DEFINES'] = env.get('GYP_DEFINES', '') + \
-      ' fastbuild=1 use_goma=1 gomadir=%s' % bb_utils.GOMA_DIR
+      ' OS=android fastbuild=1 use_goma=1 gomadir=%s' % bb_utils.GOMA_DIR
   if host_obj.target_arch:
     env['GYP_DEFINES'] += ' target_arch=%s' % host_obj.target_arch
   extra_gyp = host_obj.extra_gyp_defines
@@ -118,7 +118,8 @@ def GetBotStepMap():
   std_host_tests = ['check_webview_licenses', 'findbugs']
   std_build_steps = ['compile', 'zip_build']
   std_test_steps = ['extract_build']
-  std_tests = ['ui', 'unit']
+  std_tests = ['ui', 'unit', 'mojo']
+  telemetry_tests = ['telemetry_perf_unittests']
   flakiness_server = (
       '--flakiness-server=%s' % constants.UPSTREAM_FLAKINESS_SERVER)
   experimental = ['--experimental']
@@ -138,6 +139,8 @@ def GetBotStepMap():
       B('main-clang-builder',
         H(compile_step, extra_gyp='clang=1 component=shared_library')),
       B('main-clobber', H(compile_step)),
+      B('main-tests-rel', H(std_test_steps), T(std_tests + telemetry_tests,
+                                               [flakiness_server])),
       B('main-tests', H(std_test_steps), T(std_tests, [flakiness_server])),
 
       # Other waterfalls
@@ -198,6 +201,7 @@ def GetBotStepMap():
       ('try-clang-builder', 'main-clang-builder'),
       ('try-fyi-builder-dbg', 'fyi-builder-dbg'),
       ('try-x86-builder-dbg', 'x86-builder-dbg'),
+      ('try-tests-rel', 'main-tests-rel'),
       ('try-tests', 'main-tests'),
       ('try-fyi-tests', 'fyi-tests'),
       ('webkit-latest-tests', 'main-tests'),

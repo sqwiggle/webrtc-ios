@@ -23,12 +23,17 @@ using std::string;
 
 namespace {
 
+const char kClassMustLeftMostlyDeriveGC[] =
+    "[blink-gc] Class %0 must derive its GC base in the left-most position.";
+
 const char kClassRequiresTraceMethod[] =
-    "[blink-gc] Class %0 requires a trace method"
-    " because it contains fields that require tracing.";
+    "[blink-gc] Class %0 requires a trace method.";
 
 const char kBaseRequiresTracing[] =
     "[blink-gc] Base class %0 of derived class %1 requires tracing.";
+
+const char kBaseRequiresTracingNote[] =
+    "[blink-gc] Untraced base class %0 declared here:";
 
 const char kFieldsRequireTracing[] =
     "[blink-gc] Class %0 has untraced fields that require tracing.";
@@ -63,10 +68,13 @@ const char kStackAllocatedFieldNote[] =
 const char kMemberInUnmanagedClassNote[] =
     "[blink-gc] Member field %0 in unmanaged class declared here:";
 
-const char kPartObjectContainsGCRoot[] =
+const char kPartObjectToGCDerivedClassNote[] =
+    "[blink-gc] Part-object field %0 to a GC derived class declared here:";
+
+const char kPartObjectContainsGCRootNote[] =
     "[blink-gc] Field %0 with embedded GC root in %1 declared here:";
 
-const char kFieldContainsGCRoot[] =
+const char kFieldContainsGCRootNote[] =
     "[blink-gc] Field %0 defining a GC root declared here:";
 
 const char kOverriddenNonVirtualTrace[] =
@@ -112,6 +120,14 @@ const char kManualDispatchMethodNote[] =
 const char kDerivesNonStackAllocated[] =
     "[blink-gc] Stack-allocated class %0 derives class %1"
     " which is not stack allocated.";
+
+const char kClassOverridesNew[] =
+    "[blink-gc] Garbage collected class %0"
+    " is not permitted to override its new operator.";
+
+const char kClassDeclaresPureVirtualTrace[] =
+    "[blink-gc] Garbage collected class %0"
+    " is not permitted to declare a pure-virtual trace method.";
 
 struct BlinkGCPluginOptions {
   BlinkGCPluginOptions() : enable_oilpan(false), dump_graph(false) {}
@@ -343,10 +359,13 @@ class CheckTraceVisitor : public RecursiveASTVisitor<CheckTraceVisitor> {
         return true;
       }
 
-      // TODO: It is possible to have multiple bases, where one must be traced
-      // using a traceAfterDispatch. In such a case we should also check that
-      // the mixin does not add a vtable.
-      if (Config::IsTraceMethod(fn) && member->hasQualifier()) {
+      // Currently, a manually dispatched class cannot have mixin bases (having
+      // one would add a vtable which we explicitly check against). This means
+      // that we can only make calls to a trace method of the same name. Revisit
+      // this if our mixin/vtable assumption changes.
+      if (Config::IsTraceMethod(fn) &&
+          fn->getName() == trace_->getName() &&
+          member->hasQualifier()) {
         if (const Type* type = member->getQualifier()->getAsType()) {
           if (CXXRecordDecl* decl = type->getAsCXXRecordDecl()) {
             RecordInfo::Bases::iterator it = info_->GetBases().find(decl);
@@ -429,10 +448,22 @@ class CheckGCRootsVisitor : public RecursiveEdgeVisitor {
 
 // This visitor checks that the fields of a class are "well formed".
 // - OwnPtr, RefPtr and RawPtr must not point to a GC derived types.
+// - Part objects must not be GC derived types.
 // - An on-heap class must never contain GC roots.
+// - Only stack-allocated types may point to stack-allocated types.
 class CheckFieldsVisitor : public RecursiveEdgeVisitor {
  public:
-  typedef std::vector<std::pair<FieldPoint*, Edge*> > Errors;
+
+  enum Error {
+    kRawPtrToGCManaged,
+    kRefPtrToGCManaged,
+    kOwnPtrToGCManaged,
+    kMemberInUnmanaged,
+    kPtrFromHeapToStack,
+    kGCDerivedPartObject
+  };
+
+  typedef std::vector<std::pair<FieldPoint*, Error> > Errors;
 
   CheckFieldsVisitor(const BlinkGCPluginOptions& options)
       : options_(options), current_(0), stack_allocated_host_(false) {}
@@ -465,7 +496,7 @@ class CheckFieldsVisitor : public RecursiveEdgeVisitor {
       if ((*it)->Kind() == Edge::kRoot)
         return;
     }
-    invalid_fields_.push_back(std::make_pair(current_, edge));
+    invalid_fields_.push_back(std::make_pair(current_, kMemberInUnmanaged));
   }
 
   void VisitValue(Value* edge) override {
@@ -474,28 +505,52 @@ class CheckFieldsVisitor : public RecursiveEdgeVisitor {
       return;
 
     if (!stack_allocated_host_ && edge->value()->IsStackAllocated()) {
-      invalid_fields_.push_back(std::make_pair(current_, edge));
+      invalid_fields_.push_back(std::make_pair(current_, kPtrFromHeapToStack));
+      return;
+    }
+
+    if (!Parent() &&
+        edge->value()->IsGCDerived() &&
+        !edge->value()->IsGCMixin()) {
+      invalid_fields_.push_back(std::make_pair(current_, kGCDerivedPartObject));
       return;
     }
 
     if (!Parent() || !edge->value()->IsGCAllocated())
       return;
 
-    if (Parent()->IsOwnPtr() ||
-        (stack_allocated_host_ && Parent()->IsRawPtr())) {
-      invalid_fields_.push_back(std::make_pair(current_, Parent()));
+    // In transition mode, disallow  OwnPtr<T>, RawPtr<T> to GC allocated T's,
+    // also disallow T* in stack-allocated types.
+    if (options_.enable_oilpan) {
+      if (Parent()->IsOwnPtr() ||
+          Parent()->IsRawPtrClass() ||
+          (stack_allocated_host_ && Parent()->IsRawPtr())) {
+        invalid_fields_.push_back(std::make_pair(
+            current_, InvalidSmartPtr(Parent())));
+        return;
+      }
+
       return;
     }
 
-    // Don't check raw and ref pointers in transition mode.
-    if (options_.enable_oilpan)
+    if (Parent()->IsRawPtr() || Parent()->IsRefPtr() || Parent()->IsOwnPtr()) {
+      invalid_fields_.push_back(std::make_pair(
+          current_, InvalidSmartPtr(Parent())));
       return;
-
-    if (Parent()->IsRawPtr() || Parent()->IsRefPtr())
-      invalid_fields_.push_back(std::make_pair(current_, Parent()));
+    }
   }
 
  private:
+  Error InvalidSmartPtr(Edge* ptr) {
+    if (ptr->IsRawPtr())
+      return kRawPtrToGCManaged;
+    if (ptr->IsRefPtr())
+      return kRefPtrToGCManaged;
+    if (ptr->IsOwnPtr())
+      return kOwnPtrToGCManaged;
+    assert(false && "Unknown smart pointer kind");
+  }
+
   const BlinkGCPluginOptions& options_;
   FieldPoint* current_;
   bool stack_allocated_host_;
@@ -523,6 +578,8 @@ class BlinkGCPluginConsumer : public ASTConsumer {
     options_.ignored_directories.push_back("/heap/");
 
     // Register warning/error messages.
+    diag_class_must_left_mostly_derive_gc_ = diagnostic_.getCustomDiagID(
+        getErrorLevel(), kClassMustLeftMostlyDeriveGC);
     diag_class_requires_trace_method_ =
         diagnostic_.getCustomDiagID(getErrorLevel(), kClassRequiresTraceMethod);
     diag_base_requires_tracing_ =
@@ -551,8 +608,14 @@ class BlinkGCPluginConsumer : public ASTConsumer {
         diagnostic_.getCustomDiagID(getErrorLevel(), kMissingFinalizeDispatch);
     diag_derives_non_stack_allocated_ =
         diagnostic_.getCustomDiagID(getErrorLevel(), kDerivesNonStackAllocated);
+    diag_class_overrides_new_ =
+        diagnostic_.getCustomDiagID(getErrorLevel(), kClassOverridesNew);
+    diag_class_declares_pure_virtual_trace_ = diagnostic_.getCustomDiagID(
+        getErrorLevel(), kClassDeclaresPureVirtualTrace);
 
     // Register note messages.
+    diag_base_requires_tracing_note_ = diagnostic_.getCustomDiagID(
+        DiagnosticsEngine::Note, kBaseRequiresTracingNote);
     diag_field_requires_tracing_note_ = diagnostic_.getCustomDiagID(
         DiagnosticsEngine::Note, kFieldRequiresTracingNote);
     diag_raw_ptr_to_gc_managed_class_note_ = diagnostic_.getCustomDiagID(
@@ -565,10 +628,12 @@ class BlinkGCPluginConsumer : public ASTConsumer {
         DiagnosticsEngine::Note, kStackAllocatedFieldNote);
     diag_member_in_unmanaged_class_note_ = diagnostic_.getCustomDiagID(
         DiagnosticsEngine::Note, kMemberInUnmanagedClassNote);
+    diag_part_object_to_gc_derived_class_note_ = diagnostic_.getCustomDiagID(
+        DiagnosticsEngine::Note, kPartObjectToGCDerivedClassNote);
     diag_part_object_contains_gc_root_note_ = diagnostic_.getCustomDiagID(
-        DiagnosticsEngine::Note, kPartObjectContainsGCRoot);
+        DiagnosticsEngine::Note, kPartObjectContainsGCRootNote);
     diag_field_contains_gc_root_note_ = diagnostic_.getCustomDiagID(
-        DiagnosticsEngine::Note, kFieldContainsGCRoot);
+        DiagnosticsEngine::Note, kFieldContainsGCRootNote);
     diag_finalized_field_note_ = diagnostic_.getCustomDiagID(
         DiagnosticsEngine::Note, kFinalizedFieldNote);
     diag_user_declared_destructor_note_ = diagnostic_.getCustomDiagID(
@@ -673,8 +738,12 @@ class BlinkGCPluginConsumer : public ASTConsumer {
       }
     }
 
-    if (info->RequiresTraceMethod() && !info->GetTraceMethod())
+    if (CXXMethodDecl* trace = info->GetTraceMethod()) {
+      if (trace->isPure())
+        ReportClassDeclaresPureVirtualTrace(info, trace);
+    } else if (info->RequiresTraceMethod()) {
       ReportClassRequiresTraceMethod(info);
+    }
 
     {
       CheckFieldsVisitor visitor(options_);
@@ -683,17 +752,36 @@ class BlinkGCPluginConsumer : public ASTConsumer {
     }
 
     if (info->IsGCDerived()) {
-      CheckDispatch(info);
 
-      CheckGCRootsVisitor visitor;
-      if (visitor.ContainsGCRoots(info))
-        ReportClassContainsGCRoots(info, &visitor.gc_roots());
+      if (!info->IsGCMixin()) {
+        CheckLeftMostDerived(info);
+        CheckDispatch(info);
+        if (CXXMethodDecl* newop = info->DeclaresNewOperator())
+          ReportClassOverridesNew(info, newop);
+      }
+
+      {
+        CheckGCRootsVisitor visitor;
+        if (visitor.ContainsGCRoots(info))
+          ReportClassContainsGCRoots(info, &visitor.gc_roots());
+      }
 
       if (info->NeedsFinalization())
         CheckFinalization(info);
     }
 
     DumpClass(info);
+  }
+
+  void CheckLeftMostDerived(RecordInfo* info) {
+    CXXRecordDecl* left_most = info->record();
+    CXXRecordDecl::base_class_iterator it = left_most->bases_begin();
+    while (it != left_most->bases_end()) {
+      left_most = it->getType()->getAsCXXRecordDecl();
+      it = left_most->bases_begin();
+    }
+    if (!Config::IsGCBase(left_most->getName()))
+      ReportClassMustLeftMostlyDeriveGC(info);
   }
 
   void CheckDispatch(RecordInfo* info) {
@@ -886,6 +974,14 @@ class BlinkGCPluginConsumer : public ASTConsumer {
         json_->Write("lbl", lbl);
         json_->Write("kind", kind);
         json_->Write("loc", loc);
+        json_->Write("ptr",
+                     !Parent() ? "val" :
+                     Parent()->IsRawPtr() ? "raw" :
+                     Parent()->IsRefPtr() ? "ref" :
+                     Parent()->IsOwnPtr() ? "own" :
+                     (Parent()->IsMember() ||
+                      Parent()->IsWeakMember()) ? "mem" :
+                     "val");
         json_->CloseObject();
       }
 
@@ -1000,12 +1096,14 @@ class BlinkGCPluginConsumer : public ASTConsumer {
     DeclContext* context = info->record()->getDeclContext();
     if (context->isRecord())
       return InCheckedNamespace(cache_.Lookup(context));
-    if (context->isNamespace()) {
-      const NamespaceDecl* decl = dyn_cast<NamespaceDecl>(context);
+    while (context->isNamespace()) {
+      NamespaceDecl* decl = dyn_cast<NamespaceDecl>(context);
       if (decl->isAnonymousNamespace())
         return false;
-      return options_.checked_namespaces.find(decl->getNameAsString()) !=
-          options_.checked_namespaces.end();
+      if (options_.checked_namespaces.find(decl->getNameAsString()) !=
+          options_.checked_namespaces.end())
+        return true;
+      context = decl->getDeclContext();
     }
     return false;
   }
@@ -1023,12 +1121,28 @@ class BlinkGCPluginConsumer : public ASTConsumer {
     return true;
   }
 
+  void ReportClassMustLeftMostlyDeriveGC(RecordInfo* info) {
+    SourceLocation loc = info->record()->getInnerLocStart();
+    SourceManager& manager = instance_.getSourceManager();
+    FullSourceLoc full_loc(loc, manager);
+    diagnostic_.Report(full_loc, diag_class_must_left_mostly_derive_gc_)
+        << info->record();
+  }
+
   void ReportClassRequiresTraceMethod(RecordInfo* info) {
     SourceLocation loc = info->record()->getInnerLocStart();
     SourceManager& manager = instance_.getSourceManager();
     FullSourceLoc full_loc(loc, manager);
     diagnostic_.Report(full_loc, diag_class_requires_trace_method_)
         << info->record();
+
+    for (RecordInfo::Bases::iterator it = info->GetBases().begin();
+         it != info->GetBases().end();
+         ++it) {
+      if (it->second.NeedsTracing().IsNeeded())
+        NoteBaseRequiresTracing(&it->second);
+    }
+
     for (RecordInfo::Fields::iterator it = info->GetFields().begin();
          it != info->GetFields().end();
          ++it) {
@@ -1071,17 +1185,23 @@ class BlinkGCPluginConsumer : public ASTConsumer {
     for (CheckFieldsVisitor::Errors::iterator it = errors->begin();
          it != errors->end();
          ++it) {
-      if (it->second->IsRawPtr()) {
-        NoteField(it->first, diag_raw_ptr_to_gc_managed_class_note_);
-      } else if (it->second->IsRefPtr()) {
-        NoteField(it->first, diag_ref_ptr_to_gc_managed_class_note_);
-      } else if (it->second->IsOwnPtr()) {
-        NoteField(it->first, diag_own_ptr_to_gc_managed_class_note_);
-      } else if (it->second->IsMember()) {
-        NoteField(it->first, diag_member_in_unmanaged_class_note_);
-      } else if (it->second->IsValue()) {
-        NoteField(it->first, diag_stack_allocated_field_note_);
+      unsigned error;
+      if (it->second == CheckFieldsVisitor::kRawPtrToGCManaged) {
+        error = diag_raw_ptr_to_gc_managed_class_note_;
+      } else if (it->second == CheckFieldsVisitor::kRefPtrToGCManaged) {
+        error = diag_ref_ptr_to_gc_managed_class_note_;
+      } else if (it->second == CheckFieldsVisitor::kOwnPtrToGCManaged) {
+        error = diag_own_ptr_to_gc_managed_class_note_;
+      } else if (it->second == CheckFieldsVisitor::kMemberInUnmanaged) {
+        error = diag_member_in_unmanaged_class_note_;
+      } else if (it->second == CheckFieldsVisitor::kPtrFromHeapToStack) {
+        error = diag_stack_allocated_field_note_;
+      } else if (it->second == CheckFieldsVisitor::kGCDerivedPartObject) {
+        error = diag_part_object_to_gc_derived_class_note_;
+      } else {
+        assert(false && "Unknown field error");
       }
+      NoteField(it->first, error);
     }
   }
 
@@ -1191,11 +1311,35 @@ class BlinkGCPluginConsumer : public ASTConsumer {
         << info->record() << base->info()->record();
   }
 
+  void ReportClassOverridesNew(RecordInfo* info, CXXMethodDecl* newop) {
+    SourceLocation loc = newop->getLocStart();
+    SourceManager& manager = instance_.getSourceManager();
+    FullSourceLoc full_loc(loc, manager);
+    diagnostic_.Report(full_loc, diag_class_overrides_new_) << info->record();
+  }
+
+  void ReportClassDeclaresPureVirtualTrace(RecordInfo* info,
+                                           CXXMethodDecl* trace) {
+    SourceLocation loc = trace->getLocStart();
+    SourceManager& manager = instance_.getSourceManager();
+    FullSourceLoc full_loc(loc, manager);
+    diagnostic_.Report(full_loc, diag_class_declares_pure_virtual_trace_)
+        << info->record();
+  }
+
   void NoteManualDispatchMethod(CXXMethodDecl* dispatch) {
     SourceLocation loc = dispatch->getLocStart();
     SourceManager& manager = instance_.getSourceManager();
     FullSourceLoc full_loc(loc, manager);
     diagnostic_.Report(full_loc, diag_manual_dispatch_method_note_) << dispatch;
+  }
+
+  void NoteBaseRequiresTracing(BasePoint* base) {
+    SourceLocation loc = base->spec().getLocStart();
+    SourceManager& manager = instance_.getSourceManager();
+    FullSourceLoc full_loc(loc, manager);
+    diagnostic_.Report(full_loc, diag_base_requires_tracing_note_)
+        << base->info()->record();
   }
 
   void NoteFieldRequiresTracing(RecordInfo* holder, FieldDecl* field) {
@@ -1256,6 +1400,7 @@ class BlinkGCPluginConsumer : public ASTConsumer {
         << overridden;
   }
 
+  unsigned diag_class_must_left_mostly_derive_gc_;
   unsigned diag_class_requires_trace_method_;
   unsigned diag_base_requires_tracing_;
   unsigned diag_fields_require_tracing_;
@@ -1270,13 +1415,17 @@ class BlinkGCPluginConsumer : public ASTConsumer {
   unsigned diag_missing_trace_dispatch_;
   unsigned diag_missing_finalize_dispatch_;
   unsigned diag_derives_non_stack_allocated_;
+  unsigned diag_class_overrides_new_;
+  unsigned diag_class_declares_pure_virtual_trace_;
 
+  unsigned diag_base_requires_tracing_note_;
   unsigned diag_field_requires_tracing_note_;
   unsigned diag_raw_ptr_to_gc_managed_class_note_;
   unsigned diag_ref_ptr_to_gc_managed_class_note_;
   unsigned diag_own_ptr_to_gc_managed_class_note_;
   unsigned diag_stack_allocated_field_note_;
   unsigned diag_member_in_unmanaged_class_note_;
+  unsigned diag_part_object_to_gc_derived_class_note_;
   unsigned diag_part_object_contains_gc_root_note_;
   unsigned diag_field_contains_gc_root_note_;
   unsigned diag_finalized_field_note_;

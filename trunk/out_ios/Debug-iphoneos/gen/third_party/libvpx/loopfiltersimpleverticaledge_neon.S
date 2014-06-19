@@ -15,8 +15,6 @@
  @
 
 
-     @.globl _vp8_loop_filter_simple_vertical_edge_neon
-	.globl vp8_loop_filter_simple_vertical_edge_neon
     .globl _vp8_loop_filter_bvs_neon
 	.globl vp8_loop_filter_bvs_neon
     .globl _vp8_loop_filter_mbvs_neon
@@ -33,6 +31,8 @@
 
 _vp8_loop_filter_simple_vertical_edge_neon:
 	vp8_loop_filter_simple_vertical_edge_neon: @
+    vpush       {d8-d15}
+
     sub         r0, r0, #2                   @ move src pointer down by 2 columns
     add         r12, r1, r1
     add         r3, r0, r1
@@ -131,6 +131,7 @@ _vp8_loop_filter_simple_vertical_edge_neon:
     vst2.8      {d14[6], d15[6]}, [r0], r12
     vst2.8      {d14[7], d15[7]}, [r3]
 
+    vpop        {d8-d15}
     bx          lr
     @         @ |vp8_loop_filter_simple_vertical_edge_neon|
 

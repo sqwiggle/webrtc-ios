@@ -1,24 +1,27 @@
 build obj/webrtc/video_engine_tests.actions_depends.stamp: stamp libgtest.a $
-    libgflags.a librtp_rtcp.a libmetrics.a libwebrtc_test_common.a $
-    libwebrtc.a libsystem_wrappers.a libpaced_sender.a $
-    libremote_bitrate_estimator.a librbe_components.a libcommon_video.a $
-    libyuv.a libyuv_neon.a libvideo_capture_module.a libwebrtc_utility.a $
-    libaudio_coding_module.a libCNG.a libcommon_audio.a $
-    libcommon_audio_neon.a libG711.a libG722.a libiLBC.a libiSAC.a $
-    libiSACFix.a libisac_neon.a libPCM16B.a libNetEq.a libwebrtc_opus.a $
-    libopus.a libacm2.a libNetEq4.a libmedia_file.a $
+    librtp_rtcp.a libmetrics.a libwebrtc_test_common.a libtest_main.a $
+    libwebrtc.a libsystem_wrappers.a libwebrtc_base.a libjsoncpp.a $
+    libcrssl.a libcrnspr.a libcrnss.a libnss_static.a libsqlite_regexp.a $
+    libsqlite_regexp.a libicui18n.a libicuuc.a libicudata.a libcrnssckbi.a $
+    libpaced_sender.a libremote_bitrate_estimator.a librbe_components.a $
+    libcommon_video.a libyuv.a libyuv_neon.a libgflags.a $
+    libvideo_capture_module.a libwebrtc_utility.a libaudio_coding_module.a $
+    libCNG.a libcommon_audio.a libcommon_audio_neon.a libG711.a libG722.a $
+    libiLBC.a libiSAC.a libiSACFix.a libisac_neon.a libPCM16B.a $
+    libwebrtc_opus.a libopus.a libneteq.a libmedia_file.a $
     libwebrtc_video_coding.a libwebrtc_i420.a libvideo_coding_utility.a $
     libwebrtc_vp8.a libvpx.a $
     obj/third_party/libvpx/gen_asm_offsets_vp8.actions_rules_copies.stamp $
-    libvpx_asm_offsets_vp8.a $
+    gen/third_party/libvpx/libvpx_asm_offsets_vp8.a $
     obj/third_party/libvpx/gen_asm_offsets_vpx_scale.actions_rules_copies.stamp $
-    libvpx_asm_offsets_vpx_scale.a libframe_generator.a libtest_support.a $
-    libgmock.a libvideo_engine_core.a libbitrate_controller.a $
+    gen/third_party/libvpx/libvpx_asm_offsets_vpx_scale.a $
+    libframe_generator.a libtest_support.a libgmock.a libfield_trial.a $
+    libwebrtc_common.a libvideo_engine_core.a libbitrate_controller.a $
     libvideo_processing.a libvideo_render_module.a libvoice_engine.a $
     libaudio_conference_mixer.a libaudio_processing.a $
     libaudio_processing_neon.a $
     obj/webrtc/modules/audio_processing/gen_nsx_core_neon_offsets_h.actions_rules_copies.stamp $
-    lib_core_neon_offsets.a $
+    gen/audio_processing/asm_offsets/lib_core_neon_offsets.a $
     obj/webrtc/modules/audio_processing/gen_aecm_core_neon_offsets_h.actions_rules_copies.stamp $
     libaudio_device.a
 
@@ -31,12 +34,16 @@ build obj/webrtc/video_engine_tests.compile_depends.stamp: stamp $
     obj/webrtc/modules/audio_processing/gen_nsx_core_neon_offsets_h.actions_rules_copies.stamp $
     obj/webrtc/modules/audio_processing/gen_aecm_core_neon_offsets_h.actions_rules_copies.stamp
 
+build video_engine_tests.app/icudtl.dat: mac_tool $
+    ../../third_party/icu/source/data/in/icudtl.dat
+  mactool_cmd = copy-bundle-resource
 build video_engine_tests.app/Default-568h@2x.png: mac_tool $
     ../../testing/gtest_ios/Default-568h@2x.png
   mactool_cmd = copy-bundle-resource
 build video_engine_tests.app/Info.plist: copy_infoplist $
     ../../testing/gtest_ios/unittest-Info.plist
   env = export ALWAYS_SEARCH_USER_PATHS=NO; export $
+      ARCHS="$${ARCHS_STANDARD_INCLUDING_64_BIT}"; export $
       BUILT_PRODUCTS_DIR=/Users/cwebb/Sqwiggle/webrtc/trunk/out_ios/Release; $
       export BUNDLE_ID_TEST_NAME=videoenginetests; export $
       SRCROOT=/Users/cwebb/Sqwiggle/webrtc/trunk/out_ios/Release/../../webrtc; $
@@ -65,10 +72,12 @@ build video_engine_tests.app/Info.plist: copy_infoplist $
       IPHONEOS_DEPLOYMENT_TARGET=6.0; export $
       LDPLUSPLUS="$${SOURCE_ROOT}/../third_party/llvm-build/Release+Asserts/bin/clang++"; $
       export MACH_O_TYPE=mh_execute; export OTHER_LDFLAGS="-framework $
-      AVFoundation -framework CoreMedia -framework CoreVideo -framework $
-      UIKit -framework OpenGLES -framework QuartzCore -framework UIKit $
-      -Wl,-search_paths_first"; export PRODUCT_NAME=video_engine_tests; $
-      export PRODUCT_TYPE=com.apple.product-type.application; export $
+      Foundation -framework Security -framework SystemConfiguration $
+      -framework UIKit -framework AVFoundation -framework CoreMedia $
+      -framework CoreVideo -framework UIKit -framework OpenGLES -framework $
+      QuartzCore -framework UIKit -Wl,-search_paths_first"; export $
+      PRODUCT_NAME=video_engine_tests; export $
+      PRODUCT_TYPE=com.apple.product-type.application; export $
       SDKROOT=/Applications/Xcode.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator7.1.sdk; $
       export SYMROOT=../xcodebuild; export TARGETED_DEVICE_FAMILY=1,2; $
       export $
@@ -80,29 +89,26 @@ build video_engine_tests.app/Info.plist: copy_infoplist $
       -Wno-missing-field-initializers -Wheader-hygiene -Wno-c++11-narrowing $
       -Wno-char-subscripts -Wno-unneeded-internal-declaration $
       -Wno-covered-switch-default -Wstring-conversion $
-      -Wno-deprecated-register -Wno-absolute-value"; export $
+      -Wno-deprecated-register -Wno-selector-type-mismatch"; export $
       WRAPPER_NAME=video_engine_tests.app;
-  keys = '{"DTXcode": "0510", "DTSDKName": "iphonesimulator", $
+  keys = '{"DTXcode": "0511", "DTSDKName": "iphonesimulator", $
       "DTPlatformName": "iphonesimulator", "UIDeviceFamily": [1, 2], $
-      "BuildMachineOSBuild": "13C64", "DTXcodeBuild": "5B130a", $
+      "BuildMachineOSBuild": "13D65", "DTXcodeBuild": "5B1008", $
       "DTSDKBuild": "11D167", "CFBundleSupportedPlatforms": $
       ["iPhoneSimulator"]}'
 defines = -DV8_DEPRECATION_WARNINGS -DBLINK_SCALE_FILTERS_AT_RECORD_TIME $
-    -DDISABLE_NACL -DCHROMIUM_BUILD -DUSE_LIBJPEG_TURBO=1 $
-    -DENABLE_CONFIGURATION_POLICY $
+    -DDISABLE_NACL -DCHROMIUM_BUILD -DCR_CLANG_REVISION=206824 $
+    -DUSE_LIBJPEG_TURBO=1 -DENABLE_CONFIGURATION_POLICY $
     -DDISCARDABLE_MEMORY_ALWAYS_SUPPORTED_NATIVELY $
     -DSYSTEM_NATIVELY_SIGNALS_MEMORY_PRESSURE -DENABLE_EGLIMAGE=1 $
     -DCLD_VERSION=1 -DENABLE_SPELLCHECK=1 -DDISABLE_FTP_SUPPORT=1 $
     -DWEBRTC_MODULE_UTILITY_VIDEO -DWEBRTC_ARCH_ARM -DWEBRTC_ARCH_ARM_V7 $
     -DWEBRTC_ARCH_ARM_NEON -DWEBRTC_POSIX -DWEBRTC_MAC -DWEBRTC_IOS $
     -DGTEST_HAS_POSIX_RE=0 -DUNIT_TEST -DGTEST_HAS_RTTI=0 $
-    -DGFLAGS_DLL_DECL= -DGFLAGS_DLL_DECLARE_FLAG= -DGFLAGS_DLL_DEFINE_FLAG= $
     -D__STDC_CONSTANT_MACROS -D__STDC_FORMAT_MACROS -DNDEBUG -DNVALGRIND $
     -DDYNAMIC_ANNOTATIONS_ENABLED=0 -DNS_BLOCK_ASSERTIONS=1 $
     -D_FORTIFY_SOURCE=2
-includes = -I../.. -I../.. -I../../testing/gtest/include $
-    -I../../third_party/gflags/gen/posix/include $
-    -I../../third_party/gflags/src
+includes = -I../.. -I../../testing/gtest/include
 cflags = -isysroot $
     /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator7.1.sdk $
     -Os -gdwarf-2 -fvisibility=hidden -Werror -Wnewline-eof $
@@ -110,7 +116,7 @@ cflags = -isysroot $
     -Wno-unused-parameter -Wno-missing-field-initializers -Wheader-hygiene $
     -Wno-c++11-narrowing -Wno-char-subscripts $
     -Wno-unneeded-internal-declaration -Wno-covered-switch-default $
-    -Wstring-conversion -Wno-deprecated-register -Wno-absolute-value
+    -Wstring-conversion -Wno-deprecated-register -Wno-selector-type-mismatch
 cflags_c = -std=c99 -fcolor-diagnostics
 cflags_cc = -std=gnu++0x -fno-rtti -fno-exceptions $
     -fvisibility-inlines-hidden -fno-threadsafe-statics -fcolor-diagnostics
@@ -137,17 +143,17 @@ build $
     obj/webrtc/test/testsupport/metrics/video_engine_tests.video_metrics_unittest.o: $
     cxx ../../webrtc/test/testsupport/metrics/video_metrics_unittest.cc || $
     obj/webrtc/video_engine_tests.compile_depends.stamp
-build obj/webrtc/test/video_engine_tests.test_main.o: cxx $
-    ../../webrtc/test/test_main.cc || $
-    obj/webrtc/video_engine_tests.compile_depends.stamp
 
-ldflags = -framework AVFoundation -framework CoreMedia -framework CoreVideo $
-    -framework UIKit -framework OpenGLES -framework QuartzCore $
-    -Wl,-search_paths_first -Wl,-dead_strip -mios-simulator-version-min=6.0 $
-    -isysroot $
+ldflags = -framework Foundation -framework Security -framework $
+    SystemConfiguration -framework UIKit -framework AVFoundation -framework $
+    CoreMedia -framework CoreVideo -framework OpenGLES -framework $
+    QuartzCore -Wl,-search_paths_first -Wl,-dead_strip $
+    -mios-simulator-version-min=6.0 -isysroot $
     /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator7.1.sdk $
     -arch i386 -L.
-libs = -framework Foundation -framework AudioToolbox -framework CoreAudio
+libs = -framework Foundation $
+    /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator7.1.sdk/usr/lib/libsqlite3.dylib $
+    -framework AudioToolbox -framework CoreAudio
 build video_engine_tests.app/video_engine_tests: link $
     obj/webrtc/video/video_engine_tests.bitrate_estimator_tests.o $
     obj/webrtc/video/video_engine_tests.call_tests.o $
@@ -155,27 +161,34 @@ build video_engine_tests.app/video_engine_tests: link $
     obj/webrtc/video/video_engine_tests.video_send_stream_tests.o $
     obj/webrtc/test/video_engine_tests.common_unittest.o $
     obj/webrtc/test/testsupport/metrics/video_engine_tests.video_metrics_unittest.o $
-    obj/webrtc/test/video_engine_tests.test_main.o libgtest.a libgflags.a $
-    librtp_rtcp.a libmetrics.a libwebrtc_test_common.a libwebrtc.a $
-    libsystem_wrappers.a libpaced_sender.a libremote_bitrate_estimator.a $
-    librbe_components.a libcommon_video.a libyuv.a libyuv_neon.a $
+    libgtest.a librtp_rtcp.a libmetrics.a libwebrtc_test_common.a $
+    libtest_main.a libwebrtc.a libsystem_wrappers.a libwebrtc_base.a $
+    libjsoncpp.a libcrssl.a libcrnspr.a libcrnss.a libnss_static.a $
+    libsqlite_regexp.a libicui18n.a libicuuc.a libicudata.a libcrnssckbi.a $
+    libpaced_sender.a libremote_bitrate_estimator.a librbe_components.a $
+    libcommon_video.a libyuv.a libyuv_neon.a libgflags.a $
     libvideo_capture_module.a libwebrtc_utility.a libaudio_coding_module.a $
     libCNG.a libcommon_audio.a libcommon_audio_neon.a libG711.a libG722.a $
-    libiLBC.a libiSAC.a libiSACFix.a libisac_neon.a libPCM16B.a libNetEq.a $
-    libwebrtc_opus.a libopus.a libacm2.a libNetEq4.a libmedia_file.a $
+    libiLBC.a libiSAC.a libiSACFix.a libisac_neon.a libPCM16B.a $
+    libwebrtc_opus.a libopus.a libneteq.a libmedia_file.a $
     libwebrtc_video_coding.a libwebrtc_i420.a libvideo_coding_utility.a $
-    libwebrtc_vp8.a libvpx.a libvpx_asm_offsets_vp8.a $
-    libvpx_asm_offsets_vpx_scale.a libframe_generator.a libtest_support.a $
-    libgmock.a libvideo_engine_core.a libbitrate_controller.a $
+    libwebrtc_vp8.a libvpx.a $
+    gen/third_party/libvpx/libvpx_asm_offsets_vp8.a $
+    gen/third_party/libvpx/libvpx_asm_offsets_vpx_scale.a $
+    libframe_generator.a libtest_support.a libgmock.a libfield_trial.a $
+    libwebrtc_common.a libvideo_engine_core.a libbitrate_controller.a $
     libvideo_processing.a libvideo_render_module.a libvoice_engine.a $
     libaudio_conference_mixer.a libaudio_processing.a $
-    libaudio_processing_neon.a lib_core_neon_offsets.a libaudio_device.a | $
+    libaudio_processing_neon.a $
+    gen/audio_processing/asm_offsets/lib_core_neon_offsets.a $
+    libaudio_device.a | $
     obj/webrtc/modules/audio_processing/gen_nsx_core_neon_offsets_h.actions_rules_copies.stamp $
     obj/webrtc/modules/audio_processing/gen_aecm_core_neon_offsets_h.actions_rules_copies.stamp $
-    obj/third_party/libvpx/gen_asm_offsets_vpx_scale.actions_rules_copies.stamp $
-    obj/third_party/libvpx/gen_asm_offsets_vp8.actions_rules_copies.stamp
+    obj/third_party/libvpx/gen_asm_offsets_vp8.actions_rules_copies.stamp $
+    libsqlite_regexp.a $
+    obj/third_party/libvpx/gen_asm_offsets_vpx_scale.actions_rules_copies.stamp
   ld = $ldxx
-build video_engine_tests.app: stamp $
+build video_engine_tests.app: stamp video_engine_tests.app/icudtl.dat $
     video_engine_tests.app/Default-568h@2x.png $
     video_engine_tests.app/Info.plist $
     video_engine_tests.app/video_engine_tests

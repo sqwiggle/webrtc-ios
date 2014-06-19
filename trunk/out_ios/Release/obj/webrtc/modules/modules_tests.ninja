@@ -3,17 +3,20 @@ build obj/webrtc/modules/modules_tests.actions_depends.stamp: stamp $
     libvideo_codecs_test_framework.a libwebrtc_utility.a $
     libwebrtc_video_coding.a libgtest.a libcommon_video.a libwebrtc_vp8.a $
     libsystem_wrappers.a libmetrics.a libtest_support.a $
-    libtest_support_main.a libCNG.a libcommon_audio.a $
-    libcommon_audio_neon.a libG711.a libG722.a libiLBC.a libiSAC.a $
-    libiSACFix.a libisac_neon.a libPCM16B.a libNetEq.a libwebrtc_opus.a $
-    libopus.a libacm2.a libNetEq4.a libpaced_sender.a $
+    libtest_support_main.a libCNG.a libcommon_audio.a libwebrtc_base.a $
+    libjsoncpp.a libcrssl.a libcrnspr.a libcrnss.a libnss_static.a $
+    libsqlite_regexp.a libsqlite_regexp.a libicui18n.a libicuuc.a $
+    libicudata.a libcrnssckbi.a libcommon_audio_neon.a libG711.a libG722.a $
+    libiLBC.a libiSAC.a libiSACFix.a libisac_neon.a libPCM16B.a $
+    libwebrtc_opus.a libopus.a libneteq.a libpaced_sender.a $
     libremote_bitrate_estimator.a librbe_components.a libyuv.a $
-    libyuv_neon.a libgmock.a libgflags.a libmedia_file.a libwebrtc_i420.a $
+    libyuv_neon.a libgmock.a libmedia_file.a libwebrtc_i420.a $
     libvideo_coding_utility.a libvpx.a $
     obj/third_party/libvpx/gen_asm_offsets_vp8.actions_rules_copies.stamp $
-    libvpx_asm_offsets_vp8.a $
+    gen/third_party/libvpx/libvpx_asm_offsets_vp8.a $
     obj/third_party/libvpx/gen_asm_offsets_vpx_scale.actions_rules_copies.stamp $
-    libvpx_asm_offsets_vpx_scale.a
+    gen/third_party/libvpx/libvpx_asm_offsets_vpx_scale.a libfield_trial.a $
+    libgflags.a
 
 build obj/webrtc/modules/modules_tests.compile_depends.stamp: stamp $
     obj.host/testing/iossim/iossim.gen/iossim/DVTiPhoneSimulatorRemoteClient.h $
@@ -21,12 +24,16 @@ build obj/webrtc/modules/modules_tests.compile_depends.stamp: stamp $
     obj/third_party/libvpx/gen_asm_offsets_vp8.actions_rules_copies.stamp $
     obj/third_party/libvpx/gen_asm_offsets_vpx_scale.actions_rules_copies.stamp
 
+build modules_tests.app/icudtl.dat: mac_tool $
+    ../../third_party/icu/source/data/in/icudtl.dat
+  mactool_cmd = copy-bundle-resource
 build modules_tests.app/Default-568h@2x.png: mac_tool $
     ../../testing/gtest_ios/Default-568h@2x.png
   mactool_cmd = copy-bundle-resource
 build modules_tests.app/Info.plist: copy_infoplist $
     ../../testing/gtest_ios/unittest-Info.plist
   env = export ALWAYS_SEARCH_USER_PATHS=NO; export $
+      ARCHS="$${ARCHS_STANDARD_INCLUDING_64_BIT}"; export $
       BUILT_PRODUCTS_DIR=/Users/cwebb/Sqwiggle/webrtc/trunk/out_ios/Release; $
       export BUNDLE_ID_TEST_NAME=modulestests; export $
       SRCROOT=/Users/cwebb/Sqwiggle/webrtc/trunk/out_ios/Release/../../webrtc/modules; $
@@ -53,8 +60,9 @@ build modules_tests.app/Info.plist: copy_infoplist $
       INFOPLIST_PATH=modules_tests.app/Info.plist; export $
       IPHONEOS_DEPLOYMENT_TARGET=6.0; export $
       LDPLUSPLUS="$${SOURCE_ROOT}/../../third_party/llvm-build/Release+Asserts/bin/clang++"; $
-      export MACH_O_TYPE=mh_execute; export $
-      OTHER_LDFLAGS=-Wl,-search_paths_first; export $
+      export MACH_O_TYPE=mh_execute; export OTHER_LDFLAGS="-framework $
+      Foundation -framework Security -framework SystemConfiguration $
+      -framework UIKit -Wl,-search_paths_first"; export $
       PRODUCT_NAME=modules_tests; export $
       PRODUCT_TYPE=com.apple.product-type.application; export $
       SDKROOT=/Applications/Xcode.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator7.1.sdk; $
@@ -68,16 +76,16 @@ build modules_tests.app/Info.plist: copy_infoplist $
       -Wno-missing-field-initializers -Wheader-hygiene -Wno-c++11-narrowing $
       -Wno-char-subscripts -Wno-unneeded-internal-declaration $
       -Wno-covered-switch-default -Wstring-conversion $
-      -Wno-deprecated-register -Wno-absolute-value"; export $
+      -Wno-deprecated-register -Wno-selector-type-mismatch"; export $
       WRAPPER_NAME=modules_tests.app;
-  keys = '{"DTXcode": "0510", "DTSDKName": "iphonesimulator", $
+  keys = '{"DTXcode": "0511", "DTSDKName": "iphonesimulator", $
       "DTPlatformName": "iphonesimulator", "UIDeviceFamily": [1, 2], $
-      "BuildMachineOSBuild": "13C64", "DTXcodeBuild": "5B130a", $
+      "BuildMachineOSBuild": "13D65", "DTXcodeBuild": "5B1008", $
       "DTSDKBuild": "11D167", "CFBundleSupportedPlatforms": $
       ["iPhoneSimulator"]}'
 defines = -DV8_DEPRECATION_WARNINGS -DBLINK_SCALE_FILTERS_AT_RECORD_TIME $
-    -DDISABLE_NACL -DCHROMIUM_BUILD -DUSE_LIBJPEG_TURBO=1 $
-    -DENABLE_CONFIGURATION_POLICY $
+    -DDISABLE_NACL -DCHROMIUM_BUILD -DCR_CLANG_REVISION=206824 $
+    -DUSE_LIBJPEG_TURBO=1 -DENABLE_CONFIGURATION_POLICY $
     -DDISCARDABLE_MEMORY_ALWAYS_SUPPORTED_NATIVELY $
     -DSYSTEM_NATIVELY_SIGNALS_MEMORY_PRESSURE -DENABLE_EGLIMAGE=1 $
     -DCLD_VERSION=1 -DENABLE_SPELLCHECK=1 -DDISABLE_FTP_SUPPORT=1 $
@@ -87,8 +95,7 @@ defines = -DV8_DEPRECATION_WARNINGS -DBLINK_SCALE_FILTERS_AT_RECORD_TIME $
     -DGTEST_HAS_RTTI=0 -D__STDC_CONSTANT_MACROS -D__STDC_FORMAT_MACROS $
     -DNDEBUG -DNVALGRIND -DDYNAMIC_ANNOTATIONS_ENABLED=0 $
     -DNS_BLOCK_ASSERTIONS=1 -D_FORTIFY_SOURCE=2
-includes = -I../.. -I../.. $
-    -I../../webrtc/modules/audio_coding/main/interface $
+includes = -I../.. -I../../webrtc/modules/audio_coding/main/interface $
     -I../../webrtc/modules/interface -I../../webrtc $
     -I../../testing/gtest/include -I../../webrtc/common_video/interface $
     -I../../webrtc/common_video/libyuv/include $
@@ -100,7 +107,7 @@ cflags = -isysroot $
     -Wno-unused-parameter -Wno-missing-field-initializers -Wheader-hygiene $
     -Wno-c++11-narrowing -Wno-char-subscripts $
     -Wno-unneeded-internal-declaration -Wno-covered-switch-default $
-    -Wstring-conversion -Wno-deprecated-register -Wno-absolute-value
+    -Wstring-conversion -Wno-deprecated-register -Wno-selector-type-mismatch
 cflags_c = -std=c99 -fcolor-diagnostics
 cflags_cc = -std=gnu++0x -fno-rtti -fno-exceptions $
     -fvisibility-inlines-hidden -fno-threadsafe-statics -fcolor-diagnostics
@@ -131,6 +138,10 @@ build obj/webrtc/modules/audio_coding/main/test/modules_tests.iSACTest.o: $
 build obj/webrtc/modules/audio_coding/main/test/modules_tests.opus_test.o: $
     cxx ../../webrtc/modules/audio_coding/main/test/opus_test.cc || $
     obj/webrtc/modules/modules_tests.compile_depends.stamp
+build $
+    obj/webrtc/modules/audio_coding/main/test/modules_tests.PacketLossTest.o: $
+    cxx ../../webrtc/modules/audio_coding/main/test/PacketLossTest.cc || $
+    obj/webrtc/modules/modules_tests.compile_depends.stamp
 build obj/webrtc/modules/audio_coding/main/test/modules_tests.PCMFile.o: $
     cxx ../../webrtc/modules/audio_coding/main/test/PCMFile.cc || $
     obj/webrtc/modules/modules_tests.compile_depends.stamp
@@ -153,8 +164,8 @@ build $
 build obj/webrtc/modules/audio_coding/main/test/modules_tests.Tester.o: cxx $
     ../../webrtc/modules/audio_coding/main/test/Tester.cc || $
     obj/webrtc/modules/modules_tests.compile_depends.stamp
-build obj/webrtc/modules/audio_coding/main/test/modules_tests.TestFEC.o: $
-    cxx ../../webrtc/modules/audio_coding/main/test/TestFEC.cc || $
+build obj/webrtc/modules/audio_coding/main/test/modules_tests.TestRedFec.o: $
+    cxx ../../webrtc/modules/audio_coding/main/test/TestRedFec.cc || $
     obj/webrtc/modules/modules_tests.compile_depends.stamp
 build obj/webrtc/modules/audio_coding/main/test/modules_tests.TestStereo.o: $
     cxx ../../webrtc/modules/audio_coding/main/test/TestStereo.cc || $
@@ -191,11 +202,14 @@ build $
     ../../webrtc/modules/video_coding/codecs/vp8/test/vp8_impl_unittest.cc $
     || obj/webrtc/modules/modules_tests.compile_depends.stamp
 
-ldflags = -Wl,-search_paths_first -Wl,-dead_strip $
-    -mios-simulator-version-min=6.0 -isysroot $
+ldflags = -framework Foundation -framework Security -framework $
+    SystemConfiguration -framework UIKit -Wl,-search_paths_first $
+    -Wl,-dead_strip -mios-simulator-version-min=6.0 -isysroot $
     /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator7.1.sdk $
     -arch i386 -L.
-libs = -framework Foundation
+libs = $
+    /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator7.1.sdk/usr/lib/libsqlite3.dylib $
+    -framework Foundation
 build modules_tests.app/modules_tests: link $
     obj/webrtc/modules/audio_coding/main/test/modules_tests.ACMTest.o $
     obj/webrtc/modules/audio_coding/main/test/modules_tests.APITest.o $
@@ -204,13 +218,14 @@ build modules_tests.app/modules_tests: link $
     obj/webrtc/modules/audio_coding/main/test/modules_tests.EncodeDecodeTest.o $
     obj/webrtc/modules/audio_coding/main/test/modules_tests.iSACTest.o $
     obj/webrtc/modules/audio_coding/main/test/modules_tests.opus_test.o $
+    obj/webrtc/modules/audio_coding/main/test/modules_tests.PacketLossTest.o $
     obj/webrtc/modules/audio_coding/main/test/modules_tests.PCMFile.o $
     obj/webrtc/modules/audio_coding/main/test/modules_tests.RTPFile.o $
     obj/webrtc/modules/audio_coding/main/test/modules_tests.SpatialAudio.o $
     obj/webrtc/modules/audio_coding/main/test/modules_tests.TestAllCodecs.o $
     obj/webrtc/modules/audio_coding/main/test/modules_tests.target_delay_unittest.o $
     obj/webrtc/modules/audio_coding/main/test/modules_tests.Tester.o $
-    obj/webrtc/modules/audio_coding/main/test/modules_tests.TestFEC.o $
+    obj/webrtc/modules/audio_coding/main/test/modules_tests.TestRedFec.o $
     obj/webrtc/modules/audio_coding/main/test/modules_tests.TestStereo.o $
     obj/webrtc/modules/audio_coding/main/test/modules_tests.TestVADDTX.o $
     obj/webrtc/modules/audio_coding/main/test/modules_tests.TimedTrace.o $
@@ -224,19 +239,24 @@ build modules_tests.app/modules_tests: link $
     libvideo_codecs_test_framework.a libwebrtc_utility.a $
     libwebrtc_video_coding.a libgtest.a libcommon_video.a libwebrtc_vp8.a $
     libsystem_wrappers.a libmetrics.a libtest_support.a $
-    libtest_support_main.a libCNG.a libcommon_audio.a $
+    libtest_support_main.a libCNG.a libcommon_audio.a libwebrtc_base.a $
+    libjsoncpp.a libcrssl.a libcrnspr.a libcrnss.a libnss_static.a $
+    libsqlite_regexp.a libicui18n.a libicuuc.a libicudata.a libcrnssckbi.a $
     libcommon_audio_neon.a libG711.a libG722.a libiLBC.a libiSAC.a $
-    libiSACFix.a libisac_neon.a libPCM16B.a libNetEq.a libwebrtc_opus.a $
-    libopus.a libacm2.a libNetEq4.a libpaced_sender.a $
-    libremote_bitrate_estimator.a librbe_components.a libyuv.a $
-    libyuv_neon.a libgmock.a libgflags.a libmedia_file.a libwebrtc_i420.a $
-    libvideo_coding_utility.a libvpx.a libvpx_asm_offsets_vp8.a $
-    libvpx_asm_offsets_vpx_scale.a | $
-    obj/third_party/libvpx/gen_asm_offsets_vpx_scale.actions_rules_copies.stamp $
-    obj/third_party/libvpx/gen_asm_offsets_vp8.actions_rules_copies.stamp
+    libiSACFix.a libisac_neon.a libPCM16B.a libwebrtc_opus.a libopus.a $
+    libneteq.a libpaced_sender.a libremote_bitrate_estimator.a $
+    librbe_components.a libyuv.a libyuv_neon.a libgmock.a libmedia_file.a $
+    libwebrtc_i420.a libvideo_coding_utility.a libvpx.a $
+    gen/third_party/libvpx/libvpx_asm_offsets_vp8.a $
+    gen/third_party/libvpx/libvpx_asm_offsets_vpx_scale.a libfield_trial.a $
+    libgflags.a | $
+    obj/third_party/libvpx/gen_asm_offsets_vp8.actions_rules_copies.stamp $
+    libsqlite_regexp.a $
+    obj/third_party/libvpx/gen_asm_offsets_vpx_scale.actions_rules_copies.stamp
   ld = $ldxx
-build modules_tests.app: stamp modules_tests.app/Default-568h@2x.png $
-    modules_tests.app/Info.plist modules_tests.app/modules_tests
+build modules_tests.app: stamp modules_tests.app/icudtl.dat $
+    modules_tests.app/Default-568h@2x.png modules_tests.app/Info.plist $
+    modules_tests.app/modules_tests
   postbuilds = (export $
       BUILT_PRODUCTS_DIR=/Users/cwebb/Sqwiggle/webrtc/trunk/out_ios/Release; $
       export CONFIGURATION=Release; export $

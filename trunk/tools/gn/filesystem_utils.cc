@@ -99,9 +99,8 @@ bool DoesBeginWindowsDriveLetter(const base::StringPiece& path) {
   if (path[1] != ':')
     return false;
 
-  // Check drive letter
-  if (!((path[0] >= 'A' && path[0] <= 'Z') ||
-         path[0] >= 'a' && path[0] <= 'z'))
+  // Check drive letter.
+  if (!IsAsciiAlpha(path[0]))
     return false;
 
   if (!IsSlash(path[2]))
@@ -165,8 +164,7 @@ bool FilesystemStringsEqual(const base::FilePath::StringType& a,
 
 }  // namespace
 
-SourceFileType GetSourceFileType(const SourceFile& file,
-                                 Settings::TargetOS os) {
+SourceFileType GetSourceFileType(const SourceFile& file) {
   base::StringPiece extension = FindExtension(&file.value());
   if (extension == "cc" || extension == "cpp" || extension == "cxx")
     return SOURCE_CC;
@@ -174,29 +172,16 @@ SourceFileType GetSourceFileType(const SourceFile& file,
     return SOURCE_H;
   if (extension == "c")
     return SOURCE_C;
-
-  switch (os) {
-    case Settings::MAC:
-      if (extension == "m")
-        return SOURCE_M;
-      if (extension == "mm")
-        return SOURCE_MM;
-      break;
-
-    case Settings::WIN:
-      if (extension == "rc")
-        return SOURCE_RC;
-      // TODO(brettw) asm files.
-      break;
-
-    default:
-      break;
-  }
-
-  if (os != Settings::WIN) {
-    if (extension == "S")
-      return SOURCE_S;
-  }
+  if (extension == "m")
+    return SOURCE_M;
+  if (extension == "mm")
+    return SOURCE_MM;
+  if (extension == "rc")
+    return SOURCE_RC;
+  if (extension == "S" || extension == "s")
+    return SOURCE_S;
+  if (extension == "o" || extension == "obj")
+    return SOURCE_O;
 
   return SOURCE_UNKNOWN;
 }
@@ -327,6 +312,23 @@ base::StringPiece FindDir(const std::string* path) {
   if (filename_offset == 0u)
     return base::StringPiece();
   return base::StringPiece(path->data(), filename_offset);
+}
+
+base::StringPiece FindLastDirComponent(const SourceDir& dir) {
+  const std::string& dir_string = dir.value();
+
+  if (dir_string.empty())
+    return base::StringPiece();
+  int cur = static_cast<int>(dir_string.size()) - 1;
+  DCHECK(dir_string[cur] == '/');
+  int end = cur;
+  cur--;  // Skip before the last slash.
+
+  for (; cur >= 0; cur--) {
+    if (dir_string[cur] == '/')
+      return base::StringPiece(&dir_string[cur + 1], end - cur - 1);
+  }
+  return base::StringPiece(&dir_string[0], end);
 }
 
 bool EnsureStringIsInOutputDir(const SourceDir& dir,
@@ -562,12 +564,6 @@ void ConvertPathToSystem(std::string* path) {
 #endif
 }
 
-std::string PathToSystem(const std::string& path) {
-  std::string ret(path);
-  ConvertPathToSystem(&ret);
-  return ret;
-}
-
 std::string RebaseSourceAbsolutePath(const std::string& input,
                                      const SourceDir& dest_dir) {
   CHECK(input.size() >= 2 && input[0] == '/' && input[1] == '/')
@@ -670,6 +666,16 @@ SourceDir SourceDirForCurrentDirectory(const base::FilePath& source_root) {
   return SourceDirForPath(source_root, cd);
 }
 
+std::string GetOutputSubdirName(const Label& toolchain_label, bool is_default) {
+  // The default toolchain has no subdir.
+  if (is_default)
+    return std::string();
+
+  // For now just assume the toolchain name is always a valid dir name. We may
+  // want to clean up the in the future.
+  return toolchain_label.name() + "/";
+}
+
 SourceDir GetToolchainOutputDir(const Settings* settings) {
   const OutputFile& toolchain_subdir = settings->toolchain_output_subdir();
 
@@ -680,6 +686,13 @@ SourceDir GetToolchainOutputDir(const Settings* settings) {
   return SourceDir(SourceDir::SWAP_IN, &result);
 }
 
+SourceDir GetToolchainOutputDir(const BuildSettings* build_settings,
+                                const Label& toolchain_label, bool is_default) {
+  std::string result = build_settings->build_dir().value();
+  result.append(GetOutputSubdirName(toolchain_label, is_default));
+  return SourceDir(SourceDir::SWAP_IN, &result);
+}
+
 SourceDir GetToolchainGenDir(const Settings* settings) {
   const OutputFile& toolchain_subdir = settings->toolchain_output_subdir();
 
@@ -687,6 +700,14 @@ SourceDir GetToolchainGenDir(const Settings* settings) {
   if (!toolchain_subdir.value().empty())
     result.append(toolchain_subdir.value());
 
+  result.append("gen/");
+  return SourceDir(SourceDir::SWAP_IN, &result);
+}
+
+SourceDir GetToolchainGenDir(const BuildSettings* build_settings,
+                             const Label& toolchain_label, bool is_default) {
+  std::string result = GetToolchainOutputDir(
+      build_settings, toolchain_label, is_default).value();
   result.append("gen/");
   return SourceDir(SourceDir::SWAP_IN, &result);
 }

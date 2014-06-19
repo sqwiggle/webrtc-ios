@@ -34,6 +34,7 @@
 _vp8_sad16x16_neon:
 	vp8_sad16x16_neon: @
  @ @
+    vpush           {d8-d15}
     vld1.8          {q0}, [r0], r1
     vld1.8          {q4}, [r2], r3
 
@@ -142,6 +143,7 @@ _vp8_sad16x16_neon:
 
     vmov.32         r0, d0[0]
 
+    vpop            {d8-d15}
     bx              lr
 
     @
@@ -154,6 +156,8 @@ _vp8_sad16x16_neon:
  @    int  ref_stride)
 _vp8_sad16x8_neon:
 	vp8_sad16x8_neon: @
+    vpush           {d8-d15}
+
     vld1.8          {q0}, [r0], r1
     vld1.8          {q4}, [r2], r3
 
@@ -211,6 +215,7 @@ _vp8_sad16x8_neon:
 
     vmov.32         r0, d0[0]
 
+    vpop            {d8-d15}
     bx              lr
 
     @

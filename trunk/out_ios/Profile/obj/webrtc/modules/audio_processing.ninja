@@ -1,6 +1,6 @@
 defines = -DV8_DEPRECATION_WARNINGS -DBLINK_SCALE_FILTERS_AT_RECORD_TIME $
-    -DDISABLE_NACL -DCHROMIUM_BUILD -DUSE_LIBJPEG_TURBO=1 $
-    -DENABLE_CONFIGURATION_POLICY $
+    -DDISABLE_NACL -DCHROMIUM_BUILD -DCR_CLANG_REVISION=206824 $
+    -DUSE_LIBJPEG_TURBO=1 -DENABLE_CONFIGURATION_POLICY $
     -DDISCARDABLE_MEMORY_ALWAYS_SUPPORTED_NATIVELY $
     -DSYSTEM_NATIVELY_SIGNALS_MEMORY_PRESSURE -DENABLE_EGLIMAGE=1 $
     -DCLD_VERSION=1 -DENABLE_SPELLCHECK=1 -DDISABLE_FTP_SUPPORT=1 $
@@ -9,7 +9,7 @@ defines = -DV8_DEPRECATION_WARNINGS -DBLINK_SCALE_FILTERS_AT_RECORD_TIME $
     -DWEBRTC_NS_FIXED -D__STDC_CONSTANT_MACROS -D__STDC_FORMAT_MACROS $
     -DNDEBUG -DNVALGRIND -DDYNAMIC_ANNOTATIONS_ENABLED=0 $
     -DNS_BLOCK_ASSERTIONS=1 -D_FORTIFY_SOURCE=2
-includes = -I../.. -I../.. -I../../webrtc/common_audio/resampler/include $
+includes = -I../.. -I../../webrtc/common_audio/resampler/include $
     -I../../webrtc/common_audio/signal_processing/include $
     -I../../webrtc/common_audio/vad/include $
     -I../../webrtc/system_wrappers/interface
@@ -20,7 +20,7 @@ cflags = -isysroot $
     -Wno-unused-parameter -Wno-missing-field-initializers -Wheader-hygiene $
     -Wno-c++11-narrowing -Wno-char-subscripts $
     -Wno-unneeded-internal-declaration -Wno-covered-switch-default $
-    -Wstring-conversion -Wno-deprecated-register -Wno-absolute-value
+    -Wstring-conversion -Wno-deprecated-register -Wno-selector-type-mismatch
 cflags_c = -std=c99 -fcolor-diagnostics
 cflags_cc = -std=gnu++0x -fno-rtti -fno-exceptions $
     -fvisibility-inlines-hidden -fno-threadsafe-statics -fcolor-diagnostics
@@ -76,6 +76,8 @@ build $
 build $
     obj/webrtc/modules/audio_processing/audio_processing.processing_component.o: $
     cxx ../../webrtc/modules/audio_processing/processing_component.cc
+build obj/webrtc/modules/audio_processing/audio_processing.rms_level.o: cxx $
+    ../../webrtc/modules/audio_processing/rms_level.cc
 build $
     obj/webrtc/modules/audio_processing/audio_processing.typing_detection.o: $
     cxx ../../webrtc/modules/audio_processing/typing_detection.cc
@@ -122,6 +124,7 @@ build libaudio_processing.a: alink $
     obj/webrtc/modules/audio_processing/audio_processing.level_estimator_impl.o $
     obj/webrtc/modules/audio_processing/audio_processing.noise_suppression_impl.o $
     obj/webrtc/modules/audio_processing/audio_processing.processing_component.o $
+    obj/webrtc/modules/audio_processing/audio_processing.rms_level.o $
     obj/webrtc/modules/audio_processing/audio_processing.typing_detection.o $
     obj/webrtc/modules/audio_processing/utility/audio_processing.delay_estimator.o $
     obj/webrtc/modules/audio_processing/utility/audio_processing.delay_estimator_wrapper.o $
@@ -132,3 +135,5 @@ build libaudio_processing.a: alink $
     obj/webrtc/modules/audio_processing/ns/audio_processing.nsx_core.o $
     obj/webrtc/modules/audio_processing/ns/audio_processing.nsx_core_c.o $
     obj/webrtc/modules/audio_processing/aecm/audio_processing.aecm_core_c.o
+  libtool_flags = -framework Foundation -framework Security -framework $
+      SystemConfiguration -framework UIKit

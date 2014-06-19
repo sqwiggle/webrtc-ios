@@ -4,10 +4,13 @@
 
 # This action takes an archive (.a) file and unpacks it unto object (.o) files.
 # The following input gyp variables are required:
-#   unpack_lib_output_dir, the output directory of extracted object file
-#   unpack_lib_name, the object file to be extracted.
+#   unpack_lib, the library to unpack.
+#   object_file_output_dir, the output directory of extracted object file.
+#   object_file_to_extract, the object file to be extracted.
 #   unpack_lib_search_path_list, a list of paths to search for the library.
 #   it must be ['-a', 'path_name1', '-a', 'path_name2'...]
+#   TODO(fgalligan): Change unpack_lib_posix.sh to expect only one input
+#                    library to unpack.
 #
 # For example:
 #   'variables': {
@@ -15,8 +18,8 @@
 #       '-a', '/a/lib.a',
 #       '-a', 'b/lib.a',
 #     ],
-#     'unpack_lib_output_dir':'ouput',
-#     'unpack_lib_name':'offsets.o'
+#     'object_file_output_dir':'output',
+#     'object_file_to_extract':'offsets.o'
 #   },
 #   'includes': ['unpack_lib_posix.gypi'],
 #
@@ -28,23 +31,24 @@
     {
       'variables' : {
         'ar_cmd': [],
-	'conditions': [
+        'conditions': [
           ['android_webview_build==1', {
-            'ar_cmd': ['-r', '<(android_src)/$(TARGET_AR)'],
+            'ar_cmd': ['-r', '$(abspath $($(gyp_var_prefix)TARGET_AR))'],
           }],
         ],
       },
       'action_name': 'unpack_lib_posix',
       'inputs': [
         'unpack_lib_posix.sh',
+        '<(unpack_lib)',
       ],
       'outputs': [
-        '<(unpack_lib_output_dir)/<(unpack_lib_name)',
+        '<(object_file_output_dir)/<(object_file_to_extract)',
       ],
       'action': [
         '<(DEPTH)/third_party/libvpx/unpack_lib_posix.sh',
-        '-d', '<(unpack_lib_output_dir)',
-        '-f', '<(unpack_lib_name)',
+        '-d', '<(object_file_output_dir)',
+        '-f', '<(object_file_to_extract)',
         '<@(unpack_lib_search_path_list)',
         '<@(ar_cmd)',
       ],

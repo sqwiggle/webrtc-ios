@@ -38,9 +38,9 @@ VideoCaptureManagerTest.StartUsingId
 # http://crbug.com/247601
 FontSerializationTest.StyledFonts
 MacSandboxTest.FontLoadingTest
+VideoCaptureManagerTest.CreateAndAbort
 VideoCaptureManagerTest.ManipulateDeviceAndCheckCapabilities
 VideoCaptureManagerTest.StartDeviceAndGetDeviceFormatInUse
-VideoCaptureDeviceTest.FakeCapture
 
 # http://crbug.com/280583
 DesktopCaptureDeviceTest.ScreenResolutionChangeVariableResolution
@@ -49,3 +49,8 @@ DesktopCaptureDeviceTest.Capture
 # http://crbug.com/303709
 GamepadProviderTest.PollingAccess
 GamepadProviderTest.UserGesture
+
+# Flaky. http://crbug.com/365715
+AppCacheRequestHandlerTest.MainResource_Hit
+AppCacheRequestHandlerTest.MainResource_Miss
+AppCacheRequestHandlerTest.WorkerRequest

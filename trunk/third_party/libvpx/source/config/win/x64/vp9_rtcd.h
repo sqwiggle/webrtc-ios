@@ -23,8 +23,7 @@ struct macroblockd;
 /* Encoder forward decls */
 struct macroblock;
 struct vp9_variance_vtable;
-
-#define DEC_MVCOSTS int *mvjcost, int *mvcost[2]
+struct search_site_config;
 struct mv;
 union int_mv;
 struct yv12_buffer_config;
@@ -219,9 +218,9 @@ void vp9_dc_top_predictor_4x4_c(uint8_t *dst, ptrdiff_t y_stride, const uint8_t 
 void vp9_dc_top_predictor_8x8_c(uint8_t *dst, ptrdiff_t y_stride, const uint8_t *above, const uint8_t *left);
 #define vp9_dc_top_predictor_8x8 vp9_dc_top_predictor_8x8_c
 
-int vp9_diamond_search_sad_c(const struct macroblock *x, struct mv *ref_mv, struct mv *best_mv, int search_param, int sad_per_bit, int *num00, const struct vp9_variance_vtable *fn_ptr, DEC_MVCOSTS, const struct mv *center_mv);
-int vp9_diamond_search_sadx4(const struct macroblock *x, struct mv *ref_mv, struct mv *best_mv, int search_param, int sad_per_bit, int *num00, const struct vp9_variance_vtable *fn_ptr, DEC_MVCOSTS, const struct mv *center_mv);
-RTCD_EXTERN int (*vp9_diamond_search_sad)(const struct macroblock *x, struct mv *ref_mv, struct mv *best_mv, int search_param, int sad_per_bit, int *num00, const struct vp9_variance_vtable *fn_ptr, DEC_MVCOSTS, const struct mv *center_mv);
+int vp9_diamond_search_sad_c(const struct macroblock *x, const struct search_site_config *cfg,  struct mv *ref_mv, struct mv *best_mv, int search_param, int sad_per_bit, int *num00, const struct vp9_variance_vtable *fn_ptr, const struct mv *center_mv);
+int vp9_diamond_search_sadx4(const struct macroblock *x, const struct search_site_config *cfg,  struct mv *ref_mv, struct mv *best_mv, int search_param, int sad_per_bit, int *num00, const struct vp9_variance_vtable *fn_ptr, const struct mv *center_mv);
+RTCD_EXTERN int (*vp9_diamond_search_sad)(const struct macroblock *x, const struct search_site_config *cfg,  struct mv *ref_mv, struct mv *best_mv, int search_param, int sad_per_bit, int *num00, const struct vp9_variance_vtable *fn_ptr, const struct mv *center_mv);
 
 void vp9_fdct16x16_c(const int16_t *input, int16_t *output, int stride);
 void vp9_fdct16x16_sse2(const int16_t *input, int16_t *output, int stride);
@@ -241,7 +240,8 @@ void vp9_fdct4x4_sse2(const int16_t *input, int16_t *output, int stride);
 
 void vp9_fdct8x8_c(const int16_t *input, int16_t *output, int stride);
 void vp9_fdct8x8_sse2(const int16_t *input, int16_t *output, int stride);
-#define vp9_fdct8x8 vp9_fdct8x8_sse2
+void vp9_fdct8x8_ssse3(const int16_t *input, int16_t *output, int stride);
+RTCD_EXTERN void (*vp9_fdct8x8)(const int16_t *input, int16_t *output, int stride);
 
 void vp9_fht16x16_c(const int16_t *input, int16_t *output, int stride, int tx_type);
 void vp9_fht16x16_sse2(const int16_t *input, int16_t *output, int stride, int tx_type);
@@ -255,25 +255,22 @@ void vp9_fht8x8_c(const int16_t *input, int16_t *output, int stride, int tx_type
 void vp9_fht8x8_sse2(const int16_t *input, int16_t *output, int stride, int tx_type);
 #define vp9_fht8x8 vp9_fht8x8_sse2
 
-int vp9_full_range_search_c(const struct macroblock *x, struct mv *ref_mv, struct mv *best_mv, int search_param, int sad_per_bit, int *num00, const struct vp9_variance_vtable *fn_ptr, DEC_MVCOSTS, const struct mv *center_mv);
+int vp9_full_range_search_c(const struct macroblock *x, const struct search_site_config *cfg, struct mv *ref_mv, struct mv *best_mv, int search_param, int sad_per_bit, int *num00, const struct vp9_variance_vtable *fn_ptr, const struct mv *center_mv);
 #define vp9_full_range_search vp9_full_range_search_c
 
-int vp9_full_search_sad_c(const struct macroblock *x, const struct mv *ref_mv, int sad_per_bit, int distance, const struct vp9_variance_vtable *fn_ptr, DEC_MVCOSTS, const struct mv *center_mv, struct mv *best_mv);
-int vp9_full_search_sadx3(const struct macroblock *x, const struct mv *ref_mv, int sad_per_bit, int distance, const struct vp9_variance_vtable *fn_ptr, DEC_MVCOSTS, const struct mv *center_mv, struct mv *best_mv);
-int vp9_full_search_sadx8(const struct macroblock *x, const struct mv *ref_mv, int sad_per_bit, int distance, const struct vp9_variance_vtable *fn_ptr, DEC_MVCOSTS, const struct mv *center_mv, struct mv *best_mv);
-RTCD_EXTERN int (*vp9_full_search_sad)(const struct macroblock *x, const struct mv *ref_mv, int sad_per_bit, int distance, const struct vp9_variance_vtable *fn_ptr, DEC_MVCOSTS, const struct mv *center_mv, struct mv *best_mv);
+int vp9_full_search_sad_c(const struct macroblock *x, const struct mv *ref_mv, int sad_per_bit, int distance, const struct vp9_variance_vtable *fn_ptr, const struct mv *center_mv, struct mv *best_mv);
+int vp9_full_search_sadx3(const struct macroblock *x, const struct mv *ref_mv, int sad_per_bit, int distance, const struct vp9_variance_vtable *fn_ptr, const struct mv *center_mv, struct mv *best_mv);
+int vp9_full_search_sadx8(const struct macroblock *x, const struct mv *ref_mv, int sad_per_bit, int distance, const struct vp9_variance_vtable *fn_ptr, const struct mv *center_mv, struct mv *best_mv);
+RTCD_EXTERN int (*vp9_full_search_sad)(const struct macroblock *x, const struct mv *ref_mv, int sad_per_bit, int distance, const struct vp9_variance_vtable *fn_ptr, const struct mv *center_mv, struct mv *best_mv);
 
 void vp9_fwht4x4_c(const int16_t *input, int16_t *output, int stride);
-#define vp9_fwht4x4 vp9_fwht4x4_c
+void vp9_fwht4x4_mmx(const int16_t *input, int16_t *output, int stride);
+#define vp9_fwht4x4 vp9_fwht4x4_mmx
 
 unsigned int vp9_get_mb_ss_c(const int16_t *);
 unsigned int vp9_get_mb_ss_mmx(const int16_t *);
 unsigned int vp9_get_mb_ss_sse2(const int16_t *);
 #define vp9_get_mb_ss vp9_get_mb_ss_sse2
-
-void vp9_get_sse_sum_8x8_c(const uint8_t *src_ptr, int source_stride, const uint8_t *ref_ptr, int ref_stride, unsigned int *sse, int *sum);
-void vp9_get8x8var_sse2(const uint8_t *src_ptr, int source_stride, const uint8_t *ref_ptr, int ref_stride, unsigned int *sse, int *sum);
-#define vp9_get_sse_sum_8x8 vp9_get8x8var_sse2
 
 void vp9_h_predictor_16x16_c(uint8_t *dst, ptrdiff_t y_stride, const uint8_t *above, const uint8_t *left);
 void vp9_h_predictor_16x16_ssse3(uint8_t *dst, ptrdiff_t y_stride, const uint8_t *above, const uint8_t *left);
@@ -323,9 +320,10 @@ void vp9_idct4x4_1_add_c(const int16_t *input, uint8_t *dest, int dest_stride);
 void vp9_idct4x4_1_add_sse2(const int16_t *input, uint8_t *dest, int dest_stride);
 #define vp9_idct4x4_1_add vp9_idct4x4_1_add_sse2
 
-void vp9_idct8x8_10_add_c(const int16_t *input, uint8_t *dest, int dest_stride);
-void vp9_idct8x8_10_add_sse2(const int16_t *input, uint8_t *dest, int dest_stride);
-#define vp9_idct8x8_10_add vp9_idct8x8_10_add_sse2
+void vp9_idct8x8_12_add_c(const int16_t *input, uint8_t *dest, int dest_stride);
+void vp9_idct8x8_12_add_sse2(const int16_t *input, uint8_t *dest, int dest_stride);
+void vp9_idct8x8_12_add_ssse3(const int16_t *input, uint8_t *dest, int dest_stride);
+RTCD_EXTERN void (*vp9_idct8x8_12_add)(const int16_t *input, uint8_t *dest, int dest_stride);
 
 void vp9_idct8x8_1_add_c(const int16_t *input, uint8_t *dest, int dest_stride);
 void vp9_idct8x8_1_add_sse2(const int16_t *input, uint8_t *dest, int dest_stride);
@@ -333,7 +331,8 @@ void vp9_idct8x8_1_add_sse2(const int16_t *input, uint8_t *dest, int dest_stride
 
 void vp9_idct8x8_64_add_c(const int16_t *input, uint8_t *dest, int dest_stride);
 void vp9_idct8x8_64_add_sse2(const int16_t *input, uint8_t *dest, int dest_stride);
-#define vp9_idct8x8_64_add vp9_idct8x8_64_add_sse2
+void vp9_idct8x8_64_add_ssse3(const int16_t *input, uint8_t *dest, int dest_stride);
+RTCD_EXTERN void (*vp9_idct8x8_64_add)(const int16_t *input, uint8_t *dest, int dest_stride);
 
 void vp9_iht16x16_256_add_c(const int16_t *input, uint8_t *output, int pitch, int tx_type);
 void vp9_iht16x16_256_add_sse2(const int16_t *input, uint8_t *output, int pitch, int tx_type);
@@ -419,9 +418,9 @@ void vp9_quantize_b_32x32_c(const int16_t *coeff_ptr, intptr_t n_coeffs, int ski
 void vp9_quantize_b_32x32_ssse3(const int16_t *coeff_ptr, intptr_t n_coeffs, int skip_block, const int16_t *zbin_ptr, const int16_t *round_ptr, const int16_t *quant_ptr, const int16_t *quant_shift_ptr, int16_t *qcoeff_ptr, int16_t *dqcoeff_ptr, const int16_t *dequant_ptr, int zbin_oq_value, uint16_t *eob_ptr, const int16_t *scan, const int16_t *iscan);
 RTCD_EXTERN void (*vp9_quantize_b_32x32)(const int16_t *coeff_ptr, intptr_t n_coeffs, int skip_block, const int16_t *zbin_ptr, const int16_t *round_ptr, const int16_t *quant_ptr, const int16_t *quant_shift_ptr, int16_t *qcoeff_ptr, int16_t *dqcoeff_ptr, const int16_t *dequant_ptr, int zbin_oq_value, uint16_t *eob_ptr, const int16_t *scan, const int16_t *iscan);
 
-int vp9_refining_search_sad_c(const struct macroblock *x, struct mv *ref_mv, int sad_per_bit, int distance, const struct vp9_variance_vtable *fn_ptr, DEC_MVCOSTS, const struct mv *center_mv);
-int vp9_refining_search_sadx4(const struct macroblock *x, struct mv *ref_mv, int sad_per_bit, int distance, const struct vp9_variance_vtable *fn_ptr, DEC_MVCOSTS, const struct mv *center_mv);
-RTCD_EXTERN int (*vp9_refining_search_sad)(const struct macroblock *x, struct mv *ref_mv, int sad_per_bit, int distance, const struct vp9_variance_vtable *fn_ptr, DEC_MVCOSTS, const struct mv *center_mv);
+int vp9_refining_search_sad_c(const struct macroblock *x, struct mv *ref_mv, int sad_per_bit, int distance, const struct vp9_variance_vtable *fn_ptr, const struct mv *center_mv);
+int vp9_refining_search_sadx4(const struct macroblock *x, struct mv *ref_mv, int sad_per_bit, int distance, const struct vp9_variance_vtable *fn_ptr, const struct mv *center_mv);
+RTCD_EXTERN int (*vp9_refining_search_sad)(const struct macroblock *x, struct mv *ref_mv, int sad_per_bit, int distance, const struct vp9_variance_vtable *fn_ptr, const struct mv *center_mv);
 
 unsigned int vp9_sad16x16_c(const uint8_t *src_ptr, int source_stride, const uint8_t *ref_ptr, int  ref_stride, unsigned int max_sad);
 unsigned int vp9_sad16x16_mmx(const uint8_t *src_ptr, int source_stride, const uint8_t *ref_ptr, int  ref_stride, unsigned int max_sad);
@@ -704,12 +703,6 @@ unsigned int vp9_sub_pixel_avg_variance8x8_sse2(const uint8_t *src_ptr, int sour
 unsigned int vp9_sub_pixel_avg_variance8x8_ssse3(const uint8_t *src_ptr, int source_stride, int xoffset, int  yoffset, const uint8_t *ref_ptr, int ref_stride, unsigned int *sse, const uint8_t *second_pred);
 RTCD_EXTERN unsigned int (*vp9_sub_pixel_avg_variance8x8)(const uint8_t *src_ptr, int source_stride, int xoffset, int  yoffset, const uint8_t *ref_ptr, int ref_stride, unsigned int *sse, const uint8_t *second_pred);
 
-unsigned int vp9_sub_pixel_mse32x32_c(const uint8_t *src_ptr, int  source_stride, int  xoffset, int  yoffset, const uint8_t *ref_ptr, int ref_stride, unsigned int *sse);
-#define vp9_sub_pixel_mse32x32 vp9_sub_pixel_mse32x32_c
-
-unsigned int vp9_sub_pixel_mse64x64_c(const uint8_t *src_ptr, int  source_stride, int  xoffset, int  yoffset, const uint8_t *ref_ptr, int ref_stride, unsigned int *sse);
-#define vp9_sub_pixel_mse64x64 vp9_sub_pixel_mse64x64_c
-
 unsigned int vp9_sub_pixel_variance16x16_c(const uint8_t *src_ptr, int source_stride, int xoffset, int  yoffset, const uint8_t *ref_ptr, int ref_stride, unsigned int *sse);
 unsigned int vp9_sub_pixel_variance16x16_sse2(const uint8_t *src_ptr, int source_stride, int xoffset, int  yoffset, const uint8_t *ref_ptr, int ref_stride, unsigned int *sse);
 unsigned int vp9_sub_pixel_variance16x16_ssse3(const uint8_t *src_ptr, int source_stride, int xoffset, int  yoffset, const uint8_t *ref_ptr, int ref_stride, unsigned int *sse);
@@ -872,36 +865,6 @@ unsigned int vp9_variance8x8_mmx(const uint8_t *src_ptr, int source_stride, cons
 unsigned int vp9_variance8x8_sse2(const uint8_t *src_ptr, int source_stride, const uint8_t *ref_ptr, int ref_stride, unsigned int *sse);
 #define vp9_variance8x8 vp9_variance8x8_sse2
 
-unsigned int vp9_variance_halfpixvar16x16_h_c(const uint8_t *src_ptr, int source_stride, const uint8_t *ref_ptr, int ref_stride, unsigned int *sse);
-unsigned int vp9_variance_halfpixvar16x16_h_sse2(const uint8_t *src_ptr, int source_stride, const uint8_t *ref_ptr, int ref_stride, unsigned int *sse);
-#define vp9_variance_halfpixvar16x16_h vp9_variance_halfpixvar16x16_h_sse2
-
-unsigned int vp9_variance_halfpixvar16x16_hv_c(const uint8_t *src_ptr, int source_stride, const uint8_t *ref_ptr, int ref_stride, unsigned int *sse);
-unsigned int vp9_variance_halfpixvar16x16_hv_sse2(const uint8_t *src_ptr, int source_stride, const uint8_t *ref_ptr, int ref_stride, unsigned int *sse);
-#define vp9_variance_halfpixvar16x16_hv vp9_variance_halfpixvar16x16_hv_sse2
-
-unsigned int vp9_variance_halfpixvar16x16_v_c(const uint8_t *src_ptr, int source_stride, const uint8_t *ref_ptr, int ref_stride, unsigned int *sse);
-unsigned int vp9_variance_halfpixvar16x16_v_sse2(const uint8_t *src_ptr, int source_stride, const uint8_t *ref_ptr, int ref_stride, unsigned int *sse);
-#define vp9_variance_halfpixvar16x16_v vp9_variance_halfpixvar16x16_v_sse2
-
-unsigned int vp9_variance_halfpixvar32x32_h_c(const uint8_t *src_ptr, int source_stride, const uint8_t *ref_ptr, int ref_stride, unsigned int *sse);
-#define vp9_variance_halfpixvar32x32_h vp9_variance_halfpixvar32x32_h_c
-
-unsigned int vp9_variance_halfpixvar32x32_hv_c(const uint8_t *src_ptr, int source_stride, const uint8_t *ref_ptr, int ref_stride, unsigned int *sse);
-#define vp9_variance_halfpixvar32x32_hv vp9_variance_halfpixvar32x32_hv_c
-
-unsigned int vp9_variance_halfpixvar32x32_v_c(const uint8_t *src_ptr, int source_stride, const uint8_t *ref_ptr, int ref_stride, unsigned int *sse);
-#define vp9_variance_halfpixvar32x32_v vp9_variance_halfpixvar32x32_v_c
-
-unsigned int vp9_variance_halfpixvar64x64_h_c(const uint8_t *src_ptr, int source_stride, const uint8_t *ref_ptr, int ref_stride, unsigned int *sse);
-#define vp9_variance_halfpixvar64x64_h vp9_variance_halfpixvar64x64_h_c
-
-unsigned int vp9_variance_halfpixvar64x64_hv_c(const uint8_t *src_ptr, int source_stride, const uint8_t *ref_ptr, int ref_stride, unsigned int *sse);
-#define vp9_variance_halfpixvar64x64_hv vp9_variance_halfpixvar64x64_hv_c
-
-unsigned int vp9_variance_halfpixvar64x64_v_c(const uint8_t *src_ptr, int source_stride, const uint8_t *ref_ptr, int ref_stride, unsigned int *sse);
-#define vp9_variance_halfpixvar64x64_v vp9_variance_halfpixvar64x64_v_c
-
 void vp9_rtcd(void);
 
 #ifdef RTCD_C
@@ -912,315 +875,135 @@ static void setup_rtcd_internal(void)
 
     (void)flags;
 
-
-
-
-
     vp9_convolve8 = vp9_convolve8_sse2;
     if (flags & HAS_SSSE3) vp9_convolve8 = vp9_convolve8_ssse3;
-
     vp9_convolve8_avg = vp9_convolve8_avg_sse2;
     if (flags & HAS_SSSE3) vp9_convolve8_avg = vp9_convolve8_avg_ssse3;
-
     vp9_convolve8_avg_horiz = vp9_convolve8_avg_horiz_sse2;
     if (flags & HAS_SSSE3) vp9_convolve8_avg_horiz = vp9_convolve8_avg_horiz_ssse3;
-
     vp9_convolve8_avg_vert = vp9_convolve8_avg_vert_sse2;
     if (flags & HAS_SSSE3) vp9_convolve8_avg_vert = vp9_convolve8_avg_vert_ssse3;
-
     vp9_convolve8_horiz = vp9_convolve8_horiz_sse2;
     if (flags & HAS_SSSE3) vp9_convolve8_horiz = vp9_convolve8_horiz_ssse3;
-
     vp9_convolve8_vert = vp9_convolve8_vert_sse2;
     if (flags & HAS_SSSE3) vp9_convolve8_vert = vp9_convolve8_vert_ssse3;
-
-
-
-
-
-
-
-
-
-
-
     vp9_d153_predictor_16x16 = vp9_d153_predictor_16x16_c;
     if (flags & HAS_SSSE3) vp9_d153_predictor_16x16 = vp9_d153_predictor_16x16_ssse3;
-
-
     vp9_d153_predictor_4x4 = vp9_d153_predictor_4x4_c;
     if (flags & HAS_SSSE3) vp9_d153_predictor_4x4 = vp9_d153_predictor_4x4_ssse3;
-
     vp9_d153_predictor_8x8 = vp9_d153_predictor_8x8_c;
     if (flags & HAS_SSSE3) vp9_d153_predictor_8x8 = vp9_d153_predictor_8x8_ssse3;
-
     vp9_d207_predictor_16x16 = vp9_d207_predictor_16x16_c;
     if (flags & HAS_SSSE3) vp9_d207_predictor_16x16 = vp9_d207_predictor_16x16_ssse3;
-
     vp9_d207_predictor_32x32 = vp9_d207_predictor_32x32_c;
     if (flags & HAS_SSSE3) vp9_d207_predictor_32x32 = vp9_d207_predictor_32x32_ssse3;
-
     vp9_d207_predictor_4x4 = vp9_d207_predictor_4x4_c;
     if (flags & HAS_SSSE3) vp9_d207_predictor_4x4 = vp9_d207_predictor_4x4_ssse3;
-
     vp9_d207_predictor_8x8 = vp9_d207_predictor_8x8_c;
     if (flags & HAS_SSSE3) vp9_d207_predictor_8x8 = vp9_d207_predictor_8x8_ssse3;
-
     vp9_d45_predictor_16x16 = vp9_d45_predictor_16x16_c;
     if (flags & HAS_SSSE3) vp9_d45_predictor_16x16 = vp9_d45_predictor_16x16_ssse3;
-
     vp9_d45_predictor_32x32 = vp9_d45_predictor_32x32_c;
     if (flags & HAS_SSSE3) vp9_d45_predictor_32x32 = vp9_d45_predictor_32x32_ssse3;
-
     vp9_d45_predictor_4x4 = vp9_d45_predictor_4x4_c;
     if (flags & HAS_SSSE3) vp9_d45_predictor_4x4 = vp9_d45_predictor_4x4_ssse3;
-
     vp9_d45_predictor_8x8 = vp9_d45_predictor_8x8_c;
     if (flags & HAS_SSSE3) vp9_d45_predictor_8x8 = vp9_d45_predictor_8x8_ssse3;
-
     vp9_d63_predictor_16x16 = vp9_d63_predictor_16x16_c;
     if (flags & HAS_SSSE3) vp9_d63_predictor_16x16 = vp9_d63_predictor_16x16_ssse3;
-
     vp9_d63_predictor_32x32 = vp9_d63_predictor_32x32_c;
     if (flags & HAS_SSSE3) vp9_d63_predictor_32x32 = vp9_d63_predictor_32x32_ssse3;
-
     vp9_d63_predictor_4x4 = vp9_d63_predictor_4x4_c;
     if (flags & HAS_SSSE3) vp9_d63_predictor_4x4 = vp9_d63_predictor_4x4_ssse3;
-
     vp9_d63_predictor_8x8 = vp9_d63_predictor_8x8_c;
     if (flags & HAS_SSSE3) vp9_d63_predictor_8x8 = vp9_d63_predictor_8x8_ssse3;
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
     vp9_diamond_search_sad = vp9_diamond_search_sad_c;
     if (flags & HAS_SSE3) vp9_diamond_search_sad = vp9_diamond_search_sadx4;
-
-
-
-
-
-
-
-
-
-
+    vp9_fdct8x8 = vp9_fdct8x8_sse2;
+    if (flags & HAS_SSSE3) vp9_fdct8x8 = vp9_fdct8x8_ssse3;
     vp9_full_search_sad = vp9_full_search_sad_c;
     if (flags & HAS_SSE3) vp9_full_search_sad = vp9_full_search_sadx3;
     if (flags & HAS_SSE4_1) vp9_full_search_sad = vp9_full_search_sadx8;
-
-
-
-
     vp9_h_predictor_16x16 = vp9_h_predictor_16x16_c;
     if (flags & HAS_SSSE3) vp9_h_predictor_16x16 = vp9_h_predictor_16x16_ssse3;
-
     vp9_h_predictor_32x32 = vp9_h_predictor_32x32_c;
     if (flags & HAS_SSSE3) vp9_h_predictor_32x32 = vp9_h_predictor_32x32_ssse3;
-
     vp9_h_predictor_4x4 = vp9_h_predictor_4x4_c;
     if (flags & HAS_SSSE3) vp9_h_predictor_4x4 = vp9_h_predictor_4x4_ssse3;
-
     vp9_h_predictor_8x8 = vp9_h_predictor_8x8_c;
     if (flags & HAS_SSSE3) vp9_h_predictor_8x8 = vp9_h_predictor_8x8_ssse3;
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+    vp9_idct8x8_12_add = vp9_idct8x8_12_add_sse2;
+    if (flags & HAS_SSSE3) vp9_idct8x8_12_add = vp9_idct8x8_12_add_ssse3;
+    vp9_idct8x8_64_add = vp9_idct8x8_64_add_sse2;
+    if (flags & HAS_SSSE3) vp9_idct8x8_64_add = vp9_idct8x8_64_add_ssse3;
     vp9_quantize_b = vp9_quantize_b_c;
     if (flags & HAS_SSSE3) vp9_quantize_b = vp9_quantize_b_ssse3;
-
     vp9_quantize_b_32x32 = vp9_quantize_b_32x32_c;
     if (flags & HAS_SSSE3) vp9_quantize_b_32x32 = vp9_quantize_b_32x32_ssse3;
-
     vp9_refining_search_sad = vp9_refining_search_sad_c;
     if (flags & HAS_SSE3) vp9_refining_search_sad = vp9_refining_search_sadx4;
-
-
-
     vp9_sad16x16x3 = vp9_sad16x16x3_c;
     if (flags & HAS_SSE3) vp9_sad16x16x3 = vp9_sad16x16x3_sse3;
     if (flags & HAS_SSSE3) vp9_sad16x16x3 = vp9_sad16x16x3_ssse3;
-
-
-
-
-
-
-
-
     vp9_sad16x8x3 = vp9_sad16x8x3_c;
     if (flags & HAS_SSE3) vp9_sad16x8x3 = vp9_sad16x8x3_sse3;
     if (flags & HAS_SSSE3) vp9_sad16x8x3 = vp9_sad16x8x3_ssse3;
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
     vp9_sad4x4x3 = vp9_sad4x4x3_c;
     if (flags & HAS_SSE3) vp9_sad4x4x3 = vp9_sad4x4x3_sse3;
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
     vp9_sad8x16x3 = vp9_sad8x16x3_c;
     if (flags & HAS_SSE3) vp9_sad8x16x3 = vp9_sad8x16x3_sse3;
-
-
-
-
-
-
-
-
-
     vp9_sad8x8x3 = vp9_sad8x8x3_c;
     if (flags & HAS_SSE3) vp9_sad8x8x3 = vp9_sad8x8x3_sse3;
-
-
-
     vp9_sub_pixel_avg_variance16x16 = vp9_sub_pixel_avg_variance16x16_sse2;
     if (flags & HAS_SSSE3) vp9_sub_pixel_avg_variance16x16 = vp9_sub_pixel_avg_variance16x16_ssse3;
-
     vp9_sub_pixel_avg_variance16x32 = vp9_sub_pixel_avg_variance16x32_sse2;
     if (flags & HAS_SSSE3) vp9_sub_pixel_avg_variance16x32 = vp9_sub_pixel_avg_variance16x32_ssse3;
-
     vp9_sub_pixel_avg_variance16x8 = vp9_sub_pixel_avg_variance16x8_sse2;
     if (flags & HAS_SSSE3) vp9_sub_pixel_avg_variance16x8 = vp9_sub_pixel_avg_variance16x8_ssse3;
-
     vp9_sub_pixel_avg_variance32x16 = vp9_sub_pixel_avg_variance32x16_sse2;
     if (flags & HAS_SSSE3) vp9_sub_pixel_avg_variance32x16 = vp9_sub_pixel_avg_variance32x16_ssse3;
-
     vp9_sub_pixel_avg_variance32x32 = vp9_sub_pixel_avg_variance32x32_sse2;
     if (flags & HAS_SSSE3) vp9_sub_pixel_avg_variance32x32 = vp9_sub_pixel_avg_variance32x32_ssse3;
-
     vp9_sub_pixel_avg_variance32x64 = vp9_sub_pixel_avg_variance32x64_sse2;
     if (flags & HAS_SSSE3) vp9_sub_pixel_avg_variance32x64 = vp9_sub_pixel_avg_variance32x64_ssse3;
-
     vp9_sub_pixel_avg_variance4x4 = vp9_sub_pixel_avg_variance4x4_sse;
     if (flags & HAS_SSSE3) vp9_sub_pixel_avg_variance4x4 = vp9_sub_pixel_avg_variance4x4_ssse3;
-
     vp9_sub_pixel_avg_variance4x8 = vp9_sub_pixel_avg_variance4x8_sse;
     if (flags & HAS_SSSE3) vp9_sub_pixel_avg_variance4x8 = vp9_sub_pixel_avg_variance4x8_ssse3;
-
     vp9_sub_pixel_avg_variance64x32 = vp9_sub_pixel_avg_variance64x32_sse2;
     if (flags & HAS_SSSE3) vp9_sub_pixel_avg_variance64x32 = vp9_sub_pixel_avg_variance64x32_ssse3;
-
     vp9_sub_pixel_avg_variance64x64 = vp9_sub_pixel_avg_variance64x64_sse2;
     if (flags & HAS_SSSE3) vp9_sub_pixel_avg_variance64x64 = vp9_sub_pixel_avg_variance64x64_ssse3;
-
     vp9_sub_pixel_avg_variance8x16 = vp9_sub_pixel_avg_variance8x16_sse2;
     if (flags & HAS_SSSE3) vp9_sub_pixel_avg_variance8x16 = vp9_sub_pixel_avg_variance8x16_ssse3;
-
     vp9_sub_pixel_avg_variance8x4 = vp9_sub_pixel_avg_variance8x4_sse2;
     if (flags & HAS_SSSE3) vp9_sub_pixel_avg_variance8x4 = vp9_sub_pixel_avg_variance8x4_ssse3;
-
     vp9_sub_pixel_avg_variance8x8 = vp9_sub_pixel_avg_variance8x8_sse2;
     if (flags & HAS_SSSE3) vp9_sub_pixel_avg_variance8x8 = vp9_sub_pixel_avg_variance8x8_ssse3;
-
-
-
     vp9_sub_pixel_variance16x16 = vp9_sub_pixel_variance16x16_sse2;
     if (flags & HAS_SSSE3) vp9_sub_pixel_variance16x16 = vp9_sub_pixel_variance16x16_ssse3;
-
     vp9_sub_pixel_variance16x32 = vp9_sub_pixel_variance16x32_sse2;
     if (flags & HAS_SSSE3) vp9_sub_pixel_variance16x32 = vp9_sub_pixel_variance16x32_ssse3;
-
     vp9_sub_pixel_variance16x8 = vp9_sub_pixel_variance16x8_sse2;
     if (flags & HAS_SSSE3) vp9_sub_pixel_variance16x8 = vp9_sub_pixel_variance16x8_ssse3;
-
     vp9_sub_pixel_variance32x16 = vp9_sub_pixel_variance32x16_sse2;
     if (flags & HAS_SSSE3) vp9_sub_pixel_variance32x16 = vp9_sub_pixel_variance32x16_ssse3;
-
     vp9_sub_pixel_variance32x32 = vp9_sub_pixel_variance32x32_sse2;
     if (flags & HAS_SSSE3) vp9_sub_pixel_variance32x32 = vp9_sub_pixel_variance32x32_ssse3;
-
     vp9_sub_pixel_variance32x64 = vp9_sub_pixel_variance32x64_sse2;
     if (flags & HAS_SSSE3) vp9_sub_pixel_variance32x64 = vp9_sub_pixel_variance32x64_ssse3;
-
     vp9_sub_pixel_variance4x4 = vp9_sub_pixel_variance4x4_sse;
     if (flags & HAS_SSSE3) vp9_sub_pixel_variance4x4 = vp9_sub_pixel_variance4x4_ssse3;
-
     vp9_sub_pixel_variance4x8 = vp9_sub_pixel_variance4x8_sse;
     if (flags & HAS_SSSE3) vp9_sub_pixel_variance4x8 = vp9_sub_pixel_variance4x8_ssse3;
-
     vp9_sub_pixel_variance64x32 = vp9_sub_pixel_variance64x32_sse2;
     if (flags & HAS_SSSE3) vp9_sub_pixel_variance64x32 = vp9_sub_pixel_variance64x32_ssse3;
-
     vp9_sub_pixel_variance64x64 = vp9_sub_pixel_variance64x64_sse2;
     if (flags & HAS_SSSE3) vp9_sub_pixel_variance64x64 = vp9_sub_pixel_variance64x64_ssse3;
-
     vp9_sub_pixel_variance8x16 = vp9_sub_pixel_variance8x16_sse2;
     if (flags & HAS_SSSE3) vp9_sub_pixel_variance8x16 = vp9_sub_pixel_variance8x16_ssse3;
-
     vp9_sub_pixel_variance8x4 = vp9_sub_pixel_variance8x4_sse2;
     if (flags & HAS_SSSE3) vp9_sub_pixel_variance8x4 = vp9_sub_pixel_variance8x4_ssse3;
-
     vp9_sub_pixel_variance8x8 = vp9_sub_pixel_variance8x8_sse2;
     if (flags & HAS_SSSE3) vp9_sub_pixel_variance8x8 = vp9_sub_pixel_variance8x8_ssse3;
 }

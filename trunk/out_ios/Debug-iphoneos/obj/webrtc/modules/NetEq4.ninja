@@ -8,7 +8,7 @@ defines = -DV8_DEPRECATION_WARNINGS -DBLINK_SCALE_FILTERS_AT_RECORD_TIME $
     -DWEBRTC_ARCH_ARM_NEON -DWEBRTC_POSIX -DWEBRTC_MAC -DWEBRTC_IOS $
     -DWEBRTC_CODEC_OPUS -D__STDC_CONSTANT_MACROS -D__STDC_FORMAT_MACROS $
     -DDYNAMIC_ANNOTATIONS_ENABLED=1 -DWTF_USE_DYNAMIC_ANNOTATIONS=1
-includes = -I../.. -I../.. -I../../third_party/opus/src/celt $
+includes = -I../.. -I../../third_party/opus/src/celt $
     -I../../third_party/opus/src/src $
     -I../../webrtc/modules/audio_coding/codecs/g711/include -I../../webrtc $
     -I../../webrtc/modules/audio_coding/codecs/g722/include $
@@ -29,7 +29,8 @@ cflags = -isysroot $
     -Wno-unused-parameter -Wno-missing-field-initializers -Wheader-hygiene $
     -Wno-c++11-narrowing -Wno-char-subscripts $
     -Wno-unneeded-internal-declaration -Wno-covered-switch-default $
-    -Wstring-conversion -Wno-deprecated-register -Wno-absolute-value
+    -Wstring-conversion -Wno-deprecated-register -Wno-absolute-value $
+    -Wno-selector-type-mismatch
 cflags_c = -std=c99 -fcolor-diagnostics -fstack-protector-all
 cflags_cc = -std=gnu++0x -fno-rtti -fno-exceptions $
     -fvisibility-inlines-hidden -fno-threadsafe-statics -fcolor-diagnostics $
@@ -141,3 +142,5 @@ build libNetEq4.a: alink $
     obj/webrtc/modules/audio_coding/neteq4/NetEq4.sync_buffer.o $
     obj/webrtc/modules/audio_coding/neteq4/NetEq4.timestamp_scaler.o $
     obj/webrtc/modules/audio_coding/neteq4/NetEq4.time_stretch.o
+  libtool_flags = -framework Foundation -framework Security -framework $
+      SystemConfiguration -framework UIKit

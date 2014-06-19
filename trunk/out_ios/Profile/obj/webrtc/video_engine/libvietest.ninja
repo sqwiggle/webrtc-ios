@@ -1,6 +1,6 @@
 defines = -DV8_DEPRECATION_WARNINGS -DBLINK_SCALE_FILTERS_AT_RECORD_TIME $
-    -DDISABLE_NACL -DCHROMIUM_BUILD -DUSE_LIBJPEG_TURBO=1 $
-    -DENABLE_CONFIGURATION_POLICY $
+    -DDISABLE_NACL -DCHROMIUM_BUILD -DCR_CLANG_REVISION=206824 $
+    -DUSE_LIBJPEG_TURBO=1 -DENABLE_CONFIGURATION_POLICY $
     -DDISCARDABLE_MEMORY_ALWAYS_SUPPORTED_NATIVELY $
     -DSYSTEM_NATIVELY_SIGNALS_MEMORY_PRESSURE -DENABLE_EGLIMAGE=1 $
     -DCLD_VERSION=1 -DENABLE_SPELLCHECK=1 -DDISABLE_FTP_SUPPORT=1 $
@@ -10,7 +10,7 @@ defines = -DV8_DEPRECATION_WARNINGS -DBLINK_SCALE_FILTERS_AT_RECORD_TIME $
     -D__STDC_CONSTANT_MACROS -D__STDC_FORMAT_MACROS -DNDEBUG -DNVALGRIND $
     -DDYNAMIC_ANNOTATIONS_ENABLED=0 -DNS_BLOCK_ASSERTIONS=1 $
     -D_FORTIFY_SOURCE=2
-includes = -I../.. -I../.. -I../../webrtc/system_wrappers/interface $
+includes = -I../.. -I../../webrtc/system_wrappers/interface $
     -I../../testing/gtest/include
 cflags = -isysroot $
     /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator7.1.sdk $
@@ -19,7 +19,7 @@ cflags = -isysroot $
     -Wno-unused-parameter -Wno-missing-field-initializers -Wheader-hygiene $
     -Wno-c++11-narrowing -Wno-char-subscripts $
     -Wno-unneeded-internal-declaration -Wno-covered-switch-default $
-    -Wstring-conversion -Wno-deprecated-register -Wno-absolute-value
+    -Wstring-conversion -Wno-deprecated-register -Wno-selector-type-mismatch
 cflags_c = -std=c99 -fcolor-diagnostics
 cflags_cc = -std=gnu++0x -fno-rtti -fno-exceptions $
     -fvisibility-inlines-hidden -fno-threadsafe-statics -fcolor-diagnostics
@@ -64,6 +64,7 @@ build libvietest.a: alink $
     obj/webrtc/video_engine/test/libvietest/testbed/libvietest.tb_I420_codec.o $
     obj/webrtc/video_engine/test/libvietest/testbed/libvietest.tb_interfaces.o $
     obj/webrtc/video_engine/test/libvietest/testbed/libvietest.tb_video_channel.o
-  libtool_flags = -framework AVFoundation -framework CoreMedia -framework $
-      CoreVideo -framework UIKit -framework OpenGLES -framework QuartzCore $
-      -framework UIKit
+  libtool_flags = -framework Foundation -framework Security -framework $
+      SystemConfiguration -framework UIKit -framework AVFoundation $
+      -framework CoreMedia -framework CoreVideo -framework UIKit -framework $
+      OpenGLES -framework QuartzCore -framework UIKit

@@ -16,8 +16,8 @@
 
     .globl _vp9_idct8x8_64_add_neon
 	.globl vp9_idct8x8_64_add_neon
-    .globl _vp9_idct8x8_10_add_neon
-	.globl vp9_idct8x8_10_add_neon
+    .globl _vp9_idct8x8_12_add_neon
+	.globl vp9_idct8x8_12_add_neon
    @ ARM
    @ 
    @ PRESERVE8
@@ -319,14 +319,14 @@ _vp9_idct8x8_64_add_neon:
     bx              lr
     @   @ |vp9_idct8x8_64_add_neon|
 
- @void vp9_idct8x8_10_add_neon(int16_t *input, uint8_t *dest, int dest_stride)
+ @void vp9_idct8x8_12_add_neon(int16_t *input, uint8_t *dest, int dest_stride)
  @
  @ r0  int16_t input
  @ r1  uint8_t *dest
  @ r2  int dest_stride)
 
-_vp9_idct8x8_10_add_neon:
-	vp9_idct8x8_10_add_neon: @
+_vp9_idct8x8_12_add_neon:
+	vp9_idct8x8_12_add_neon: @
     push            {r4-r9}
     vpush           {d8-d15}
     vld1.s16        {q8,q9}, [r0]!
@@ -524,5 +524,5 @@ _vp9_idct8x8_10_add_neon:
     vpop            {d8-d15}
     pop             {r4-r9}
     bx              lr
-    @   @ |vp9_idct8x8_10_add_neon|
+    @   @ |vp9_idct8x8_12_add_neon|
 

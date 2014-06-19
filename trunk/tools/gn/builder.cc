@@ -251,6 +251,7 @@ BuilderRecord* Builder::GetOrCreateRecordOfType(const Label& label,
   if (!record) {
     // Not seen this record yet, create a new one.
     record = new BuilderRecord(type, label);
+    record->set_originally_referenced_from(request_from);
     records_[label] = record;
     return record;
   }
@@ -259,12 +260,14 @@ BuilderRecord* Builder::GetOrCreateRecordOfType(const Label& label,
   if (record->type() != type) {
     *err = Err(request_from, "Item type does not match.",
         "The item \"" + label.GetUserVisibleName(false) +
-        "\" was expected\nto be a " +
+        "\"\nwas expected to be a " +
         BuilderRecord::GetNameForType(type) +
-        " but was previously\n referenced as a " +
+        " but was previously referenced as a " +
         BuilderRecord::GetNameForType(record->type()));
-    err->AppendSubErr(Err(record->originally_referenced_from(),
-                          "The previous reference was here."));
+    if (record->originally_referenced_from()) {
+      err->AppendSubErr(Err(record->originally_referenced_from(),
+                            "The previous reference was here."));
+    }
     return NULL;
   }
 
@@ -378,7 +381,7 @@ bool Builder::ResolveItem(BuilderRecord* record, Err* err) {
   record->set_resolved(true);
   record->item()->OnResolved();
   if (!resolved_callback_.is_null())
-    resolved_callback_.Run(record->item());
+    resolved_callback_.Run(record);
 
   // Recursively update everybody waiting on this item to be resolved.
   BuilderRecordSet& waiting_set = record->waiting_on_resolution();
@@ -444,9 +447,10 @@ bool Builder::ResolveForwardDependentConfigs(Target* target, Err* err) {
     if (!configs[config_i].ptr) {
       *err = Err(target->defined_from(),
           "Target in forward_dependent_configs_from was not listed in the deps",
-          "The target \"" + configs[config_i].label.GetUserVisibleName(false) +
-          "\"\n was not present in the deps. This thing is used to forward\n"
-          "configs from direct dependents.");
+          "This target has a forward_dependent_configs_from entry that was "
+          "not present in\nthe deps. A target can only forward things it "
+          "depends on. It was forwarding:\n  " +
+          configs[config_i].label.GetUserVisibleName(false));
       return false;
     }
   }

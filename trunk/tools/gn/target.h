@@ -69,6 +69,16 @@ class Target : public Item {
   const FileList& sources() const { return sources_; }
   FileList& sources() { return sources_; }
 
+  // Set to true when all sources are public. This is the default. In this case
+  // the public headers list should be empty.
+  bool all_headers_public() const { return all_headers_public_; }
+  void set_all_headers_public(bool p) { all_headers_public_ = p; }
+
+  // When all_headers_public is false, this is the list of public headers. It
+  // could be empty which would mean no headers are public.
+  const FileList& public_headers() const { return public_headers_; }
+  FileList& public_headers() { return public_headers_; }
+
   // Compile-time extra dependencies.
   const FileList& source_prereqs() const { return source_prereqs_; }
   FileList& source_prereqs() { return source_prereqs_; }
@@ -77,9 +87,13 @@ class Target : public Item {
   const FileList& data() const { return data_; }
   FileList& data() { return data_; }
 
-  // Targets depending on this one should have an order dependency.
-  bool hard_dep() const { return hard_dep_; }
-  void set_hard_dep(bool hd) { hard_dep_ = hd; }
+  // Returns true if targets depending on this one should have an order
+  // dependency.
+  bool hard_dep() const {
+    return output_type_ == ACTION ||
+           output_type_ == ACTION_FOREACH ||
+           output_type_ == COPY_FILES;
+  }
 
   // Linked dependencies.
   const LabelTargetVector& deps() const { return deps_; }
@@ -89,7 +103,8 @@ class Target : public Item {
   const LabelTargetVector& datadeps() const { return datadeps_; }
   LabelTargetVector& datadeps() { return datadeps_; }
 
-  // List of configs that this class inherits settings from.
+  // List of configs that this class inherits settings from. Once a target is
+  // resolved, this will also list all- and direct-dependent configs.
   const LabelConfigVector& configs() const { return configs_; }
   LabelConfigVector& configs() { return configs_; }
 
@@ -135,16 +150,27 @@ class Target : public Item {
   const OrderedSet<SourceDir>& all_lib_dirs() const { return all_lib_dirs_; }
   const OrderedSet<std::string>& all_libs() const { return all_libs_; }
 
+  const std::set<const Target*>& recursive_hard_deps() const {
+    return recursive_hard_deps_;
+  }
+
  private:
-  // Pulls necessary information from dependents to this one when all
+  // Pulls necessary information from dependencies to this one when all
   // dependencies have been resolved.
   void PullDependentTargetInfo(std::set<const Config*>* unique_configs);
+
+  // These each pull specific things from dependencies to this one when all
+  // deps have been resolved.
+  void PullForwardedDependentConfigs();
+  void PullRecursiveHardDeps();
 
   OutputType output_type_;
   std::string output_name_;
   std::string output_extension_;
 
   FileList sources_;
+  bool all_headers_public_;
+  FileList public_headers_;
   FileList source_prereqs_;
   FileList data_;
 
@@ -180,6 +206,10 @@ class Target : public Item {
   // configs applying to this target.
   OrderedSet<SourceDir> all_lib_dirs_;
   OrderedSet<std::string> all_libs_;
+
+  // All hard deps from this target and all dependencies. Filled in when this
+  // target is marked resolved. This will not include the current target.
+  std::set<const Target*> recursive_hard_deps_;
 
   ConfigValues config_values_;  // Used for all binary targets.
   ActionValues action_values_;  // Used for action[_foreach] targets.

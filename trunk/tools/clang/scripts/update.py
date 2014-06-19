@@ -66,18 +66,10 @@ def DeleteFiles(dir, pattern):
 def ClobberChromiumBuildFiles():
   """Clobber Chomium build files."""
   print 'Clobbering Chromium build files...'
-  n = 0
-  dirs = [
-    os.path.join(CHROMIUM_DIR, 'out/Debug'),
-    os.path.join(CHROMIUM_DIR, 'out/Release'),
-  ]
-  for d in dirs:
-    if not os.path.exists(d):
-      continue
-    n += DeleteFiles(d, r'.*\.o')
-    n += DeleteFiles(d, r'.*\.obj')
-    n += DeleteFiles(d, r'stamp.untar')
-  print 'Removed %d files.' % (n)
+  out_dir = os.path.join(CHROMIUM_DIR, 'out')
+  if os.path.isdir(out_dir):
+    shutil.rmtree(out_dir)
+    print 'Removed Chromium out dir: %s.' % (out_dir)
 
 
 def RunCommand(command, tries=1):
@@ -89,6 +81,10 @@ def RunCommand(command, tries=1):
     print 'Failed.'
   sys.exit(1)
 
+def CopyFile(src, dst):
+  """Copy a file from src to dst."""
+  shutil.copy(src, dst)
+  print "Copying %s to %s" % (src, dst)
 
 def Checkout(name, url, dir):
   """Checkout the SVN module at url into dir. Use name for the log message."""
@@ -147,17 +143,36 @@ def UpdateClang():
              ['&&', 'cmake', '-GNinja', '-DCMAKE_BUILD_TYPE=Release',
               '-DLLVM_ENABLE_ASSERTIONS=ON', LLVM_DIR])
   RunCommand(GetVSVersion().SetupScript('x86') + ['&&', 'ninja', 'compiler-rt'])
+
+  # TODO(hans): Make this (and the .gypi file) version number independent.
   asan_rt_lib_src_dir = os.path.join(COMPILER_RT_BUILD_DIR, 'lib', 'clang',
-                                     '3.5', 'lib', 'windows')
+                                     '3.5.0', 'lib', 'windows')
   asan_rt_lib_dst_dir = os.path.join(LLVM_BUILD_DIR, 'lib', 'clang',
-                                     '3.5', 'lib', 'windows')
+                                     '3.5.0', 'lib', 'windows')
+
   if not os.path.exists(asan_rt_lib_dst_dir):
     os.makedirs(asan_rt_lib_dst_dir)
   for root, _, files in os.walk(asan_rt_lib_src_dir):
     for f in files:
       if re.match(r'^.*-i386\.lib$', f):
-        shutil.copy(os.path.join(root, f), asan_rt_lib_dst_dir)
-        print "Copying %s to %s" % (f, asan_rt_lib_dst_dir)
+        CopyFile(os.path.join(root, f), asan_rt_lib_dst_dir)
+
+  CopyFile(os.path.join(asan_rt_lib_src_dir, '..', '..', 'asan_blacklist.txt'),
+           os.path.join(asan_rt_lib_dst_dir, '..', '..'))
+
+  # Make an extra copy of the sanitizer headers, to be put on the include path
+  # of the fallback compiler.
+  sanitizer_include_dir = os.path.join(LLVM_BUILD_DIR, 'lib', 'clang', '3.5.0',
+                                       'include', 'sanitizer')
+  aux_sanitizer_include_dir = os.path.join(LLVM_BUILD_DIR, 'lib', 'clang',
+                                           '3.5.0', 'include_sanitizer',
+                                           'sanitizer')
+  if not os.path.exists(aux_sanitizer_include_dir):
+    os.makedirs(aux_sanitizer_include_dir)
+  for _, _, files in os.walk(sanitizer_include_dir):
+    for f in files:
+      CopyFile(os.path.join(sanitizer_include_dir, f),
+               aux_sanitizer_include_dir)
 
   WriteStampFile(LLVM_WIN_REVISION)
   print 'Clang update was successful.'
@@ -182,11 +197,11 @@ def main():
         [os.path.join(os.path.dirname(__file__), 'update.sh')] +  sys.argv[1:],
         stderr=os.fdopen(os.dup(sys.stdin.fileno())))
 
-  if not re.search(r'\b(clang|asan)=1\b', os.environ.get('GYP_DEFINES', '')):
+  if not re.search(r'\b(clang|asan)=1', os.environ.get('GYP_DEFINES', '')):
     print 'Skipping Clang update (clang=1 was not set in GYP_DEFINES).'
     return 0
 
-  if re.search(r'\b(make_clang_dir)=\b', os.environ.get('GYP_DEFINES', '')):
+  if re.search(r'\b(make_clang_dir)=', os.environ.get('GYP_DEFINES', '')):
     print 'Skipping Clang update (make_clang_dir= was set in GYP_DEFINES).'
     return 0
 

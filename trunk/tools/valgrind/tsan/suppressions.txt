@@ -680,24 +680,6 @@
   fun:base::internal::RunnableAdapter::Run
 }
 {
-  bug_108408
-  ThreadSanitizer:Race
-  fun:base::subtle::RefCountedBase::AddRef
-  fun:base::RefCounted::AddRef
-  fun:net::HttpCache::Transaction::DoCacheWriteData
-  fun:net::HttpCache::Transaction::DoLoop
-  fun:net::HttpCache::Transaction::ReadFromNetwork
-  fun:net::HttpCache::Transaction::Read
-  fun:net::URLRequestHttpJob::ReadRawData
-  fun:net::URLRequestJob::ReadRawDataHelper
-  fun:net::URLRequestJob::Read
-  fun:net::URLRequest::Read
-  fun:ResourceDispatcherHost::Read
-  fun:ResourceDispatcherHost::StartReading
-  fun:ResourceDispatcherHost::ResumeRequest
-  fun:base::internal::RunnableAdapter::Run
-}
-{
   bug_108539
   ThreadSanitizer:Race
   fun:tracked_objects::ThreadData::InitializeAndSetTrackingStatus
@@ -935,10 +917,17 @@
   fun:gfx::GtkInitFromCommandLine
 }
 {
-  bug_239350
+  bug_239350_a
   ThreadSanitizer:Race
   fun:av_buffer_unref
   fun:av_frame_unref
+  ...
+}
+{
+  bug_239350_b
+  ThreadSanitizer:Race
+  fun:av_buffer_get_opaque
+  fun:av_buffer_get_opaque
   ...
 }
 {
@@ -1062,13 +1051,6 @@
   fun:base::internal::RunnableAdapter::Run
 }
 {
-  bug_330903
-  ThreadSanitizer:Race
-  fun:gcm::GCMClientMock::SetIsLoading
-  fun:gcm::GCMProfileServiceRegisterTest_GCMClientLoadingCompletedAfterReadingRegistration_Test::TestBody
-  fun:testing::internal::HandleSehExceptionsInMethodIfSupported
-}
-{
   bug_344704
   ThreadSanitizer:Race
   fun:base::Thread::message_loop
@@ -1085,4 +1067,10 @@
   fun:decode_tile
   fun:decode_tiles
   fun:vp9_decode_frame
+}
+{
+  bug_343802
+  ThreadSanitizer:Race
+  ...
+  fun:base::debug::TraceLog::GetCategoryGroupEnabledInternal
 }

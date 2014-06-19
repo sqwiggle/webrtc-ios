@@ -1,4 +1,4 @@
-build obj/All.actions_depends.stamp: stamp $
+build obj/All.actions_depends.stamp: stamp libopenmax_dl.a $
     obj/webrtc/webrtc_all.actions_depends.stamp libwebrtc.a $
     obj/webrtc/webrtc_tests.actions_depends.stamp video_loopback.app $
     video_engine_tests.app webrtc_perf_tests.app libjingle.a $
@@ -6,9 +6,10 @@ build obj/All.actions_depends.stamp: stamp $
     libjingle_peerconnection.a libjingle_peerconnection_objc.a $
     libjingle_xmpphelp.a relayserver stunserver turnserver login $
     peerconnection_server AppRTCDemo.app libgunit.a $
-    libjingle_unittest_main.a libjingle_unittest libjingle_sound_unittest $
-    libjingle_media_unittest libjingle_p2p_unittest $
-    libjingle_peerconnection_unittest libjingle_peerconnection_objc_test.app
+    libjingle_unittest_main.a libjingle_unittest.app $
+    libjingle_sound_unittest libjingle_media_unittest $
+    libjingle_p2p_unittest libjingle_peerconnection_unittest.app $
+    libjingle_peerconnection_objc_test.app
 
 build obj/All.compile_depends.stamp: stamp $
     obj/webrtc/webrtc_all.compile_depends.stamp $

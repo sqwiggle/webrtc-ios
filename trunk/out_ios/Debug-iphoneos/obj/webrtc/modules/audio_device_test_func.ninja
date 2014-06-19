@@ -1,16 +1,18 @@
 build obj/webrtc/modules/audio_device_test_func.actions_depends.stamp: $
     stamp libaudio_device.a libwebrtc_utility.a libcommon_audio.a $
     libsystem_wrappers.a libtest_support.a libgtest.a $
-    libaudio_coding_module.a libCNG.a libcommon_audio_neon.a libG711.a $
-    libG722.a libiLBC.a libiSAC.a libiSACFix.a libisac_neon.a libPCM16B.a $
-    libNetEq.a libwebrtc_opus.a libopus.a libacm2.a libNetEq4.a $
-    libmedia_file.a libwebrtc_video_coding.a libwebrtc_i420.a $
+    libaudio_coding_module.a libCNG.a libwebrtc_base.a libjsoncpp.a $
+    libcrssl.a libcrnspr.a libcrnss.a libnss_static.a libsqlite_regexp.a $
+    libsqlite_regexp.a libicui18n.a libicuuc.a libicudata.a libcrnssckbi.a $
+    libcommon_audio_neon.a libG711.a libG722.a libiLBC.a libiSAC.a $
+    libiSACFix.a libisac_neon.a libPCM16B.a libwebrtc_opus.a libopus.a $
+    libneteq.a libmedia_file.a libwebrtc_video_coding.a libwebrtc_i420.a $
     libcommon_video.a libyuv.a libyuv_neon.a libvideo_coding_utility.a $
     libwebrtc_vp8.a libvpx.a $
     obj/third_party/libvpx/gen_asm_offsets_vp8.actions_rules_copies.stamp $
-    libvpx_asm_offsets_vp8.a $
+    gen/third_party/libvpx/libvpx_asm_offsets_vp8.a $
     obj/third_party/libvpx/gen_asm_offsets_vpx_scale.actions_rules_copies.stamp $
-    libvpx_asm_offsets_vpx_scale.a libgmock.a libgflags.a
+    gen/third_party/libvpx/libvpx_asm_offsets_vpx_scale.a libgmock.a
 
 build obj/webrtc/modules/audio_device_test_func.compile_depends.stamp: $
     stamp $
@@ -19,12 +21,16 @@ build obj/webrtc/modules/audio_device_test_func.compile_depends.stamp: $
     obj/third_party/libvpx/gen_asm_offsets_vp8.actions_rules_copies.stamp $
     obj/third_party/libvpx/gen_asm_offsets_vpx_scale.actions_rules_copies.stamp
 
+build audio_device_test_func.app/icudtl.dat: mac_tool $
+    ../../third_party/icu/source/data/in/icudtl.dat
+  mactool_cmd = copy-bundle-resource
 build audio_device_test_func.app/Default-568h@2x.png: mac_tool $
     ../../testing/gtest_ios/Default-568h@2x.png
   mactool_cmd = copy-bundle-resource
 build audio_device_test_func.app/Info.plist: copy_infoplist $
     ../../testing/gtest_ios/unittest-Info.plist
   env = export ALWAYS_SEARCH_USER_PATHS=NO; export $
+      ARCHS="$${ARCHS_STANDARD_INCLUDING_64_BIT}"; export $
       BUILT_PRODUCTS_DIR=/Users/cwebb/Sqwiggle/webrtc/trunk/out_ios/Debug-iphoneos; $
       export BUNDLE_ID_TEST_NAME=audiodevicetestfunc; export $
       SRCROOT=/Users/cwebb/Sqwiggle/webrtc/trunk/out_ios/Debug-iphoneos/../../webrtc/modules; $
@@ -53,8 +59,9 @@ build audio_device_test_func.app/Info.plist: copy_infoplist $
       INFOPLIST_PATH=audio_device_test_func.app/Info.plist; export $
       IPHONEOS_DEPLOYMENT_TARGET=6.0; export $
       LDPLUSPLUS="$${SOURCE_ROOT}/../../third_party/llvm-build/Release+Asserts/bin/clang++"; $
-      export MACH_O_TYPE=mh_execute; export $
-      OTHER_LDFLAGS=-Wl,-search_paths_first; export $
+      export MACH_O_TYPE=mh_execute; export OTHER_LDFLAGS="-framework $
+      Foundation -framework Security -framework SystemConfiguration $
+      -framework UIKit -Wl,-search_paths_first"; export $
       PRODUCT_NAME=audio_device_test_func; export $
       PRODUCT_TYPE=com.apple.product-type.application; export $
       SDKROOT=/Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS7.1.sdk; $
@@ -68,16 +75,16 @@ build audio_device_test_func.app/Info.plist: copy_infoplist $
       -Wno-missing-field-initializers -Wheader-hygiene -Wno-c++11-narrowing $
       -Wno-char-subscripts -Wno-unneeded-internal-declaration $
       -Wno-covered-switch-default -Wstring-conversion $
-      -Wno-deprecated-register -Wno-absolute-value"; export $
+      -Wno-deprecated-register -Wno-selector-type-mismatch"; export $
       WRAPPER_NAME=audio_device_test_func.app;
-  keys = '{"UIDeviceFamily": [1, 2], "BuildMachineOSBuild": "13C64", $
-      "DTXcodeBuild": "5B130a", "DTSDKBuild": "11D167", $
-      "CFBundleSupportedPlatforms": ["iPhoneOS"], "DTXcode": "0510", $
+  keys = '{"UIDeviceFamily": [1, 2], "BuildMachineOSBuild": "13D65", $
+      "DTXcodeBuild": "5B1008", "DTSDKBuild": "11D167", $
+      "CFBundleSupportedPlatforms": ["iPhoneOS"], "DTXcode": "0511", $
       "DTSDKName": "iphoneos", "DTPlatformVersion": "7.1", $
       "DTPlatformName": "iphoneos"}'
 defines = -DV8_DEPRECATION_WARNINGS -DBLINK_SCALE_FILTERS_AT_RECORD_TIME $
-    -DDISABLE_NACL -DCHROMIUM_BUILD -DUSE_LIBJPEG_TURBO=1 $
-    -DENABLE_CONFIGURATION_POLICY $
+    -DDISABLE_NACL -DCHROMIUM_BUILD -DCR_CLANG_REVISION=206824 $
+    -DUSE_LIBJPEG_TURBO=1 -DENABLE_CONFIGURATION_POLICY $
     -DDISCARDABLE_MEMORY_ALWAYS_SUPPORTED_NATIVELY $
     -DSYSTEM_NATIVELY_SIGNALS_MEMORY_PRESSURE -DENABLE_EGLIMAGE=1 $
     -DCLD_VERSION=1 -DENABLE_SPELLCHECK=1 -DDISABLE_FTP_SUPPORT=1 $
@@ -86,7 +93,7 @@ defines = -DV8_DEPRECATION_WARNINGS -DBLINK_SCALE_FILTERS_AT_RECORD_TIME $
     -DGTEST_HAS_POSIX_RE=0 -DUNIT_TEST -DGTEST_HAS_RTTI=0 $
     -D__STDC_CONSTANT_MACROS -D__STDC_FORMAT_MACROS $
     -DDYNAMIC_ANNOTATIONS_ENABLED=1 -DWTF_USE_DYNAMIC_ANNOTATIONS=1
-includes = -I../.. -I../.. -I../../webrtc/modules/interface $
+includes = -I../.. -I../../webrtc/modules/interface $
     -I../../webrtc/modules/audio_device/include $
     -I../../webrtc/common_audio/resampler/include $
     -I../../webrtc/common_audio/signal_processing/include $
@@ -99,7 +106,7 @@ cflags = -isysroot $
     -Wno-unused-parameter -Wno-missing-field-initializers -Wheader-hygiene $
     -Wno-c++11-narrowing -Wno-char-subscripts $
     -Wno-unneeded-internal-declaration -Wno-covered-switch-default $
-    -Wstring-conversion -Wno-deprecated-register -Wno-absolute-value
+    -Wstring-conversion -Wno-deprecated-register -Wno-selector-type-mismatch
 cflags_c = -std=c99 -fcolor-diagnostics -fstack-protector-all
 cflags_cc = -std=gnu++0x -fno-rtti -fno-exceptions $
     -fvisibility-inlines-hidden -fno-threadsafe-statics -fcolor-diagnostics $
@@ -117,26 +124,35 @@ build $
     cxx ../../webrtc/modules/audio_device/test/func_test_manager.cc || $
     obj/webrtc/modules/audio_device_test_func.compile_depends.stamp
 
-ldflags = -Wl,-search_paths_first -miphoneos-version-min=6.0 -isysroot $
+ldflags = -framework Foundation -framework Security -framework $
+    SystemConfiguration -framework UIKit -Wl,-search_paths_first $
+    -miphoneos-version-min=6.0 -isysroot $
     /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS7.1.sdk $
     -arch armv7 -L.
-libs = -framework AudioToolbox -framework CoreAudio -framework Foundation
+libs = -framework AudioToolbox -framework CoreAudio $
+    /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS7.1.sdk/usr/lib/libsqlite3.dylib $
+    -framework Foundation
 build audio_device_test_func.app/audio_device_test_func: link $
     obj/webrtc/modules/audio_device/test/audio_device_test_func.audio_device_test_func.o $
     obj/webrtc/modules/audio_device/test/audio_device_test_func.func_test_manager.o $
     libaudio_device.a libwebrtc_utility.a libcommon_audio.a $
     libsystem_wrappers.a libtest_support.a libgtest.a $
-    libaudio_coding_module.a libCNG.a libcommon_audio_neon.a libG711.a $
-    libG722.a libiLBC.a libiSAC.a libiSACFix.a libisac_neon.a libPCM16B.a $
-    libNetEq.a libwebrtc_opus.a libopus.a libacm2.a libNetEq4.a $
-    libmedia_file.a libwebrtc_video_coding.a libwebrtc_i420.a $
+    libaudio_coding_module.a libCNG.a libwebrtc_base.a libjsoncpp.a $
+    libcrssl.a libcrnspr.a libcrnss.a libnss_static.a libsqlite_regexp.a $
+    libicui18n.a libicuuc.a libicudata.a libcrnssckbi.a $
+    libcommon_audio_neon.a libG711.a libG722.a libiLBC.a libiSAC.a $
+    libiSACFix.a libisac_neon.a libPCM16B.a libwebrtc_opus.a libopus.a $
+    libneteq.a libmedia_file.a libwebrtc_video_coding.a libwebrtc_i420.a $
     libcommon_video.a libyuv.a libyuv_neon.a libvideo_coding_utility.a $
-    libwebrtc_vp8.a libvpx.a libvpx_asm_offsets_vp8.a $
-    libvpx_asm_offsets_vpx_scale.a libgmock.a libgflags.a | $
-    obj/third_party/libvpx/gen_asm_offsets_vpx_scale.actions_rules_copies.stamp $
-    obj/third_party/libvpx/gen_asm_offsets_vp8.actions_rules_copies.stamp
+    libwebrtc_vp8.a libvpx.a $
+    gen/third_party/libvpx/libvpx_asm_offsets_vp8.a $
+    gen/third_party/libvpx/libvpx_asm_offsets_vpx_scale.a libgmock.a | $
+    obj/third_party/libvpx/gen_asm_offsets_vp8.actions_rules_copies.stamp $
+    libsqlite_regexp.a $
+    obj/third_party/libvpx/gen_asm_offsets_vpx_scale.actions_rules_copies.stamp
   ld = $ldxx
 build audio_device_test_func.app: stamp $
+    audio_device_test_func.app/icudtl.dat $
     audio_device_test_func.app/Default-568h@2x.png $
     audio_device_test_func.app/Info.plist $
     audio_device_test_func.app/audio_device_test_func

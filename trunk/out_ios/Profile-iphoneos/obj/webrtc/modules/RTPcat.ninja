@@ -1,14 +1,20 @@
 build obj/webrtc/modules/RTPcat.actions_depends.stamp: stamp $
-    libNetEq4TestTools.a libgtest.a libG711.a libG722.a libPCM16B.a $
-    libiLBC.a libcommon_audio.a libsystem_wrappers.a libcommon_audio_neon.a $
-    libiSAC.a libCNG.a
+    libneteq_test_tools.a libgtest.a libG711.a libG722.a libPCM16B.a $
+    libiLBC.a libcommon_audio.a libsystem_wrappers.a libwebrtc_base.a $
+    libjsoncpp.a libcrssl.a libcrnspr.a libcrnss.a libnss_static.a $
+    libsqlite_regexp.a libsqlite_regexp.a libicui18n.a libicuuc.a $
+    libicudata.a libcrnssckbi.a libcommon_audio_neon.a libiSAC.a libCNG.a
 
+build RTPcat.app/icudtl.dat: mac_tool $
+    ../../third_party/icu/source/data/in/icudtl.dat
+  mactool_cmd = copy-bundle-resource
 build RTPcat.app/Default-568h@2x.png: mac_tool $
     ../../testing/gtest_ios/Default-568h@2x.png
   mactool_cmd = copy-bundle-resource
 build RTPcat.app/Info.plist: copy_infoplist $
     ../../testing/gtest_ios/unittest-Info.plist
   env = export ALWAYS_SEARCH_USER_PATHS=NO; export $
+      ARCHS="$${ARCHS_STANDARD_INCLUDING_64_BIT}"; export $
       BUILT_PRODUCTS_DIR=/Users/cwebb/Sqwiggle/webrtc/trunk/out_ios/Profile-iphoneos; $
       export BUNDLE_ID_TEST_NAME=RTPcat; export $
       SRCROOT=/Users/cwebb/Sqwiggle/webrtc/trunk/out_ios/Profile-iphoneos/../../webrtc/modules; $
@@ -35,9 +41,11 @@ build RTPcat.app/Info.plist: copy_infoplist $
       INFOPLIST_PATH=RTPcat.app/Info.plist; export $
       IPHONEOS_DEPLOYMENT_TARGET=6.0; export $
       LDPLUSPLUS="$${SOURCE_ROOT}/../../third_party/llvm-build/Release+Asserts/bin/clang++"; $
-      export MACH_O_TYPE=mh_execute; export $
-      OTHER_LDFLAGS=-Wl,-search_paths_first; export PRODUCT_NAME=RTPcat; $
-      export PRODUCT_TYPE=com.apple.product-type.application; export $
+      export MACH_O_TYPE=mh_execute; export OTHER_LDFLAGS="-framework $
+      Foundation -framework Security -framework SystemConfiguration $
+      -framework UIKit -Wl,-search_paths_first"; export $
+      PRODUCT_NAME=RTPcat; export $
+      PRODUCT_TYPE=com.apple.product-type.application; export $
       SDKROOT=/Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS7.1.sdk; $
       export SYMROOT=../../xcodebuild; export TARGETED_DEVICE_FAMILY=1,2; $
       export $
@@ -49,16 +57,16 @@ build RTPcat.app/Info.plist: copy_infoplist $
       -Wno-missing-field-initializers -Wheader-hygiene -Wno-c++11-narrowing $
       -Wno-char-subscripts -Wno-unneeded-internal-declaration $
       -Wno-covered-switch-default -Wstring-conversion $
-      -Wno-deprecated-register -Wno-absolute-value"; export $
+      -Wno-deprecated-register -Wno-selector-type-mismatch"; export $
       WRAPPER_NAME=RTPcat.app;
-  keys = '{"UIDeviceFamily": [1, 2], "BuildMachineOSBuild": "13C64", $
-      "DTXcodeBuild": "5B130a", "DTSDKBuild": "11D167", $
-      "CFBundleSupportedPlatforms": ["iPhoneOS"], "DTXcode": "0510", $
+  keys = '{"UIDeviceFamily": [1, 2], "BuildMachineOSBuild": "13D65", $
+      "DTXcodeBuild": "5B1008", "DTSDKBuild": "11D167", $
+      "CFBundleSupportedPlatforms": ["iPhoneOS"], "DTXcode": "0511", $
       "DTSDKName": "iphoneos", "DTPlatformVersion": "7.1", $
       "DTPlatformName": "iphoneos"}'
 defines = -DV8_DEPRECATION_WARNINGS -DBLINK_SCALE_FILTERS_AT_RECORD_TIME $
-    -DDISABLE_NACL -DCHROMIUM_BUILD -DUSE_LIBJPEG_TURBO=1 $
-    -DENABLE_CONFIGURATION_POLICY $
+    -DDISABLE_NACL -DCHROMIUM_BUILD -DCR_CLANG_REVISION=206824 $
+    -DUSE_LIBJPEG_TURBO=1 -DENABLE_CONFIGURATION_POLICY $
     -DDISCARDABLE_MEMORY_ALWAYS_SUPPORTED_NATIVELY $
     -DSYSTEM_NATIVELY_SIGNALS_MEMORY_PRESSURE -DENABLE_EGLIMAGE=1 $
     -DCLD_VERSION=1 -DENABLE_SPELLCHECK=1 -DDISABLE_FTP_SUPPORT=1 $
@@ -68,9 +76,8 @@ defines = -DV8_DEPRECATION_WARNINGS -DBLINK_SCALE_FILTERS_AT_RECORD_TIME $
     -D__STDC_CONSTANT_MACROS -D__STDC_FORMAT_MACROS -DNDEBUG -DNVALGRIND $
     -DDYNAMIC_ANNOTATIONS_ENABLED=0 -DNS_BLOCK_ASSERTIONS=1 $
     -D_FORTIFY_SOURCE=2
-includes = -I../.. -I../.. $
-    -I../../webrtc/modules/audio_coding/neteq4/interface $
-    -I../../webrtc/modules/audio_coding/neteq4/test -I../../webrtc $
+includes = -I../.. -I../../webrtc/modules/audio_coding/neteq/interface $
+    -I../../webrtc/modules/audio_coding/neteq/test -I../../webrtc $
     -I../../testing/gtest/include
 cflags = -isysroot $
     /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS7.1.sdk $
@@ -79,7 +86,7 @@ cflags = -isysroot $
     -Wno-unused-parameter -Wno-missing-field-initializers -Wheader-hygiene $
     -Wno-c++11-narrowing -Wno-char-subscripts $
     -Wno-unneeded-internal-declaration -Wno-covered-switch-default $
-    -Wstring-conversion -Wno-deprecated-register -Wno-absolute-value
+    -Wstring-conversion -Wno-deprecated-register -Wno-selector-type-mismatch
 cflags_c = -std=c99 -fcolor-diagnostics
 cflags_cc = -std=gnu++0x -fno-rtti -fno-exceptions $
     -fvisibility-inlines-hidden -fno-threadsafe-statics -fcolor-diagnostics
@@ -87,23 +94,28 @@ cflags_objc = $cflags_c -Wobjc-missing-property-synthesis
 cflags_objcc = $cflags_cc -Wobjc-missing-property-synthesis $
     -fobjc-call-cxx-cdtors
 
-build obj/webrtc/modules/audio_coding/neteq4/test/RTPcat.RTPcat.o: cxx $
-    ../../webrtc/modules/audio_coding/neteq4/test/RTPcat.cc || $
+build obj/webrtc/modules/audio_coding/neteq/test/RTPcat.RTPcat.o: cxx $
+    ../../webrtc/modules/audio_coding/neteq/test/RTPcat.cc || $
     obj.host/testing/iossim/iossim.gen/iossim/DVTiPhoneSimulatorRemoteClient.h
 
-ldflags = -Wl,-search_paths_first -Wl,-dead_strip $
-    -miphoneos-version-min=6.0 -isysroot $
+ldflags = -framework Foundation -framework Security -framework $
+    SystemConfiguration -framework UIKit -Wl,-search_paths_first $
+    -Wl,-dead_strip -miphoneos-version-min=6.0 -isysroot $
     /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS7.1.sdk $
     -arch armv7 -L.
-libs = -framework Foundation
+libs = $
+    /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS7.1.sdk/usr/lib/libsqlite3.dylib $
+    -framework Foundation
 build RTPcat.app/RTPcat: link $
-    obj/webrtc/modules/audio_coding/neteq4/test/RTPcat.RTPcat.o $
-    libNetEq4TestTools.a libgtest.a libG711.a libG722.a libPCM16B.a $
-    libiLBC.a libcommon_audio.a libsystem_wrappers.a libcommon_audio_neon.a $
-    libiSAC.a libCNG.a
+    obj/webrtc/modules/audio_coding/neteq/test/RTPcat.RTPcat.o $
+    libneteq_test_tools.a libgtest.a libG711.a libG722.a libPCM16B.a $
+    libiLBC.a libcommon_audio.a libsystem_wrappers.a libwebrtc_base.a $
+    libjsoncpp.a libcrssl.a libcrnspr.a libcrnss.a libnss_static.a $
+    libsqlite_regexp.a libicui18n.a libicuuc.a libicudata.a libcrnssckbi.a $
+    libcommon_audio_neon.a libiSAC.a libCNG.a | libsqlite_regexp.a
   ld = $ldxx
-build RTPcat.app: stamp RTPcat.app/Default-568h@2x.png $
-    RTPcat.app/Info.plist RTPcat.app/RTPcat
+build RTPcat.app: stamp RTPcat.app/icudtl.dat $
+    RTPcat.app/Default-568h@2x.png RTPcat.app/Info.plist RTPcat.app/RTPcat
   postbuilds = (export $
       BUILT_PRODUCTS_DIR=/Users/cwebb/Sqwiggle/webrtc/trunk/out_ios/Profile-iphoneos; $
       export CONFIGURATION=Profile-iphoneos; export $

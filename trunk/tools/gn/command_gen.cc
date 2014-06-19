@@ -22,25 +22,50 @@ namespace {
 // Suppress output on success.
 const char kSwitchQuiet[] = "q";
 
-void BackgroundDoWrite(const Target* target, const Toolchain* toolchain) {
-  NinjaTargetWriter::RunAndWriteFile(target, toolchain);
+const char kSwitchCheck[] = "check";
+
+void BackgroundDoWrite(const Target* target,
+                       const Toolchain* toolchain,
+                       const std::vector<const Item*>& deps_for_visibility) {
+  // Validate visibility.
+  Err err;
+  for (size_t i = 0; i < deps_for_visibility.size(); i++) {
+    if (!Visibility::CheckItemVisibility(target, deps_for_visibility[i],
+                                         &err)) {
+      g_scheduler->FailWithError(err);
+      break;  // Don't return early since we need DecrementWorkCount below.
+    }
+  }
+
+  if (!err.has_error())
+    NinjaTargetWriter::RunAndWriteFile(target, toolchain);
   g_scheduler->DecrementWorkCount();
 }
 
 // Called on the main thread.
 void ItemResolvedCallback(base::subtle::Atomic32* write_counter,
                           scoped_refptr<Builder> builder,
-                          const Item* item) {
+                          const BuilderRecord* record) {
   base::subtle::NoBarrier_AtomicIncrement(write_counter, 1);
 
+  const Item* item = record->item();
   const Target* target = item->AsTarget();
   if (target) {
     const Toolchain* toolchain =
         builder->GetToolchain(target->settings()->toolchain_label());
     DCHECK(toolchain);
+
+    // Collect all dependencies.
+    std::vector<const Item*> deps;
+    for (BuilderRecord::BuilderRecordSet::const_iterator iter =
+             record->all_deps().begin();
+         iter != record->all_deps().end();
+         ++iter)
+      deps.push_back((*iter)->item());
+
     g_scheduler->IncrementWorkCount();
     g_scheduler->ScheduleWork(
-        base::Bind(&BackgroundDoWrite, target, toolchain));
+        base::Bind(&BackgroundDoWrite, target, toolchain, deps));
   }
 }
 
@@ -64,7 +89,6 @@ const char kGen_Help[] =
     "\n"
     "  See \"gn help\" for the common command-line switches.\n";
 
-// Note: partially duplicated in command_gyp.cc.
 int RunGen(const std::vector<std::string>& args) {
   base::ElapsedTimer timer;
 
@@ -79,6 +103,9 @@ int RunGen(const std::vector<std::string>& args) {
   Setup* setup = new Setup();
   if (!setup->DoSetup(args[0]))
     return 1;
+
+  if (CommandLine::ForCurrentProcess()->HasSwitch(kSwitchCheck))
+    setup->set_check_public_headers(true);
 
   // Cause the load to also generate the ninja files for each target. We wrap
   // the writing to maintain a counter.

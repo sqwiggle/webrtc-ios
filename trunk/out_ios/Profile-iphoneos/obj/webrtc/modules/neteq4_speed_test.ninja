@@ -1,10 +1,13 @@
 build obj/webrtc/modules/neteq4_speed_test.actions_depends.stamp: stamp $
-    libNetEq4.a libneteq_unittest_tools.a libPCM16B.a libgflags.a $
-    libtest_support_main.a libG711.a libG722.a libiLBC.a libcommon_audio.a $
-    libsystem_wrappers.a libcommon_audio_neon.a libiSAC.a libiSACFix.a $
-    libisac_neon.a libCNG.a libopus.a libwebrtc_opus.a libgmock.a $
-    libgtest.a librtp_rtcp.a libpaced_sender.a $
-    libremote_bitrate_estimator.a librbe_components.a libtest_support.a
+    libNetEq4.a libneteq_test_support.a libgflags.a libtest_support_main.a $
+    libG711.a libG722.a libPCM16B.a libiLBC.a libcommon_audio.a $
+    libsystem_wrappers.a libwebrtc_base.a libjsoncpp.a libcrssl.a $
+    libcrnspr.a libcrnss.a libnss_static.a libsqlite_regexp.a $
+    libsqlite_regexp.a libicui18n.a libicuuc.a libicudata.a libcrnssckbi.a $
+    libcommon_audio_neon.a libiSAC.a libiSACFix.a libisac_neon.a libCNG.a $
+    libwebrtc_opus.a libopus.a libneteq_unittest_tools.a librtp_rtcp.a $
+    libpaced_sender.a libremote_bitrate_estimator.a librbe_components.a $
+    libgtest.a libtest_support.a libgmock.a libfield_trial_default.a
 
 defines = -DV8_DEPRECATION_WARNINGS -DBLINK_SCALE_FILTERS_AT_RECORD_TIME $
     -DDISABLE_NACL -DCHROMIUM_BUILD -DUSE_LIBJPEG_TURBO=1 $
@@ -19,11 +22,9 @@ defines = -DV8_DEPRECATION_WARNINGS -DBLINK_SCALE_FILTERS_AT_RECORD_TIME $
     -D__STDC_FORMAT_MACROS -DNDEBUG -DNVALGRIND $
     -DDYNAMIC_ANNOTATIONS_ENABLED=0 -DNS_BLOCK_ASSERTIONS=1 $
     -D_FORTIFY_SOURCE=2
-includes = -I../.. -I../.. -I../../third_party/opus/src/celt $
+includes = -I../.. -I../../third_party/opus/src/celt $
     -I../../third_party/opus/src/src -I../../third_party/opus/src/include $
-    -I../../webrtc/modules/audio_coding/neteq4/tools $
-    -I../../webrtc/modules/audio_coding/codecs/pcm16b/include $
-    -I../../webrtc -I../../third_party/gflags/gen/posix/include $
+    -I../../third_party/gflags/gen/posix/include $
     -I../../third_party/gflags/src
 cflags = -isysroot $
     /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS7.1.sdk $
@@ -32,7 +33,8 @@ cflags = -isysroot $
     -Wno-unused-parameter -Wno-missing-field-initializers -Wheader-hygiene $
     -Wno-c++11-narrowing -Wno-char-subscripts $
     -Wno-unneeded-internal-declaration -Wno-covered-switch-default $
-    -Wstring-conversion -Wno-deprecated-register -Wno-absolute-value
+    -Wstring-conversion -Wno-deprecated-register -Wno-absolute-value $
+    -Wno-selector-type-mismatch
 cflags_c = -std=c99 -fcolor-diagnostics
 cflags_cc = -std=gnu++0x -fno-rtti -fno-exceptions $
     -fvisibility-inlines-hidden -fno-threadsafe-statics -fcolor-diagnostics
@@ -46,19 +48,25 @@ build $
     || $
     obj.host/testing/iossim/iossim.gen/iossim/DVTiPhoneSimulatorRemoteClient.h
 
-ldflags = -Wl,-search_paths_first -Wl,-dead_strip $
-    -miphoneos-version-min=6.0 -isysroot $
+ldflags = -framework Foundation  -framework Security -framework $
+    SystemConfiguration -framework UIKit -Wl,-search_paths_first $
+    -Wl,-dead_strip -miphoneos-version-min=6.0 -isysroot $
     /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS7.1.sdk $
     -arch armv7 -L.
-libs = -framework Foundation
+libs = $
+    /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS7.1.sdk/usr/lib/libsqlite3.dylib $
+    -framework Foundation
 build neteq4_speed_test: link $
     obj/webrtc/modules/audio_coding/neteq4/test/neteq4_speed_test.neteq_speed_test.o $
-    libNetEq4.a libneteq_unittest_tools.a libPCM16B.a libgflags.a $
-    libtest_support_main.a libG711.a libG722.a libiLBC.a libcommon_audio.a $
-    libsystem_wrappers.a libcommon_audio_neon.a libiSAC.a libiSACFix.a $
-    libisac_neon.a libCNG.a libopus.a libwebrtc_opus.a libgmock.a $
-    libgtest.a librtp_rtcp.a libpaced_sender.a $
-    libremote_bitrate_estimator.a librbe_components.a libtest_support.a
+    libNetEq4.a libneteq_test_support.a libgflags.a libtest_support_main.a $
+    libG711.a libG722.a libPCM16B.a libiLBC.a libcommon_audio.a $
+    libsystem_wrappers.a libwebrtc_base.a libjsoncpp.a libcrssl.a $
+    libcrnspr.a libcrnss.a libnss_static.a libsqlite_regexp.a libicui18n.a $
+    libicuuc.a libicudata.a libcrnssckbi.a libcommon_audio_neon.a libiSAC.a $
+    libiSACFix.a libisac_neon.a libCNG.a libwebrtc_opus.a libopus.a $
+    libneteq_unittest_tools.a librtp_rtcp.a libpaced_sender.a $
+    libremote_bitrate_estimator.a librbe_components.a libgtest.a $
+    libtest_support.a libgmock.a libfield_trial_default.a | libsqlite_regexp.a
   ld = $ldxx
   postbuilds = $ && (export $
       BUILT_PRODUCTS_DIR=/Users/cwebb/Sqwiggle/webrtc/trunk/out_ios/Profile-iphoneos; $

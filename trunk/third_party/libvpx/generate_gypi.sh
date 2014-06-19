@@ -15,6 +15,7 @@
 #
 # !!! It's highly recommended to install yasm before running this script.
 
+export LC_ALL=C
 BASE_DIR=`pwd`
 LIBVPX_SRC_DIR="source/libvpx"
 LIBVPX_CONFIG_DIR="source/config"
@@ -87,6 +88,15 @@ function write_target_definition {
   echo "            'OTHER_CFLAGS': [ '-m$4', ]," >> $2
   echo "          }," >> $2
   echo "        }]," >> $2
+  if [[ $4 == avx* ]]; then
+  echo "        ['OS==\"win\"', {" >> $2
+  echo "          'msvs_settings': {" >> $2
+  echo "            'VCCLCompilerTool': {" >> $2
+  echo "              'EnableEnhancedInstructionSet': '3', # /arch:AVX" >> $2
+  echo "            }," >> $2
+  echo "          }," >> $2
+  echo "        }]," >> $2
+  fi
   echo "      ]," >> $2
   echo "    }," >> $2
 }
@@ -217,9 +227,13 @@ function make_clean {
 # Lint a pair of vpx_config.h and vpx_config.asm to make sure they match.
 # $1 - Header file directory.
 function lint_config {
-  $BASE_DIR/lint_config.sh \
-    -h $BASE_DIR/$LIBVPX_CONFIG_DIR/$1/vpx_config.h \
-    -a $BASE_DIR/$LIBVPX_CONFIG_DIR/$1/vpx_config.asm
+  # mips does not contain any assembly so the header does not need to be
+  # compared to the asm.
+  if [[ "$1" != *mipsel ]]; then
+    $BASE_DIR/lint_config.sh \
+      -h $BASE_DIR/$LIBVPX_CONFIG_DIR/$1/vpx_config.h \
+      -a $BASE_DIR/$LIBVPX_CONFIG_DIR/$1/vpx_config.asm
+  fi
 }
 
 # Print the configuration.
@@ -261,28 +275,28 @@ function gen_rtcd_header {
       -o $BASE_DIR/$TEMP_DIR/libvpx.config
   fi
 
-  $BASE_DIR/$LIBVPX_SRC_DIR/build/make/rtcd.sh \
+  $BASE_DIR/$LIBVPX_SRC_DIR/build/make/rtcd.pl \
     --arch=$2 \
     --sym=vp8_rtcd \
     --config=$BASE_DIR/$TEMP_DIR/libvpx.config \
     --disable-avx2 \
-    $BASE_DIR/$LIBVPX_SRC_DIR/vp8/common/rtcd_defs.sh \
+    $BASE_DIR/$LIBVPX_SRC_DIR/vp8/common/rtcd_defs.pl \
     > $BASE_DIR/$LIBVPX_CONFIG_DIR/$1/vp8_rtcd.h
 
-  $BASE_DIR/$LIBVPX_SRC_DIR/build/make/rtcd.sh \
+  $BASE_DIR/$LIBVPX_SRC_DIR/build/make/rtcd.pl \
     --arch=$2 \
     --sym=vp9_rtcd \
     --config=$BASE_DIR/$TEMP_DIR/libvpx.config \
     --disable-avx2 \
-    $BASE_DIR/$LIBVPX_SRC_DIR/vp9/common/vp9_rtcd_defs.sh \
+    $BASE_DIR/$LIBVPX_SRC_DIR/vp9/common/vp9_rtcd_defs.pl \
     > $BASE_DIR/$LIBVPX_CONFIG_DIR/$1/vp9_rtcd.h
 
-  $BASE_DIR/$LIBVPX_SRC_DIR/build/make/rtcd.sh \
+  $BASE_DIR/$LIBVPX_SRC_DIR/build/make/rtcd.pl \
     --arch=$2 \
     --sym=vpx_scale_rtcd \
     --config=$BASE_DIR/$TEMP_DIR/libvpx.config \
     --disable-avx2 \
-    $BASE_DIR/$LIBVPX_SRC_DIR/vpx_scale/vpx_scale_rtcd.sh \
+    $BASE_DIR/$LIBVPX_SRC_DIR/vpx_scale/vpx_scale_rtcd.pl \
     > $BASE_DIR/$LIBVPX_CONFIG_DIR/$1/vpx_scale_rtcd.h
 
   rm -rf $BASE_DIR/$TEMP_DIR/libvpx.config
@@ -316,16 +330,18 @@ cp -R $LIBVPX_SRC_DIR $TEMP_DIR
 cd $TEMP_DIR
 
 echo "Generate Config Files"
+# TODO(joeyparrish) Enable AVX2 when broader VS2013 support is available
 all_platforms="--enable-external-build --enable-postproc --disable-install-srcs --enable-multi-res-encoding --enable-temporal-denoising --disable-unit-tests --disable-install-docs --disable-examples --disable-avx2"
 gen_config_files linux/ia32 "--target=x86-linux-gcc --disable-ccache --enable-pic --enable-realtime-only ${all_platforms}"
 gen_config_files linux/x64 "--target=x86_64-linux-gcc --disable-ccache --enable-pic --enable-realtime-only ${all_platforms}"
 gen_config_files linux/arm "--target=armv6-linux-gcc --enable-pic --enable-realtime-only --disable-install-bins --disable-install-libs ${all_platforms}"
 gen_config_files linux/arm-neon "--target=armv7-linux-gcc --enable-pic --enable-realtime-only ${all_platforms}"
 gen_config_files linux/arm-neon-cpu-detect "--target=armv7-linux-gcc --enable-pic --enable-realtime-only --enable-runtime-cpu-detect ${all_platforms}"
+gen_config_files linux/arm64 "--force-target=armv8-linux-gcc --enable-pic --enable-realtime-only ${all_platforms}"
 gen_config_files linux/mipsel "--target=mips32-linux-gcc --disable-fast-unaligned ${all_platforms}"
 gen_config_files linux/generic "--target=generic-gnu --enable-pic --enable-realtime-only ${all_platforms}"
-gen_config_files win/ia32 "--target=x86-win32-vs7 --enable-realtime-only ${all_platforms}"
-gen_config_files win/x64 "--target=x86_64-win64-vs9 --enable-realtime-only ${all_platforms}"
+gen_config_files win/ia32 "--target=x86-win32-vs12 --enable-realtime-only ${all_platforms}"
+gen_config_files win/x64 "--target=x86_64-win64-vs12 --enable-realtime-only ${all_platforms}"
 gen_config_files mac/ia32 "--target=x86-darwin9-gcc --enable-pic --enable-realtime-only ${all_platforms}"
 gen_config_files mac/x64 "--target=x86_64-darwin9-gcc --enable-pic --enable-realtime-only ${all_platforms}"
 gen_config_files nacl "--target=generic-gnu --enable-pic --enable-realtime-only ${all_platforms}"
@@ -340,6 +356,8 @@ lint_config linux/x64
 lint_config linux/arm
 lint_config linux/arm-neon
 lint_config linux/arm-neon-cpu-detect
+lint_config linux/arm64
+lint_config linux/mipsel
 lint_config linux/generic
 lint_config win/ia32
 lint_config win/x64
@@ -358,6 +376,7 @@ gen_rtcd_header linux/x64 x86_64
 gen_rtcd_header linux/arm armv6
 gen_rtcd_header linux/arm-neon armv7
 gen_rtcd_header linux/arm-neon-cpu-detect armv7
+gen_rtcd_header linux/arm64 armv8
 gen_rtcd_header linux/mipsel mipsel
 gen_rtcd_header linux/generic generic
 gen_rtcd_header win/ia32 x86
@@ -402,6 +421,12 @@ config=$(print_config linux/arm-neon-cpu-detect)
 make_clean
 make libvpx_srcs.txt target=libs $config > /dev/null
 convert_srcs_to_gypi libvpx_srcs.txt libvpx_srcs_arm_neon_cpu_detect
+
+echo "Generate ARM64 source list."
+config=$(print_config linux/arm64)
+make_clean
+make libvpx_srcs.txt target=libs $config > /dev/null
+convert_srcs_to_gypi libvpx_srcs.txt libvpx_srcs_arm64
 
 echo "Generate MIPS source list."
 config=$(print_config_basic linux/mipsel)

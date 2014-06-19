@@ -29,7 +29,7 @@ class BuildDirAmbiguous(Exception): pass
 
 class ChromeTests:
   SLOW_TOOLS = ["memcheck", "tsan", "tsan_rv", "drmemory"]
-  LAYOUT_TESTS_DEFAULT_CHUNK_SIZE = 400
+  LAYOUT_TESTS_DEFAULT_CHUNK_SIZE = 300
 
   def __init__(self, options, args, test):
     if ':' in test:
@@ -281,9 +281,6 @@ class ChromeTests:
   def TestContent(self):
     return self.SimpleTest("content", "content_unittests")
 
-  def TestContentBrowser(self):
-    return self.SimpleTest("content", "content_browsertests")
-
   def TestCourgette(self):
     return self.SimpleTest("courgette", "courgette_unittests")
 
@@ -366,6 +363,57 @@ class ChromeTests:
   def TestViews(self):
     return self.SimpleTest("views", "views_unittests")
 
+  def TestCloudPrint(self):
+    return self.SimpleTest("cloud_print", "cloud_print_unittests")
+
+  def TestCacheInvalidation(self):
+    return self.SimpleTest("cacheinvalidation", "cacheinvalidation_unittests")
+
+  def TestAddressInput(self):
+    return self.SimpleTest("addressinput", "libaddressinput_unittests")
+
+  def TestPhoneNumber(self):
+    return self.SimpleTest("phonenumber", "libphonenumber_unittests")
+
+  def TestMojoSystem(self):
+    return self.SimpleTest("mojo_system", "mojo_system_unittests")
+
+  def TestMojoPublicSystem(self):
+    return self.SimpleTest("mojo_public_system",
+                           "mojo_public_system_unittests")
+
+  def TestMojoPublicUtility(self):
+    return self.SimpleTest("mojo_public_utility",
+                           "mojo_public_utility_unittests")
+
+  def TestMojoPublicBindings(self):
+    return self.SimpleTest("mojo_public_bindings",
+                           "mojo_public_bindings_unittests")
+
+  def TestMojoPublicEnv(self):
+    return self.SimpleTest("mojo_public_env",
+                           "mojo_public_environment_unittests")
+
+  def TestMojoPublicSysPerf(self):
+    return self.SimpleTest("mojo_public_sysperf",
+                           "mojo_public_system_perftests")
+
+  def TestMojoCommon(self):
+    return self.SimpleTest("mojo_common", "mojo_common_unittests")
+
+  def TestMojoAppsJS(self):
+    return self.SimpleTest("mojo_apps_js", "mojo_apps_js_unittests")
+
+  def TestMojoJS(self):
+    return self.SimpleTest("mojo_js", "mojo_js_unittests")
+
+  def TestMojoServiceManager(self):
+    return self.SimpleTest("mojo_service_manager",
+                           "mojo_service_manager_unittests")
+
+  def TestMojoViewManager(self):
+    return self.SimpleTest("mojo_view_manager", "mojo_view_manager_unittests")
+
   # Valgrind timeouts are in seconds.
   UI_VALGRIND_ARGS = ["--timeout=14400", "--trace_children", "--indirect"]
   # UI test timeouts are in milliseconds.
@@ -388,6 +436,11 @@ class ChromeTests:
 
   def TestBrowser(self):
     return self.SimpleTest("chrome", "browser_tests",
+                           valgrind_test_args=self.BROWSER_VALGRIND_ARGS,
+                           cmd_args=self.BROWSER_TEST_ARGS)
+
+  def TestContentBrowser(self):
+    return self.SimpleTest("content", "content_browsertests",
                            valgrind_test_args=self.BROWSER_VALGRIND_ARGS,
                            cmd_args=self.BROWSER_TEST_ARGS)
 
@@ -451,10 +504,11 @@ class ChromeTests:
     # tests if we're low on memory.
     jobs = max(1, int(multiprocessing.cpu_count() * 0.3))
     script_cmd = ["python", script, "-v",
-                  "--run-singly",  # run a separate DumpRenderTree for each test
+                  # run a separate DumpRenderTree for each test
+                  "--batch-size=1",
                   "--fully-parallel",
                   "--child-processes=%d" % jobs,
-                  "--time-out-ms=200000",
+                  "--time-out-ms=800000",
                   "--no-retry-failures",  # retrying takes too much time
                   # http://crbug.com/176908: Don't launch a browser when done.
                   "--no-show-results",
@@ -506,9 +560,9 @@ class ChromeTests:
     try:
       f = open(chunk_file)
       if f:
-        str = f.read()
-        if len(str):
-          chunk_num = int(str)
+        chunk_str = f.read()
+        if len(chunk_str):
+          chunk_num = int(chunk_str)
         # This should be enough so that we have a couple of complete runs
         # of test data stored in the archive (although note that when we loop
         # that we almost guaranteed won't be at the end of the test list)
@@ -583,6 +637,25 @@ class ChromeTests:
     "unit": TestUnit,            "unit_tests": TestUnit,
     "url": TestURL,              "url_unittests": TestURL,
     "views": TestViews,          "views_unittests": TestViews,
+    "cloud_print": TestCloudPrint,
+    "cloud_print_unittests": TestCloudPrint,
+    "cacheinvalidation": TestCacheInvalidation,
+    "cacheinvalidation_unittests": TestCacheInvalidation,
+    "addressinput": TestAddressInput,
+    "libaddressinput_unittests": TestAddressInput,
+    "phonenumber": TestPhoneNumber,
+    "libphonenumber_unittests": TestPhoneNumber,
+    "mojo_system": TestMojoSystem,
+    "mojo_public_system": TestMojoPublicSystem,
+    "mojo_public_utility": TestMojoPublicUtility,
+    "mojo_public_bindings": TestMojoPublicBindings,
+    "mojo_public_env": TestMojoPublicEnv,
+    "mojo_public_sysperf": TestMojoPublicSysPerf,
+    "mojo_common": TestMojoCommon,
+    "mojo_apps_js": TestMojoAppsJS,
+    "mojo_js": TestMojoJS,
+    "mojo_service_manager": TestMojoServiceManager,
+    "mojo_view_manager": TestMojoViewManager,
   }
 
 

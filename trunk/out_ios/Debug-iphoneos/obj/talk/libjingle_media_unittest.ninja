@@ -4,24 +4,26 @@ build obj/talk/libjingle_media_unittest.actions_depends.stamp: stamp $
     libsqlite_regexp.a libicui18n.a libicuuc.a libicudata.a libcrnssckbi.a $
     libyuv.a libyuv_neon.a libvideo_capture_module.a libwebrtc_utility.a $
     libaudio_coding_module.a libCNG.a libcommon_audio.a $
-    libsystem_wrappers.a libcommon_audio_neon.a libG711.a libG722.a $
-    libiLBC.a libiSAC.a libiSACFix.a libisac_neon.a libPCM16B.a libNetEq.a $
-    libwebrtc_opus.a libopus.a libacm2.a libNetEq4.a libmedia_file.a $
-    libwebrtc_video_coding.a libwebrtc_i420.a libcommon_video.a $
-    libvideo_coding_utility.a libwebrtc_vp8.a libvpx.a $
+    libsystem_wrappers.a libwebrtc_base.a libjsoncpp.a $
+    libcommon_audio_neon.a libG711.a libG722.a libiLBC.a libiSAC.a $
+    libiSACFix.a libisac_neon.a libPCM16B.a libwebrtc_opus.a libopus.a $
+    libneteq.a libmedia_file.a libwebrtc_video_coding.a libwebrtc_i420.a $
+    libcommon_video.a libvideo_coding_utility.a libwebrtc_vp8.a libvpx.a $
     obj/third_party/libvpx/gen_asm_offsets_vp8.actions_rules_copies.stamp $
-    libvpx_asm_offsets_vp8.a $
+    gen/third_party/libvpx/libvpx_asm_offsets_vp8.a $
     obj/third_party/libvpx/gen_asm_offsets_vpx_scale.actions_rules_copies.stamp $
-    libvpx_asm_offsets_vpx_scale.a libvideo_render_module.a $
+    gen/third_party/libvpx/libvpx_asm_offsets_vpx_scale.a $
+    libvideo_render_module.a libwebrtc.a libwebrtc_common.a $
     libvideo_engine_core.a librtp_rtcp.a libpaced_sender.a $
     libremote_bitrate_estimator.a librbe_components.a $
     libbitrate_controller.a libvideo_processing.a libvoice_engine.a $
     libaudio_conference_mixer.a libaudio_processing.a $
     libaudio_processing_neon.a $
     obj/webrtc/modules/audio_processing/gen_nsx_core_neon_offsets_h.actions_rules_copies.stamp $
-    lib_core_neon_offsets.a $
+    gen/audio_processing/asm_offsets/lib_core_neon_offsets.a $
     obj/webrtc/modules/audio_processing/gen_aecm_core_neon_offsets_h.actions_rules_copies.stamp $
-    libaudio_device.a libjingle.a libexpat.a libjsoncpp.a libjingle_sound.a
+    libaudio_device.a libfield_trial_default.a libjingle.a libexpat.a $
+    libjingle_sound.a
 
 build obj/talk/libjingle_media_unittest.compile_depends.stamp: stamp $
     obj/third_party/libvpx/libvpx.actions_rules_copies.stamp $
@@ -58,8 +60,8 @@ defines = -DV8_DEPRECATION_WARNINGS -DBLINK_SCALE_FILTERS_AT_RECORD_TIME $
     -DJSONCPP_RELATIVE_PATH -DLOGGING=1 -DSRTP_RELATIVE_PATH $
     -DFEATURE_ENABLE_SSL -DFEATURE_ENABLE_PSTN -DHAVE_SRTP $
     -DHAVE_WEBRTC_VIDEO -DHAVE_WEBRTC_VOICE -DUSE_WEBRTC_DEV_BRANCH $
-    -DDISABLE_NACL -DCHROMIUM_BUILD -DUSE_LIBJPEG_TURBO=1 $
-    -DENABLE_CONFIGURATION_POLICY $
+    -DDISABLE_NACL -DCHROMIUM_BUILD -DCR_CLANG_REVISION=206824 $
+    -DUSE_LIBJPEG_TURBO=1 -DENABLE_CONFIGURATION_POLICY $
     -DDISCARDABLE_MEMORY_ALWAYS_SUPPORTED_NATIVELY $
     -DSYSTEM_NATIVELY_SIGNALS_MEMORY_PRESSURE -DENABLE_EGLIMAGE=1 $
     -DCLD_VERSION=1 -DENABLE_SPELLCHECK=1 -DDISABLE_FTP_SUPPORT=1 $
@@ -97,7 +99,7 @@ cflags = -isysroot $
     -Wno-unused-parameter -Wno-missing-field-initializers -Wheader-hygiene $
     -Wno-c++11-narrowing -Wno-char-subscripts $
     -Wno-unneeded-internal-declaration -Wno-covered-switch-default $
-    -Wstring-conversion -Wno-deprecated-register -Wno-absolute-value
+    -Wstring-conversion -Wno-deprecated-register -Wno-selector-type-mismatch
 cflags_c = -std=c99 -fcolor-diagnostics -fstack-protector-all
 cflags_cc = -std=gnu++0x -fno-rtti -fno-exceptions $
     -fvisibility-inlines-hidden -fno-threadsafe-statics -fcolor-diagnostics $
@@ -153,13 +155,17 @@ build $
     cxx ../../talk/media/webrtc/webrtcvideoengine_unittest.cc || $
     obj/talk/libjingle_media_unittest.actions_rules_copies.stamp
 build $
+    obj/talk/media/webrtc/libjingle_media_unittest.webrtcvideoengine2_unittest.o: $
+    cxx ../../talk/media/webrtc/webrtcvideoengine2_unittest.cc || $
+    obj/talk/libjingle_media_unittest.actions_rules_copies.stamp
+build $
     obj/talk/media/webrtc/libjingle_media_unittest.webrtcvoiceengine_unittest.o: $
     cxx ../../talk/media/webrtc/webrtcvoiceengine_unittest.cc || $
     obj/talk/libjingle_media_unittest.actions_rules_copies.stamp
 
 ldflags = -framework AVFoundation -framework CoreMedia -framework CoreVideo $
-    -framework UIKit -framework OpenGLES -framework QuartzCore -framework $
-    Foundation -framework Security -framework SystemConfiguration $
+    -framework UIKit -framework Foundation -framework Security -framework $
+    SystemConfiguration -framework OpenGLES -framework QuartzCore $
     -Wl,-search_paths_first -miphoneos-version-min=6.0 -isysroot $
     /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS7.1.sdk $
     -arch armv7 -L.
@@ -180,24 +186,29 @@ build libjingle_media_unittest: link $
     obj/talk/media/webrtc/libjingle_media_unittest.webrtcpassthroughrender_unittest.o $
     obj/talk/media/webrtc/libjingle_media_unittest.webrtcvideocapturer_unittest.o $
     obj/talk/media/webrtc/libjingle_media_unittest.webrtcvideoengine_unittest.o $
+    obj/talk/media/webrtc/libjingle_media_unittest.webrtcvideoengine2_unittest.o $
     obj/talk/media/webrtc/libjingle_media_unittest.webrtcvoiceengine_unittest.o $
     libcrssl.a libcrnspr.a libcrnss.a libgunit.a libjingle_media.a $
     libjingle_unittest_main.a libnss_static.a libsqlite_regexp.a $
     libicui18n.a libicuuc.a libicudata.a libcrnssckbi.a libyuv.a $
     libyuv_neon.a libvideo_capture_module.a libwebrtc_utility.a $
     libaudio_coding_module.a libCNG.a libcommon_audio.a $
-    libsystem_wrappers.a libcommon_audio_neon.a libG711.a libG722.a $
-    libiLBC.a libiSAC.a libiSACFix.a libisac_neon.a libPCM16B.a libNetEq.a $
-    libwebrtc_opus.a libopus.a libacm2.a libNetEq4.a libmedia_file.a $
-    libwebrtc_video_coding.a libwebrtc_i420.a libcommon_video.a $
-    libvideo_coding_utility.a libwebrtc_vp8.a libvpx.a $
-    libvpx_asm_offsets_vp8.a libvpx_asm_offsets_vpx_scale.a $
-    libvideo_render_module.a libvideo_engine_core.a librtp_rtcp.a $
-    libpaced_sender.a libremote_bitrate_estimator.a librbe_components.a $
+    libsystem_wrappers.a libwebrtc_base.a libjsoncpp.a $
+    libcommon_audio_neon.a libG711.a libG722.a libiLBC.a libiSAC.a $
+    libiSACFix.a libisac_neon.a libPCM16B.a libwebrtc_opus.a libopus.a $
+    libneteq.a libmedia_file.a libwebrtc_video_coding.a libwebrtc_i420.a $
+    libcommon_video.a libvideo_coding_utility.a libwebrtc_vp8.a libvpx.a $
+    gen/third_party/libvpx/libvpx_asm_offsets_vp8.a $
+    gen/third_party/libvpx/libvpx_asm_offsets_vpx_scale.a $
+    libvideo_render_module.a libwebrtc.a libwebrtc_common.a $
+    libvideo_engine_core.a librtp_rtcp.a libpaced_sender.a $
+    libremote_bitrate_estimator.a librbe_components.a $
     libbitrate_controller.a libvideo_processing.a libvoice_engine.a $
     libaudio_conference_mixer.a libaudio_processing.a $
-    libaudio_processing_neon.a lib_core_neon_offsets.a libaudio_device.a $
-    libjingle.a libexpat.a libjsoncpp.a libjingle_sound.a | $
+    libaudio_processing_neon.a $
+    gen/audio_processing/asm_offsets/lib_core_neon_offsets.a $
+    libaudio_device.a libfield_trial_default.a libjingle.a libexpat.a $
+    libjingle_sound.a | $
     obj/webrtc/modules/audio_processing/gen_nsx_core_neon_offsets_h.actions_rules_copies.stamp $
     obj/webrtc/modules/audio_processing/gen_aecm_core_neon_offsets_h.actions_rules_copies.stamp $
     obj/third_party/libvpx/gen_asm_offsets_vp8.actions_rules_copies.stamp $

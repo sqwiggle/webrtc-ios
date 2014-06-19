@@ -52,10 +52,11 @@ filter16_coeff:
 _vp8_sixtap_predict16x16_neon:
 	vp8_sixtap_predict16x16_neon: @
     push            {r4-r5, lr}
+    vpush           {d8-d15}
 
     adr             r12, filter16_coeff
-    ldr             r4, [sp, #12]            @load parameters from stack
-    ldr             r5, [sp, #16]            @load parameters from stack
+    ldr             r4, [sp, #76]            @load parameters from stack
+    ldr             r5, [sp, #80]            @load parameters from stack
 
     cmp             r2, #0                   @skip first_pass filter if xoffset=0
     beq             secondpass_filter16x16_only
@@ -300,6 +301,8 @@ secondpass_inner_loop_neon:
     bne filt_blk2d_sp16x16_outloop_neon
 
     add             sp, sp, #336
+
+    vpop            {d8-d15}
     pop             {r4-r5,pc}
 
  @--------------------
@@ -393,6 +396,7 @@ filt_blk2d_fpo16x16_loop_neon:
 
     bne             filt_blk2d_fpo16x16_loop_neon
 
+    vpop            {d8-d15}
     pop             {r4-r5,pc}
 
  @--------------------
@@ -491,6 +495,7 @@ secondpass_only_inner_loop_neon:
 
     bne filt_blk2d_spo16x16_outloop_neon
 
+    vpop            {d8-d15}
     pop             {r4-r5,pc}
 
     @

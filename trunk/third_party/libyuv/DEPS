@@ -14,7 +14,7 @@ vars = {
   "chromium_trunk" : "http://src.chromium.org/svn/trunk",
   # chrome://version/ for revision of canary Chrome.
   # http://chromium-status.appspot.com/lkgr is a last known good revision.
-  "chromium_revision": "255773",
+  "chromium_revision": "262938",
 }
 
 # NOTE: Prefer revision numbers to tags for svn deps. Use http rather than
@@ -58,6 +58,9 @@ deps = {
   "tools/win/supalink":
     Var("chromium_trunk") + "/src/tools/win/supalink@" + Var("chromium_revision"),
 
+  "third_party/binutils":
+    Var("chromium_trunk") + "/src/third_party/binutils@" + Var("chromium_revision"),
+
   "third_party/libjpeg_turbo":
     From("chromium_deps", "src/third_party/libjpeg_turbo"),
 
@@ -83,10 +86,6 @@ deps_os = {
 
     "tools/find_depot_tools":
       File(Var("chromium_trunk") + "/src/tools/find_depot_tools.py@" + Var("chromium_revision")),
-  },
-  "unix": {
-    "third_party/gold":
-      From("chromium_deps", "src/third_party/gold"),
   },
   "android": {
     "third_party/android_tools":
@@ -125,7 +124,7 @@ hooks = [
   # Pull GN binaries. This needs to be before running GYP below.
   {
     "name": "gn_win",
-    "pattern": "tools/gn/bin/win/gn.exe.sha1",
+    "pattern": ".",
     "action": [ "download_from_google_storage",
                 "--no_resume",
                 "--platform=win32",
@@ -136,7 +135,7 @@ hooks = [
   },
   {
     "name": "gn_mac",
-    "pattern": "tools/gn/bin/mac/gn.sha1",
+    "pattern": ".",
     "action": [ "download_from_google_storage",
                 "--no_resume",
                 "--platform=darwin",
@@ -147,7 +146,7 @@ hooks = [
   },
   {
     "name": "gn_linux",
-    "pattern": "tools/gn/bin/linux/gn.sha1",
+    "pattern": ".",
     "action": [ "download_from_google_storage",
                 "--no_resume",
                 "--platform=linux*",
@@ -158,7 +157,7 @@ hooks = [
   },
   {
     "name": "gn_linux32",
-    "pattern": "tools/gn/bin/linux/gn32.sha1",
+    "pattern": ".",
     "action": [ "download_from_google_storage",
                 "--no_resume",
                 "--platform=linux*",
@@ -172,7 +171,20 @@ hooks = [
     # zero seconds to run. If something changed, it downloads a prebuilt clang.
     "pattern": ".",
     "action": ["python", Var("root_dir") + "/tools/clang/scripts/update.py",
-               "--mac-only"],
+               "--if-needed"],
+  },
+  {
+  # Update the Windows toolchain if necessary.
+    "name": "win_toolchain",
+    "pattern": ".",
+    "action": ["python", Var("root_dir") + "/download_vs_toolchain.py",
+               "update"],
+  },
+  {
+    # Pull binutils for gold.
+    "name": "binutils",
+    "pattern": ".",
+    "action": ["python", Var("root_dir") + "/third_party/binutils/download.py"],
   },
   {
     # A change to a .gyp, .gypi, or to GYP itself should run the generator.

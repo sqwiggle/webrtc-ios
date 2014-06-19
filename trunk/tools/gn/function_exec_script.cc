@@ -233,6 +233,8 @@ bool ExecProcess(const CommandLine& cmdline,
 }  // namespace
 
 const char kExecScript[] = "exec_script";
+const char kExecScript_HelpShort[] =
+    "exec_script: Synchronously run a script and return the output.";
 const char kExecScript_Help[] =
     "exec_script: Synchronously run a script and return the output.\n"
     "\n"
@@ -408,7 +410,7 @@ Value RunExecScript(Scope* scope,
   }
 
   // Default to None value for the input conversion if unspecified.
-  return ConvertInputToValue(output, function,
+  return ConvertInputToValue(scope->settings(), output, function,
                              args.size() >= 3 ? args[2] : Value(), err);
 }
 

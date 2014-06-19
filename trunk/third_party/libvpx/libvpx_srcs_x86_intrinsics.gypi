@@ -71,6 +71,7 @@
       ],
       'sources': [
         '<(libvpx_source)/vp8/common/x86/variance_ssse3.c',
+        '<(libvpx_source)/vp8/encoder/x86/quantize_ssse3.c',
         '<(libvpx_source)/vp9/common/x86/vp9_subpixel_8t_intrin_ssse3.c',
       ],
       'conditions': [

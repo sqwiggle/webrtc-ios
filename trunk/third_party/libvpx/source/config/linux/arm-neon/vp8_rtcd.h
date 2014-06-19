@@ -87,8 +87,8 @@ void vp8_dc_only_idct_add_v6(short input, unsigned char *pred, int pred_stride, 
 void vp8_dc_only_idct_add_neon(short input, unsigned char *pred, int pred_stride, unsigned char *dst, int dst_stride);
 #define vp8_dc_only_idct_add vp8_dc_only_idct_add_neon
 
-int vp8_denoiser_filter_c(struct yv12_buffer_config* mc_running_avg, struct yv12_buffer_config* running_avg, struct macroblock* signal, unsigned int motion_magnitude2, int y_offset, int uv_offset);
-int vp8_denoiser_filter_neon(struct yv12_buffer_config* mc_running_avg, struct yv12_buffer_config* running_avg, struct macroblock* signal, unsigned int motion_magnitude2, int y_offset, int uv_offset);
+int vp8_denoiser_filter_c(unsigned char *mc_running_avg_y, int mc_avg_y_stride, unsigned char *running_avg_y, int avg_y_stride, unsigned char *sig, int sig_stride, unsigned int motion_magnitude, int increase_denoising);
+int vp8_denoiser_filter_neon(unsigned char *mc_running_avg_y, int mc_avg_y_stride, unsigned char *running_avg_y, int avg_y_stride, unsigned char *sig, int sig_stride, unsigned int motion_magnitude, int increase_denoising);
 #define vp8_denoiser_filter vp8_denoiser_filter_neon
 
 void vp8_dequant_idct_add_c(short *input, short *dq, unsigned char *output, int stride);
@@ -422,6 +422,7 @@ void vp8_yv12_copy_partial_frame_neon(struct yv12_buffer_config *src_ybc, struct
 #define vp8_yv12_copy_partial_frame vp8_yv12_copy_partial_frame_neon
 
 void vp8_rtcd(void);
+
 #include "vpx_config.h"
 
 #ifdef RTCD_C
@@ -431,7 +432,6 @@ static void setup_rtcd_internal(void)
     int flags = arm_cpu_caps();
 
     (void)flags;
-
 
 }
 #endif

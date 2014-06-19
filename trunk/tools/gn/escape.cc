@@ -58,6 +58,9 @@ void EscapeStringToString(const base::StringPiece& str,
     } else if (str[i] == '\\' && (options.mode & ESCAPE_JSON)) {
       dest->push_back('\\');
       dest->push_back('\\');
+    } else if (str[i] == ':' && (options.mode & ESCAPE_NINJA)) {
+      dest->push_back('$');
+      dest->push_back(':');
     } else {
       dest->push_back(str[i]);
     }
@@ -86,5 +89,5 @@ void EscapeStringToStream(std::ostream& out,
   result->reserve(str.size() + 4);  // Guess we'll add a couple of extra chars.
   EscapeStringToString(str, options, &result.container(), NULL);
   if (!result->empty())
-    out.write(result->data(), result->size());
+    out.write(&result[0], result->size());
 }

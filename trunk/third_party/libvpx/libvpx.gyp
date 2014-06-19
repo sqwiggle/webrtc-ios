@@ -28,6 +28,9 @@
               }],
             ],
           }],
+          ['target_arch=="arm64"', {
+            'target_arch_full': 'arm64',
+          }],
         ],
       }],
 
@@ -50,10 +53,8 @@
     'variables': {
       'conditions': [
         ['OS=="win" and buildtype=="Official"', {
-          # Setting the optimizations to 'speed' or to 'max' results in a lot of
-          # unresolved symbols. The only supported mode is 'size' (see
-          # crbug.com/352476).
-          'optimize' :'size',
+          # Do not set to 'size', as it results in an error on win64.
+          'optimize' :'speed',
         }],
       ],
     },
@@ -86,6 +87,9 @@
               '-I', 'source/config',
               '-I', '<(libvpx_source)',
               '-I', '<(shared_generated_dir)', # Generated assembly offsets
+            ],
+            'yasm_includes': [
+              '<(shared_generated_dir)/vp8_asm_enc_offsets.asm'
             ],
           },
           'dependencies': [
@@ -127,9 +131,11 @@
                 #'libvpx_intrinsics_sse4_1',
                 # Currently no avx intrinsic functions
                 #'libvpx_intrinsics_avx',
-                # Add avx2 support when VS2013 lands: crbug.com/328981
                 #'libvpx_intrinsics_avx2',
               ],
+            }],
+            ['target_arch=="arm64"', {
+              'includes': [ 'libvpx_srcs_arm64.gypi', ],
             }],
             ['target_arch=="x64"', {
               'conditions': [
@@ -150,7 +156,6 @@
                     #'libvpx_intrinsics_sse4_1',
                     # Currently no avx intrinsic functions
                     #'libvpx_intrinsics_avx',
-                    # Add avx2 support when VS2013 lands: crbug.com/328981
                     #'libvpx_intrinsics_avx2',
                   ],
                 }],
@@ -249,6 +254,7 @@
               'inputs': [
                 '<(shared_generated_dir)/<(ads2gas_script)',
                 '<(shared_generated_dir)/thumb.pm',
+                '<(shared_generated_dir)/vp8_asm_enc_offsets.asm',
               ],
               'outputs': [
                 '<(shared_generated_dir)/<(RULE_INPUT_ROOT).S',
@@ -278,14 +284,6 @@
             'ads2gas_script_path': '<(libvpx_source)/build/make/<(ads2gas_script)',
             'ads2gas_script_include': '<(libvpx_source)/build/make/thumb.pm',
           },
-          # We need to explicitly tell the assembler to look for
-          # .include directive files from the place where they're
-          # generated to.
-          'cflags': [
-             '-Wa,-I,<!(pwd)/source/config/<(OS_CATEGORY)/<(target_arch_full)',
-             '-Wa,-I,<!(pwd)/source/config',
-             '-Wa,-I,<(shared_generated_dir)',
-          ],
           'xcode_settings': {
             'OTHER_CFLAGS': [
               '-I<!(pwd)/source/config/<(OS_CATEGORY)/<(target_arch_full)',
@@ -303,7 +301,21 @@
               '<(libvpx_source)',
             ],
           },
+          # We need to explicitly tell the assembler to look for
+          # .include directive files from the place where they're
+          # generated to.
+          'cflags': [
+             '-Wa,-I,<(shared_generated_dir)',
+          ],
           'conditions': [
+            # For Android WebView, the following pathc are not required and not
+            # allowed, because they generate the absolute path.
+            ['android_webview_build!=1', {
+              'cflags': [
+                '-Wa,-I,<!(pwd)/source/config/<(OS_CATEGORY)/<(target_arch_full)',
+                '-Wa,-I,<!(pwd)/source/config',
+              ],
+            }],
             # Libvpx optimizations for ARMv6 or ARMv7 without NEON.
             ['arm_neon==0', {
               'conditions': [
@@ -369,7 +381,13 @@
       ],
       'sources': [
         '<(libvpx_source)/build/make/obj_int_extract.c',
-      ]
+      ],
+      'conditions': [
+        ['android_webview_build==1', {
+          'defines': [ 'FORCE_PARSE_ELF' ],
+          'include_dirs': [ 'include' ],
+        }],
+      ],
     },
     {
       # A library that contains assembly offsets needed.
@@ -398,6 +416,9 @@
             },
           },
         }],
+        ['android_webview_build==0', {
+          'product_dir': '<(shared_generated_dir)',
+        }],
       ],
       'sources': [
         '<(libvpx_source)/vp8/encoder/vp8_asm_enc_offsets.c',
@@ -424,6 +445,9 @@
           },
           'ldflags!': [ '-faddress-sanitizer', '-fsanitize=address', ],
         }],
+        ['android_webview_build==0', {
+          'product_dir': '<(shared_generated_dir)',
+        }],
       ],
       'sources': [
         '<(libvpx_source)/vpx_scale/vpx_scale_asm_offsets.c',
@@ -442,12 +466,17 @@
         'libvpx_obj_int_extract#host',
       ],
       'variables' : {
-        'lib_intermediate_name' : '',
+        # unpack_lib is used as an input to unpack_lib_posix.gypi.
+        'unpack_lib' : '<(shared_generated_dir)/libvpx_asm_offsets_vp8.a',
+        'unpack_lib_search_path' : '<(shared_generated_dir)/libvpx_asm_offsets_vp8.a',
         'output_format':'',
         'output_dir': '<(shared_generated_dir)',
         'conditions' : [
           ['android_webview_build==1', {
-            'lib_intermediate_name' : '<(android_src)/$(call intermediates-dir-for, STATIC_LIBRARIES, libvpx_asm_offsets_vp8)/libvpx_asm_offsets_vp8.a',
+            # pass the empty string for 3rd and 4th arguments of
+            # intermediates-dir-for macro.
+            'unpack_lib' : '$(call intermediates-dir-for,STATIC_LIBRARIES,libvpx_asm_offsets_vp8,,,$(gyp_var_prefix))/libvpx_asm_offsets_vp8.a',
+            'unpack_lib_search_path' : '$(abspath $(call intermediates-dir-for,STATIC_LIBRARIES,libvpx_asm_offsets_vp8,,,$(gyp_var_prefix)))/libvpx_asm_offsets_vp8.a',
           }],
           ['(target_arch=="arm" or target_arch=="armv7")', {
             'output_format': 'gas',
@@ -464,15 +493,16 @@
           'actions': [
             {
               'action_name': 'copy_enc_offsets_obj',
-              'inputs': [ 'copy_obj.py' ],
+              'inputs': [
+                'copy_obj.py',
+                '<(ninja_obj_dir)/encoder/libvpx_asm_offsets_vp8.vp8_asm_enc_offsets.obj',
+              ],
               'outputs': [ '<(INTERMEDIATE_DIR)/vp8_asm_enc_offsets.obj' ],
               'action': [
                 'python',
                 '<(DEPTH)/third_party/libvpx/copy_obj.py',
                 '-d', '<@(_outputs)',
-                '-s', '<(PRODUCT_DIR)/obj/libvpx_asm_offsets_vp8/vp8_asm_enc_offsets.obj',
                 '-s', '<(ninja_obj_dir)/encoder/libvpx_asm_offsets_vp8.vp8_asm_enc_offsets.obj',
-                '-s', '<(PRODUCT_DIR)/obj/Source/WebKit/chromium/third_party/libvpx/<(libvpx_source)/vp8/encoder/libvpx_asm_offsets_vp8.vp8_asm_enc_offsets.obj',
               ],
               'process_output_as_sources': 1,
             },
@@ -483,13 +513,10 @@
         }, {
           'variables': {
             'unpack_lib_search_path_list': [
-              '-a', '<(PRODUCT_DIR)/libvpx_asm_offsets_vp8.a',
-              '-a', '<(LIB_DIR)/third_party/libvpx/libvpx_asm_offsets_vp8.a',
-              '-a', '<(LIB_DIR)/Source/WebKit/chromium/third_party/libvpx/libvpx_asm_offsets_vp8.a',
-              '-a', '<(lib_intermediate_name)',
+              '-a', '<(unpack_lib_search_path)',
             ],
-            'unpack_lib_output_dir':'<(INTERMEDIATE_DIR)',
-            'unpack_lib_name':'vp8_asm_enc_offsets.o'
+            'object_file_output_dir':'<(INTERMEDIATE_DIR)',
+            'object_file_to_extract':'vp8_asm_enc_offsets.o'
           },
           'includes': ['unpack_lib_posix.gypi'],
           # Need this otherwise gyp won't run the rule on them.
@@ -513,12 +540,16 @@
         'libvpx_obj_int_extract#host',
       ],
       'variables' : {
-        'lib_intermediate_name' : '',
+        'unpack_lib' : '<(shared_generated_dir)/libvpx_asm_offsets_vpx_scale.a',
+        'unpack_lib_search_path' : '<(shared_generated_dir)/libvpx_asm_offsets_vpx_scale.a',
         'output_format':'',
         'output_dir': '<(shared_generated_dir)',
         'conditions' : [
           ['android_webview_build==1', {
-            'lib_intermediate_name' : '<(android_src)/$(call intermediates-dir-for, STATIC_LIBRARIES, libvpx_asm_offsets_vpx_scale)/libvpx_asm_offsets_vpx_scale.a',
+            # pass the empty string for 3rd and 4th arguments of
+            # intermediates-dir-for macro.
+            'unpack_lib' : '$(call intermediates-dir-for,STATIC_LIBRARIES,libvpx_asm_offsets_vpx_scale,,,$(gyp_var_prefix))/libvpx_asm_offsets_vpx_scale.a',
+            'unpack_lib_search_path' : '$(abspath $(call intermediates-dir-for,STATIC_LIBRARIES,libvpx_asm_offsets_vp8,,,$(gyp_var_prefix)))/libvpx_asm_offsets_vp8.a',
           }],
           ['(target_arch=="arm" or target_arch=="armv7")', {
             'output_format': 'gas',
@@ -535,15 +566,16 @@
           'actions': [
             {
               'action_name': 'copy_enc_offsets_obj',
-              'inputs': [ 'copy_obj.py' ],
+              'inputs': [
+                'copy_obj.py',
+                '<(ninja_obj_dir)/encoder/libvpx_asm_offsets_vpx_scale.vpx_scale_asm_offsets.obj',
+              ],
               'outputs': [ '<(INTERMEDIATE_DIR)/vpx_scale_asm_offsets.obj' ],
               'action': [
                 'python',
                 '<(DEPTH)/third_party/libvpx/copy_obj.py',
                 '-d', '<@(_outputs)',
-                '-s', '<(PRODUCT_DIR)/obj/libvpx_asm_offsets_vpx_scale/vpx_scale_asm_offsets.obj',
                 '-s', '<(ninja_obj_dir)/encoder/libvpx_asm_offsets_vpx_scale.vpx_scale_asm_offsets.obj',
-                '-s', '<(PRODUCT_DIR)/obj/Source/WebKit/chromium/third_party/libvpx/<(libvpx_source)/vpx_scale/libvpx_asm_offsets_vpx_scale.vpx_scale_asm_offsets.obj',
               ],
               'process_output_as_sources': 1,
             },
@@ -554,16 +586,13 @@
         }, {
           'variables': {
             'unpack_lib_search_path_list': [
-              '-a', '<(PRODUCT_DIR)/libvpx_asm_offsets_vpx_scale.a',
-              '-a', '<(LIB_DIR)/third_party/libvpx/libvpx_asm_offsets_vpx_scale.a',
-              '-a', '<(LIB_DIR)/Source/WebKit/chromium/third_party/libvpx/libvpx_asm_offsets_vpx_scale.a',
-              '-a', '<(lib_intermediate_name)',
+              '-a', '<(unpack_lib_search_path)',
             ],
-            'unpack_lib_output_dir':'<(INTERMEDIATE_DIR)',
-            'unpack_lib_name':'vpx_scale_asm_offsets.o'
+            'object_file_output_dir':'<(INTERMEDIATE_DIR)',
+            'object_file_to_extract':'vpx_scale_asm_offsets.o'
           },
           'includes': ['unpack_lib_posix.gypi'],
-         # Need this otherwise gyp won't run the rule on them.
+          # Need this otherwise gyp won't run the rule on them.
           'sources': [
             '<(INTERMEDIATE_DIR)/vpx_scale_asm_offsets.o',
           ],

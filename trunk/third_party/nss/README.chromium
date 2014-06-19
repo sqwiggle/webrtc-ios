@@ -72,3 +72,13 @@ We made the following local changes to NSS.
 - patches/nss-export-private-key-info.patch: Add the
   PK11_ExportDERPrivateKeyInfo and PK11_ExportPrivKeyInfo functions. See
   NSS bug 519255 (https://bugzilla.mozilla.org/show_bug.cgi?id=519255).
+- patches/nss-intel-aes-windows.patch: Implement AES in different modes
+  of operation, using AES-NI and PCLMULQDQ-NI, for WIN32 and WIN64
+  platforms. See NSS bug 979703
+  (https://bugzilla.mozilla.org/show_bug.cgi?id=979703). Note: when we
+  upgrade to NSS 3.16.1, we also need to define the macro INTEL_GCM in
+  nss.gyp. 
+- patches/nss-rsa-oaep.patch : This combines the patches from upstream NSS bug
+  1009794 ( https://bugzilla.mozilla.org/show_bug.cgi?id=1009794) and
+  NSS bug 1009785 ( https://bugzilla.mozilla.org/show_bug.cgi?id=1009785 ) to
+  support RSA-OAEP in softoken and pk11wrap

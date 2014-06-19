@@ -46,12 +46,14 @@
 
 _vp8_short_idct4x4llm_neon:
 	vp8_short_idct4x4llm_neon: @
+    vpush           {d8-d15}
+
     adr             r12, idct_coeff
     vld1.16         {q1, q2}, [r0]
     vld1.16         {d0}, [r12]
 
     vswp            d3, d4                   @q2(vp[4] vp[12])
-    ldr             r0, [sp]                 @ stride
+    ldr             r0, [sp, #64]            @ stride
 
     vqdmulh.s16     q3, q2, d0[2]
     vqdmulh.s16     q4, q2, d0[0]
@@ -134,6 +136,7 @@ _vp8_short_idct4x4llm_neon:
     vst1.32         d2[0], [r3], r0
     vst1.32         d2[1], [r3], r0
 
+    vpop            {d8-d15}
     bx              lr
 
     @

@@ -73,6 +73,23 @@ TEST(FilesystemUtils, FindDir) {
   EXPECT_EQ("foo/bar/", FindDir(&input));
 }
 
+TEST(FilesystemUtils, FindLastDirComponent) {
+  SourceDir empty;
+  EXPECT_EQ("", FindLastDirComponent(empty));
+
+  SourceDir root("/");
+  EXPECT_EQ("", FindLastDirComponent(root));
+
+  SourceDir srcroot("//");
+  EXPECT_EQ("", FindLastDirComponent(srcroot));
+
+  SourceDir regular1("//foo/");
+  EXPECT_EQ("foo", FindLastDirComponent(regular1));
+
+  SourceDir regular2("//foo/bar/");
+  EXPECT_EQ("bar", FindLastDirComponent(regular2));
+}
+
 TEST(FilesystemUtils, IsPathAbsolute) {
   EXPECT_TRUE(IsPathAbsolute("/foo/bar"));
   EXPECT_TRUE(IsPathAbsolute("/"));
@@ -319,7 +336,7 @@ TEST(FilesystemUtils, GetToolchainDirs) {
   EXPECT_EQ("//out/Debug/gen/",
             GetToolchainGenDir(&default_settings).value());
 
-  Settings other_settings(&build_settings, "two");
+  Settings other_settings(&build_settings, "two/");
   EXPECT_EQ("//out/Debug/two/",
             GetToolchainOutputDir(&other_settings).value());
   EXPECT_EQ("//out/Debug/two/gen/",
@@ -340,7 +357,7 @@ TEST(FilesystemUtils, GetOutDirForSourceDir) {
                                      SourceDir("//foo/bar/")).value());
 
   // Secondary toolchain.
-  Settings other_settings(&build_settings, "two");
+  Settings other_settings(&build_settings, "two/");
   EXPECT_EQ("//out/Debug/two/obj/",
             GetOutputDirForSourceDir(&other_settings, SourceDir("//")).value());
   EXPECT_EQ("//out/Debug/two/obj/foo/bar/",
@@ -361,7 +378,7 @@ TEST(FilesystemUtils, GetGenDirForSourceDir) {
                                   SourceDir("//foo/bar/")).value());
 
   // Secondary toolchain.
-  Settings other_settings(&build_settings, "two");
+  Settings other_settings(&build_settings, "two/");
   EXPECT_EQ("//out/Debug/two/gen/",
             GetGenDirForSourceDir(&other_settings, SourceDir("//")).value());
   EXPECT_EQ("//out/Debug/two/gen/foo/bar/",

@@ -5,12 +5,13 @@
 #include "tools/gn/value.h"
 
 #include "base/strings/string_number_conversions.h"
+#include "base/strings/string_util.h"
+#include "tools/gn/scope.h"
 
 Value::Value()
     : type_(NONE),
       boolean_value_(false),
       int_value_(0),
-      scope_value_(NULL),
       origin_(NULL) {
 }
 
@@ -18,7 +19,6 @@ Value::Value(const ParseNode* origin, Type t)
     : type_(t),
       boolean_value_(false),
       int_value_(0),
-      scope_value_(NULL),
       origin_(origin) {
 }
 
@@ -26,7 +26,6 @@ Value::Value(const ParseNode* origin, bool bool_val)
     : type_(BOOLEAN),
       boolean_value_(bool_val),
       int_value_(0),
-      scope_value_(NULL),
       origin_(origin) {
 }
 
@@ -34,7 +33,6 @@ Value::Value(const ParseNode* origin, int64 int_val)
     : type_(INTEGER),
       boolean_value_(false),
       int_value_(int_val),
-      scope_value_(NULL),
       origin_(origin) {
 }
 
@@ -43,7 +41,6 @@ Value::Value(const ParseNode* origin, std::string str_val)
       string_value_(),
       boolean_value_(false),
       int_value_(0),
-      scope_value_(NULL),
       origin_(origin) {
   string_value_.swap(str_val);
 }
@@ -53,20 +50,42 @@ Value::Value(const ParseNode* origin, const char* str_val)
       string_value_(str_val),
       boolean_value_(false),
       int_value_(0),
-      scope_value_(NULL),
       origin_(origin) {
 }
 
-Value::Value(const ParseNode* origin, Scope* scope)
+Value::Value(const ParseNode* origin, scoped_ptr<Scope> scope)
     : type_(SCOPE),
       string_value_(),
       boolean_value_(false),
       int_value_(0),
-      scope_value_(scope),
+      scope_value_(scope.Pass()),
       origin_(origin) {
 }
 
+Value::Value(const Value& other)
+    : type_(other.type_),
+      string_value_(other.string_value_),
+      boolean_value_(other.boolean_value_),
+      int_value_(other.int_value_),
+      list_value_(other.list_value_),
+      origin_(other.origin_) {
+  if (type() == SCOPE && other.scope_value_.get())
+    scope_value_ = other.scope_value_->MakeClosure();
+}
+
 Value::~Value() {
+}
+
+Value& Value::operator=(const Value& other) {
+  type_ = other.type_;
+  string_value_ = other.string_value_;
+  boolean_value_ = other.boolean_value_;
+  int_value_ = other.int_value_;
+  list_value_ = other.list_value_;
+  if (type() == SCOPE && other.scope_value_.get())
+    scope_value_ = other.scope_value_->MakeClosure();
+  origin_ = other.origin_;
+  return *this;
 }
 
 void Value::RecursivelySetOrigin(const ParseNode* origin) {
@@ -98,6 +117,11 @@ const char* Value::DescribeType(Type t) {
   }
 }
 
+void Value::SetScopeValue(scoped_ptr<Scope> scope) {
+  DCHECK(type_ == SCOPE);
+  scope_value_ = scope.Pass();
+}
+
 std::string Value::ToString(bool quote_string) const {
   switch (type_) {
     case NONE:
@@ -107,8 +131,17 @@ std::string Value::ToString(bool quote_string) const {
     case INTEGER:
       return base::Int64ToString(int_value_);
     case STRING:
-      if (quote_string)
-        return "\"" + string_value_ + "\"";
+      if (quote_string) {
+        std::string escaped = string_value_;
+        // First escape all special uses of a backslash.
+        ReplaceSubstringsAfterOffset(&escaped, 0, "\\$", "\\\\$");
+        ReplaceSubstringsAfterOffset(&escaped, 0, "\\\"", "\\\\\"");
+
+        // Now escape special chars.
+        ReplaceSubstringsAfterOffset(&escaped, 0, "$", "\\$");
+        ReplaceSubstringsAfterOffset(&escaped, 0, "\"", "\\\"");
+        return "\"" + escaped + "\"";
+      }
       return string_value_;
     case LIST: {
       std::string result = "[";
@@ -120,8 +153,22 @@ std::string Value::ToString(bool quote_string) const {
       result.push_back(']');
       return result;
     }
-    case SCOPE:
-      return std::string("<scope>");
+    case SCOPE: {
+      Scope::KeyValueMap scope_values;
+      scope_value_->GetCurrentScopeValues(&scope_values);
+      if (scope_values.empty())
+        return std::string("{ }");
+
+      std::string result = "{\n";
+      for (Scope::KeyValueMap::const_iterator i = scope_values.begin();
+           i != scope_values.end(); ++i) {
+        result += "  " + i->first.as_string() + " = " +
+                  i->second.ToString(true) + "\n";
+      }
+      result += "}";
+
+      return result;
+    }
   }
   return std::string();
 }
@@ -154,9 +201,10 @@ bool Value::operator==(const Value& other) const {
       }
       return true;
     case Value::SCOPE:
-      // Its not clear what people mean when comparing scope values, so we test
-      // for scope identity and not contents equality.
-      return scope_value() == other.scope_value();
+      // Scopes are always considered not equal because there's currently
+      // no use case for comparing them, and it requires a bunch of complex
+      // iteration code.
+      return false;
     default:
       return false;
   }

@@ -19,12 +19,15 @@ class Label;
 class TraceItem {
  public:
   enum Type {
+    TRACE_SETUP,
     TRACE_FILE_LOAD,
     TRACE_FILE_PARSE,
     TRACE_FILE_EXECUTE,
     TRACE_FILE_WRITE,
     TRACE_SCRIPT_EXECUTE,
-    TRACE_DEFINE_TARGET
+    TRACE_DEFINE_TARGET,
+    TRACE_CHECK_HEADER,  // One file.
+    TRACE_CHECK_HEADERS,  // All files.
   };
 
   TraceItem(Type type,

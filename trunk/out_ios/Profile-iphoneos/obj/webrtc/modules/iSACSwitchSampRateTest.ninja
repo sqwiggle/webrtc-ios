@@ -1,10 +1,12 @@
 build obj/webrtc/modules/iSACSwitchSampRateTest.actions_depends.stamp: $
-    stamp libiSAC.a libcommon_audio.a libsystem_wrappers.a $
-    libcommon_audio_neon.a
+    stamp libiSAC.a libcommon_audio.a libsystem_wrappers.a libwebrtc_base.a $
+    libjsoncpp.a libcrssl.a libcrnspr.a libcrnss.a libnss_static.a $
+    libsqlite_regexp.a libsqlite_regexp.a libicui18n.a libicuuc.a $
+    libicudata.a libcrnssckbi.a libcommon_audio_neon.a
 
 defines = -DV8_DEPRECATION_WARNINGS -DBLINK_SCALE_FILTERS_AT_RECORD_TIME $
-    -DDISABLE_NACL -DCHROMIUM_BUILD -DUSE_LIBJPEG_TURBO=1 $
-    -DENABLE_CONFIGURATION_POLICY $
+    -DDISABLE_NACL -DCHROMIUM_BUILD -DCR_CLANG_REVISION=206824 $
+    -DUSE_LIBJPEG_TURBO=1 -DENABLE_CONFIGURATION_POLICY $
     -DDISCARDABLE_MEMORY_ALWAYS_SUPPORTED_NATIVELY $
     -DSYSTEM_NATIVELY_SIGNALS_MEMORY_PRESSURE -DENABLE_EGLIMAGE=1 $
     -DCLD_VERSION=1 -DENABLE_SPELLCHECK=1 -DDISABLE_FTP_SUPPORT=1 $
@@ -13,7 +15,7 @@ defines = -DV8_DEPRECATION_WARNINGS -DBLINK_SCALE_FILTERS_AT_RECORD_TIME $
     -D__STDC_CONSTANT_MACROS -D__STDC_FORMAT_MACROS -DNDEBUG -DNVALGRIND $
     -DDYNAMIC_ANNOTATIONS_ENABLED=0 -DNS_BLOCK_ASSERTIONS=1 $
     -D_FORTIFY_SOURCE=2
-includes = -I../.. -I../.. $
+includes = -I../.. $
     -I../../webrtc/modules/audio_coding/codecs/isac/main/test $
     -I../../webrtc/modules/audio_coding/codecs/isac/main/interface $
     -I../../webrtc/common_audio/signal_processing/include $
@@ -25,7 +27,7 @@ cflags = -isysroot $
     -Wno-unused-parameter -Wno-missing-field-initializers -Wheader-hygiene $
     -Wno-c++11-narrowing -Wno-char-subscripts $
     -Wno-unneeded-internal-declaration -Wno-covered-switch-default $
-    -Wstring-conversion -Wno-deprecated-register -Wno-absolute-value
+    -Wstring-conversion -Wno-deprecated-register -Wno-selector-type-mismatch
 cflags_c = -std=c99 -fcolor-diagnostics
 cflags_cc = -std=gnu++0x -fno-rtti -fno-exceptions $
     -fvisibility-inlines-hidden -fno-threadsafe-statics -fcolor-diagnostics
@@ -41,15 +43,20 @@ build $
     obj/webrtc/modules/audio_coding/codecs/isac/main/util/iSACSwitchSampRateTest.utility.o: $
     cc ../../webrtc/modules/audio_coding/codecs/isac/main/util/utility.c
 
-ldflags = -Wl,-search_paths_first -Wl,-dead_strip $
-    -miphoneos-version-min=6.0 -isysroot $
+ldflags = -framework Foundation -framework Security -framework $
+    SystemConfiguration -framework UIKit -Wl,-search_paths_first $
+    -Wl,-dead_strip -miphoneos-version-min=6.0 -isysroot $
     /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS7.1.sdk $
     -arch armv7 -L.
-libs = 
+libs = $
+    /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS7.1.sdk/usr/lib/libsqlite3.dylib
 build iSACSwitchSampRateTest: link $
     obj/webrtc/modules/audio_coding/codecs/isac/main/test/SwitchingSampRate/iSACSwitchSampRateTest.SwitchingSampRate.o $
     obj/webrtc/modules/audio_coding/codecs/isac/main/util/iSACSwitchSampRateTest.utility.o $
-    libiSAC.a libcommon_audio.a libsystem_wrappers.a libcommon_audio_neon.a
+    libiSAC.a libcommon_audio.a libsystem_wrappers.a libwebrtc_base.a $
+    libjsoncpp.a libcrssl.a libcrnspr.a libcrnss.a libnss_static.a $
+    libsqlite_regexp.a libicui18n.a libicuuc.a libicudata.a libcrnssckbi.a $
+    libcommon_audio_neon.a | libsqlite_regexp.a
   ld = $ldxx
   postbuilds = $ && (export $
       BUILT_PRODUCTS_DIR=/Users/cwebb/Sqwiggle/webrtc/trunk/out_ios/Profile-iphoneos; $

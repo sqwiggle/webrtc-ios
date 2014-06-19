@@ -28,12 +28,11 @@ GoogleDesktopNetwork3.DLL!DllUnregisterServer
 
 # They deliberately use uninit local var in sqlite random generator.
 # Random bytes may mess up the call stack between randomByte and
-# sqlite3_* frames (http://code.google.com/p/drmemory/issues/detail?id=851).
+# sqlite3_* frames (http://code.google.com/p/drmemory/issues/detail?id=1514)
+# so we just look for randomByte.
 UNINITIALIZED READ
 name=sqlite3_randomness UNINIT
 *!randomByte
-...
-*!sqlite3*
 
 # Intentional leak in WebKit Template Framework for ThreadData.
 LEAK
@@ -587,6 +586,7 @@ name=http://code.google.com/p/drmemory/issues/detail?id=512 b
 ...
 *!Encrypt*
 
+# TODO(bruening): remove these once we have v8 bitfields handled
 UNINITIALIZED READ
 name=http://code.google.com/p/drmemory/issues/detail?id=513 a
 *!v8*
@@ -601,6 +601,19 @@ name=http://code.google.com/p/drmemory/issues/detail?id=513 c
 <not in a module>
 ...
 *!v8*
+
+# We have seen some cases (not yet understood: crbug.com/364146) where v8.dll
+# has no symbols.  These are all on the bots using component build, so we use
+# v8.dll.  TODO(bruening): remove these once we've fixed the symbol issue.
+UNINITIALIZED READ
+name=http://code.google.com/p/drmemory/issues/detail?id=513 d
+v8.dll!*
+
+UNINITIALIZED READ
+name=http://code.google.com/p/drmemory/issues/detail?id=513 e
+<not in a module>
+...
+v8.dll!*
 
 UNINITIALIZED READ
 name=http://code.google.com/p/drmemory/issues/detail?id=546
@@ -1664,15 +1677,9 @@ name=bug_290435
 *!WebCore::OfflineAudioDestinationNode::offlineRender
 
 UNINITIALIZED READ
-name=bug_290451
+name=bug_364724
 *!base::MD5DigestToBase16
-*!content::WebKitTestRunner::CaptureDump
-*!content::WebKitTestRunner::testFinished
-*!WebTestRunner::TestRunner::completeNotifyDone
-*!WebTestRunner::TestRunner::notifyDone
-*!WebTestRunner::CppBoundClass::MemberCallback<>::run
-*!WebTestRunner::CppBoundClass::invoke
-*!WebTestRunner::CppNPObject::invoke
+*!content::WebKitTestRunner::CaptureDumpPixels
 
 UNINITIALIZED READ
 name=bug_298143
@@ -1953,11 +1960,12 @@ osmesa.dll!LINTERP
 osmesa.dll!INTERP_4F
 osmesa.dll!_tnl_generic_interp
 
-UNADDRESSABLE ACCESS
+UNINITIALIZED READ
 name=bug_340752
-blink_heap.dll!WebCore::ThreadState::visitStack
-blink_heap.dll!WebCore::ThreadState::trace
-blink_heap.dll!WebCore::ThreadState::visitRoots
+...
+*!WebCore::ThreadState::visitStack
+*!WebCore::ThreadState::trace
+*!WebCore::ThreadState::visitRoots
 
 UNINITIALIZED READ
 name=bug_343663
@@ -1999,11 +2007,18 @@ content.dll!std::*
 ...
 content.dll!content::BrowserAccessibilityManagerWin::*
 ...
-content.dll!content::BrowserAccessibilityManager::UpdateNode
-content.dll!content::BrowserAccessibilityManager::UpdateNodes
+*!*::UpdateNode
+
+# There are so many osmesa errors we have to suppress (mostly the unpack_RGB*
+# variety) that it's a performance hit.  We avoid that by requesting
+# whole-module suppression
+# (see https://code.google.com/p/drmemory/issues/detail?id=1529).
+UNINITIALIZED READ
+name=bug_347967_all_osmesa
+osmesa.dll!*
 
 UNINITIALIZED READ
-name=bug_347976
+name=bug_347967
 osmesa.dll!unpack_RGB*888
 osmesa.dll!_mesa_unpack_rgba_row
 osmesa.dll!slow_read_rgba_pixels
@@ -2015,7 +2030,7 @@ gpu.dll!gpu::CommandParser::ProcessCommand
 gpu.dll!gpu::GpuScheduler::PutChanged
 
 UNINITIALIZED READ
-name=bug_347976,bug_348357
+name=bug_347967,bug_348357
 osmesa.dll!clip_span
 osmesa.dll!_swrast_write_rgba_span
 osmesa.dll!general_triangle
@@ -2024,3 +2039,138 @@ gpu.dll!gpu::gles2::GLES2DecoderImpl::DoDrawElements
 gpu.dll!gpu::gles2::GLES2DecoderImpl::HandleDrawElements
 gpu.dll!gpu::gles2::GLES2DecoderImpl::DoCommand
 gpu.dll!gpu::CommandParser::ProcessCommand
+
+UNINITIALIZED READ
+name=bug_361594
+...
+skia.dll!SkA8_Shader_Blitter::blitH
+skia.dll!SkBlitter::blitRect
+skia.dll!blitrect
+skia.dll!SkScan::FillIRect
+...
+skia.dll!SkDraw::drawRect
+skia.dll!SkDraw::drawBitmap
+skia.dll!SkBitmapDevice::drawBitmap
+skia.dll!SkCanvas::internalDrawBitmap
+skia.dll!SkCanvas::drawBitmap
+content.dll!content::ScreenshotData::EncodeOnWorker
+
+UNINITIALIZED READ
+name=bug_363487
+blink_web.dll!WebCore::RenderLayerCompositor::updateIfNeeded
+blink_web.dll!WebCore::RenderLayerCompositor::updateIfNeededRecursive
+blink_web.dll!WebCore::FrameView::updateLayoutAndStyleForPainting
+blink_web.dll!WebCore::PageAnimator::updateLayoutAndStyleForPainting
+
+UNINITIALIZED READ
+name=bug_364675
+blink_web.dll!WebCore::AutoTableLayout::layout
+blink_web.dll!WebCore::RenderTable::layout
+blink_web.dll!...
+blink_web.dll!WebCore::RenderBlockFlow::layoutBlockFlow
+blink_web.dll!WebCore::RenderBlockFlow::layoutBlock
+
+UNINITIALIZED READ
+name=bug_365101
+*!device::BluetoothAdapterWin::AdapterStateChanged
+
+UNINITIALIZED READ
+name=bug_364146
+...
+v8.dll!*
+net_with_v8.dll!net::ProxyResolverV8::Context::*
+
+UNINITIALIZED READ
+name=bug_334448
+*!CLD2::UTF8GenericReplaceInternal
+*!CLD2::UTF8GenericReplace
+*!CLD2::ScriptScanner::LowerScriptSpan
+*!CLD2::ScriptScanner::GetOneScriptSpanLower
+*!CLD2::DetectLanguageSummaryV2
+*!CLD2::DetectLanguageSummary
+
+UNINITIALIZED READ
+name=bug_42043
+...
+QuickTime.qts!*
+
+UNINITIALIZED READ
+name=bug_369141
+...
+*!WebCore::RenderLayerClipper::updateClipRects
+*!WebCore::RenderLayerClipper::parentClipRects
+*!WebCore::RenderLayerClipper::backgroundClipRect
+
+HANDLE LEAK
+name=bug_370178
+system call NtCreateEvent
+KERNELBASE.dll!CreateEventExW
+KERNELBASE.dll!CreateEventW
+base.dll!base::WaitableEvent::WaitableEvent
+gpu.dll!gpu::InProcessCommandBuffer::Initialize
+gl_in_process_context.dll!gpu::`anonymous namespace'::GLInProcessContextImpl::Initialize
+gl_in_process_context.dll!gpu::GLInProcessContext::CreateContext
+
+UNINITIALIZED READ
+name=bug_371844
+*!content::GamepadProvider::PadState::Match
+*!content::GamepadProvider::DoPoll
+
+UNINITIALIZED READ
+name=bug_371950
+media.dll!ConvertYUVToRGB32Row_SSE
+media.dll!media::ConvertYUVToRGB32_SSE
+media.dll!media::ConvertVideoFrameToBitmap
+media.dll!media::SkCanvasVideoRenderer::Paint
+cc.dll!cc::VideoResourceUpdater::CreateForSoftwarePlanes
+cc.dll!cc::VideoResourceUpdater::CreateExternalResourcesFromVideoFrame
+cc.dll!cc::VideoLayerImpl::WillDraw
+
+UNINITIALIZED READ
+name=bug_371959
+content.dll!webrtc::PeerConnection::DoInitialize
+content.dll!webrtc::PeerConnection::Initialize
+content.dll!webrtc::PeerConnectionFactory::CreatePeerConnection_s
+content.dll!webrtc::PeerConnectionFactory::OnMessage
+content.dll!jingle_glue::JingleThreadWrapper::Send
+content.dll!webrtc::PeerConnectionFactory::CreatePeerConnection
+content.dll!webrtc::PeerConnectionFactoryInterface::CreatePeerConnection
+
+# This suppression is deliberately general, as bugs reported in
+# ProcessOutgoingMessages are difficult to track down until we
+# get our annotations in place.
+# TODO(bruening): add annotations once we have the infrastructure.
+UNINITIALIZED READ
+name=bug_371991
+system call NtWriteFile parameter #5
+KERNELBASE.dll!WriteFile
+KERNEL32.dll!WriteFile*
+ipc.dll!IPC::Channel::ChannelImpl::ProcessOutgoingMessages
+
+UNINITIALIZED READ
+name=bug_372254
+*!content::*::NotifyPluginProcessHostHelper
+
+UNINITIALIZED READ
+name=drm_i#1546
+*!testing::internal::CmpHelperEQ<>
+*!testing::internal::EqHelper<>::Compare<>
+*!content::BrowserPluginTest_ResizeFlowControl_Test::TestBody
+
+UNINITIALIZED READ
+name=bug_374105a
+...
+gpu.dll!gpu::gles2::ShaderTranslatorCache::GetTranslator
+gpu.dll!gpu::gles2::GLES2DecoderImpl::InitializeShaderTranslator
+gpu.dll!gpu::gles2::GLES2DecoderImpl::Initialize
+
+UNINITIALIZED READ
+name=bug_374105b
+...
+gpu.dll!gpu::gles2::ShaderTranslator::GetStringForOptionsThatWouldEffectCompilation
+*!gpu::gles2::ShaderTranslatorTest_OptionsString_Test::TestBody
+
+UNINITIALIZED READ
+name=374410
+*!ui::NativeThemeWin::PaintScrollbarTrack
+*!ui::NativeThemeWin::PaintDirect

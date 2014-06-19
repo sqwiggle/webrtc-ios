@@ -77,8 +77,10 @@ _vp8_subtract_b_neon:
 _vp8_subtract_mby_neon:
 	vp8_subtract_mby_neon: @
     push            {r4-r7}
+    vpush           {d8-d15}
+
     mov             r12, #4
-    ldr             r4, [sp, #16]            @ pred_stride
+    ldr             r4, [sp, #80]            @ pred_stride
     mov             r6, #32                  @ "diff" stride x2
     add             r5, r0, #16              @ second diff pointer
 
@@ -113,6 +115,7 @@ subtract_mby_loop:
     subs            r12, r12, #1
     bne             subtract_mby_loop
 
+    vpop            {d8-d15}
     pop             {r4-r7}
     bx              lr
     @
@@ -125,9 +128,11 @@ subtract_mby_loop:
 _vp8_subtract_mbuv_neon:
 	vp8_subtract_mbuv_neon: @
     push            {r4-r7}
-    ldr             r4, [sp, #16]        @ upred
-    ldr             r5, [sp, #20]        @ vpred
-    ldr             r6, [sp, #24]        @ pred_stride
+    vpush           {d8-d15}
+
+    ldr             r4, [sp, #80]        @ upred
+    ldr             r5, [sp, #84]        @ vpred
+    ldr             r6, [sp, #88]        @ pred_stride
     add             r0, r0, #512         @ short *udiff = diff + 256 @
     mov             r12, #32             @ "diff" stride x2
     add             r7, r0, #16          @ second diff pointer
@@ -204,6 +209,7 @@ _vp8_subtract_mbuv_neon:
     vst1.16         {q14}, [r0], r12
     vst1.16         {q15}, [r7], r12
 
+    vpop            {d8-d15}
     pop             {r4-r7}
     bx              lr
 

@@ -1,0 +1,91 @@
+function fetch() {
+echo "-- fetching webrtc"
+gclient config http://webrtc.googlecode.com/svn/trunk/
+echo "target_os = ['mac']" >> .gclient
+gclient sync
+
+sed -i "" '$d' .gclient
+echo "target_os = ['ios', 'mac']" >> .gclient
+gclient sync
+echo "-- webrtc has been sucessfully fetched"
+
+}
+
+function wrbase() {
+export GYP_DEFINES="build_with_libjinglth_chromium=0 libjingle_objc=1"
+export GYP_GENERATORS="ninja"
+}
+
+function wrsim() {
+wrbase
+export GYP_DEFINES="$GYP_DEFINES OS=ios target_arch=ia32"
+export GYP_GENERATOR_FLAGS="$GYP_GENERATOR_FLAGS output_dir=out_sim"
+export GYP_CROSSCOMPILE=1
+}
+
+function wrios() {
+wrbase
+export GYP_DEFINES="$GYP_DEFINES OS=ios target_arch=armv7"
+export GYP_GENERATOR_FLAGS="$GYP_GENERATOR_FLAGS output_dir=out_ios"
+export GYP_CROSSCOMPILE=1
+}
+
+function wrmac() {
+wrbase
+export GYP_DEFINES="$GYP_DEFINES OS=mac target_arch=x64"
+export GYP_GENERATOR_FLAGS="$GYP_GENERATOR_FLAGS output_dir=out_mac"
+}
+
+
+function upgradeSVN()
+{
+  pushd trunk
+  svn upgrade
+  popd
+}
+
+function buildsim() {
+echo "-- building webrtc ios"
+pushd trunk
+# wrios && gclient runhooks && ninja -C out_ios/Debug-iphoneos
+wrsim && gclient runhooks --force && ninja -C out_sim/Debug-iphoneos AppRTCDemo
+
+popd
+echo "-- webrtc has been sucessfully built"
+}
+
+
+function buildios() {
+echo "-- building webrtc ios"
+pushd trunk
+# wrios && gclient runhooks && ninja -C out_ios/Debug-iphoneos
+wrios && gclient runhooks --force && ninja -C out_ios/Debug-iphoneos AppRTCDemo
+
+popd
+echo "-- webrtc has been sucessfully built"
+}
+
+function launch() {
+echo "-- launching on device"
+ideviceinstaller -i trunk/out_ios/Debug-iphoneos/AppRTCDemo.app
+echo "-- launch complete"
+}
+
+function fail() {
+echo "*** webrtc build failed"
+exit 1
+}
+
+
+
+#fetch || fail
+#upgradeSVN || fail
+#wrsim || fail
+
+#wrsim || fail
+#buildsim || fail
+	
+
+wrios || fail
+buildios || fail
+#launch || fail

@@ -15,6 +15,21 @@ LIBYUV_SRCS +=  third_party/libyuv/include/libyuv/basic_types.h  \
                 third_party/libyuv/source/scale.c  \
                 third_party/libyuv/source/cpu_id.c
 
+LIBWEBM_MUXER_SRCS += third_party/libwebm/mkvmuxer.cpp \
+                      third_party/libwebm/mkvmuxerutil.cpp \
+                      third_party/libwebm/mkvwriter.cpp \
+                      third_party/libwebm/mkvmuxer.hpp \
+                      third_party/libwebm/mkvmuxertypes.hpp \
+                      third_party/libwebm/mkvmuxerutil.hpp \
+                      third_party/libwebm/mkvparser.hpp \
+                      third_party/libwebm/mkvwriter.hpp \
+                      third_party/libwebm/webmids.hpp
+
+LIBWEBM_PARSER_SRCS = third_party/libwebm/mkvparser.cpp \
+                      third_party/libwebm/mkvreader.cpp \
+                      third_party/libwebm/mkvparser.hpp \
+                      third_party/libwebm/mkvreader.hpp
+
 # List of examples to build. UTILS are tools meant for distribution
 # while EXAMPLES demonstrate specific portions of the API.
 UTILS-$(CONFIG_DECODERS)    += vpxdec.c
@@ -26,16 +41,12 @@ vpxdec.SRCS                 += vpx/vpx_integer.h
 vpxdec.SRCS                 += args.c args.h
 vpxdec.SRCS                 += ivfdec.c ivfdec.h
 vpxdec.SRCS                 += tools_common.c tools_common.h
-vpxdec.SRCS                 += webmdec.c webmdec.h
 vpxdec.SRCS                 += y4menc.c y4menc.h
-vpxdec.SRCS                 += third_party/nestegg/halloc/halloc.h
-vpxdec.SRCS                 += third_party/nestegg/halloc/src/align.h
-vpxdec.SRCS                 += third_party/nestegg/halloc/src/halloc.c
-vpxdec.SRCS                 += third_party/nestegg/halloc/src/hlist.h
-vpxdec.SRCS                 += third_party/nestegg/halloc/src/macros.h
-vpxdec.SRCS                 += third_party/nestegg/include/nestegg/nestegg.h
-vpxdec.SRCS                 += third_party/nestegg/src/nestegg.c
 vpxdec.SRCS                 += $(LIBYUV_SRCS)
+ifeq ($(CONFIG_WEBM_IO),yes)
+  vpxdec.SRCS                 += $(LIBWEBM_PARSER_SRCS)
+  vpxdec.SRCS                 += webmdec.cc webmdec.h
+endif
 vpxdec.GUID                  = BA5FE66F-38DD-E034-F542-B1578C5FB950
 vpxdec.DESCRIPTION           = Full featured decoder
 UTILS-$(CONFIG_ENCODERS)    += vpxenc.c
@@ -45,42 +56,38 @@ vpxenc.SRCS                 += ivfenc.c ivfenc.h
 vpxenc.SRCS                 += rate_hist.c rate_hist.h
 vpxenc.SRCS                 += tools_common.c tools_common.h
 vpxenc.SRCS                 += warnings.c warnings.h
-vpxenc.SRCS                 += webmenc.c webmenc.h
 vpxenc.SRCS                 += vpx_ports/mem_ops.h
 vpxenc.SRCS                 += vpx_ports/mem_ops_aligned.h
 vpxenc.SRCS                 += vpx_ports/vpx_timer.h
 vpxenc.SRCS                 += vpxstats.c vpxstats.h
-vpxenc.SRCS                 += third_party/libmkv/EbmlIDs.h
-vpxenc.SRCS                 += third_party/libmkv/EbmlWriter.c
-vpxenc.SRCS                 += third_party/libmkv/EbmlWriter.h
 vpxenc.SRCS                 += $(LIBYUV_SRCS)
+ifeq ($(CONFIG_WEBM_IO),yes)
+  vpxenc.SRCS                 += $(LIBWEBM_MUXER_SRCS)
+  vpxenc.SRCS                 += webmenc.cc webmenc.h
+endif
 vpxenc.GUID                  = 548DEC74-7A15-4B2B-AFC3-AA102E7C25C1
 vpxenc.DESCRIPTION           = Full featured encoder
-EXAMPLES-$(CONFIG_VP9_ENCODER)    += vp9_spatial_scalable_encoder.c
-vp9_spatial_scalable_encoder.SRCS += args.c args.h
-vp9_spatial_scalable_encoder.SRCS += ivfenc.c ivfenc.h
-vp9_spatial_scalable_encoder.SRCS += tools_common.c tools_common.h
-vp9_spatial_scalable_encoder.SRCS += video_common.h
-vp9_spatial_scalable_encoder.SRCS += video_writer.h video_writer.c
-vp9_spatial_scalable_encoder.GUID   = 4A38598D-627D-4505-9C7B-D4020C84100D
-vp9_spatial_scalable_encoder.DESCRIPTION = Spatial Scalable Encoder
+EXAMPLES-$(CONFIG_VP9_ENCODER)      += vp9_spatial_svc_encoder.c
+vp9_spatial_svc_encoder.SRCS        += args.c args.h
+vp9_spatial_svc_encoder.SRCS        += ivfenc.c ivfenc.h
+vp9_spatial_svc_encoder.SRCS        += tools_common.c tools_common.h
+vp9_spatial_svc_encoder.SRCS        += video_common.h
+vp9_spatial_svc_encoder.SRCS        += video_writer.h video_writer.c
+vp9_spatial_svc_encoder.SRCS        += vpxstats.c vpxstats.h
+vp9_spatial_svc_encoder.GUID        = 4A38598D-627D-4505-9C7B-D4020C84100D
+vp9_spatial_svc_encoder.DESCRIPTION = VP9 Spatial SVC Encoder
 
-ifeq ($(CONFIG_SHARED),no)
-UTILS-$(CONFIG_VP9_ENCODER)    += resize_util.c
+ifneq ($(CONFIG_SHARED),yes)
+EXAMPLES-$(CONFIG_VP9_ENCODER)    += resize_util.c
 endif
 
-# XMA example disabled for now, not used in VP8
-#UTILS-$(CONFIG_DECODERS)    += example_xma.c
-#example_xma.GUID             = A955FC4A-73F1-44F7-135E-30D84D32F022
-#example_xma.DESCRIPTION      = External Memory Allocation mode usage
-
-EXAMPLES-$(CONFIG_ENCODERS)         += vpx_temporal_scalable_patterns.c
-vpx_temporal_scalable_patterns.SRCS += ivfenc.c ivfenc.h
-vpx_temporal_scalable_patterns.SRCS += tools_common.c tools_common.h
-vpx_temporal_scalable_patterns.SRCS += video_common.h
-vpx_temporal_scalable_patterns.SRCS += video_writer.h video_writer.c
-vpx_temporal_scalable_patterns.GUID  = B18C08F2-A439-4502-A78E-849BE3D60947
-vpx_temporal_scalable_patterns.DESCRIPTION = Temporal Scalability Encoder
+EXAMPLES-$(CONFIG_ENCODERS)          += vpx_temporal_svc_encoder.c
+vpx_temporal_svc_encoder.SRCS        += ivfenc.c ivfenc.h
+vpx_temporal_svc_encoder.SRCS        += tools_common.c tools_common.h
+vpx_temporal_svc_encoder.SRCS        += video_common.h
+vpx_temporal_svc_encoder.SRCS        += video_writer.h video_writer.c
+vpx_temporal_svc_encoder.GUID        = B18C08F2-A439-4502-A78E-849BE3D60947
+vpx_temporal_svc_encoder.DESCRIPTION = Temporal SVC Encoder
 EXAMPLES-$(CONFIG_VP8_DECODER)     += simple_decoder.c
 simple_decoder.GUID                 = D3BBF1E9-2427-450D-BBFF-B2843C1D44CC
 simple_decoder.SRCS                += ivfdec.h ivfdec.c
@@ -123,9 +130,6 @@ twopass_encoder.SRCS            += video_common.h
 twopass_encoder.SRCS            += video_writer.h video_writer.c
 twopass_encoder.GUID             = 73494FA6-4AF9-4763-8FBB-265C92402FD8
 twopass_encoder.DESCRIPTION      = Two-pass encoder loop
-EXAMPLES-$(CONFIG_VP8_ENCODER)  += force_keyframe.c
-force_keyframe.GUID              = 3C67CADF-029F-4C86-81F5-D6D4F51177F0
-force_keyframe.DESCRIPTION       = Force generation of keyframes
 ifeq ($(CONFIG_DECODERS),yes)
 EXAMPLES-$(CONFIG_VP8_ENCODER)  += decode_with_drops.c
 decode_with_drops.SRCS          += ivfdec.h ivfdec.c
@@ -137,19 +141,18 @@ decode_with_drops.SRCS          += vpx_ports/mem_ops_aligned.h
 endif
 decode_with_drops.GUID           = CE5C53C4-8DDA-438A-86ED-0DDD3CDB8D26
 decode_with_drops.DESCRIPTION    = Drops frames while decoding
-ifeq ($(CONFIG_VP8_DECODER),yes)
-EXAMPLES-$(CONFIG_ERROR_CONCEALMENT)    += decode_with_partial_drops.c
-endif
-decode_with_partial_drops.GUID           = 61C2D026-5754-46AC-916F-1343ECC5537E
-decode_with_partial_drops.DESCRIPTION    = Drops parts of frames while decoding
-EXAMPLES-$(CONFIG_VP8_ENCODER)     += vp8_set_maps.c
-vp8_set_maps.SRCS                  += ivfenc.h ivfenc.c
-vp8_set_maps.SRCS                  += tools_common.h tools_common.c
-vp8_set_maps.SRCS                  += video_common.h
-vp8_set_maps.SRCS                  += video_writer.h video_writer.c
-vp8_set_maps.GUID                   = ECB2D24D-98B8-4015-A465-A4AF3DCC145F
-vp8_set_maps.DESCRIPTION            = VP8 set active and ROI maps
+EXAMPLES-$(CONFIG_ENCODERS)        += set_maps.c
+set_maps.SRCS                      += ivfenc.h ivfenc.c
+set_maps.SRCS                      += tools_common.h tools_common.c
+set_maps.SRCS                      += video_common.h
+set_maps.SRCS                      += video_writer.h video_writer.c
+set_maps.GUID                       = ECB2D24D-98B8-4015-A465-A4AF3DCC145F
+set_maps.DESCRIPTION                = Set active and ROI maps
 EXAMPLES-$(CONFIG_VP8_ENCODER)     += vp8cx_set_ref.c
+vp8cx_set_ref.SRCS                 += ivfenc.h ivfenc.c
+vp8cx_set_ref.SRCS                 += tools_common.h tools_common.c
+vp8cx_set_ref.SRCS                 += video_common.h
+vp8cx_set_ref.SRCS                 += video_writer.h video_writer.c
 vp8cx_set_ref.GUID                  = C5E31F7F-96F6-48BD-BD3E-10EBF6E8057A
 vp8cx_set_ref.DESCRIPTION           = VP8 set encoder reference frame
 

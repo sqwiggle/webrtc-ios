@@ -1,23 +1,27 @@
 build obj/webrtc/video_loopback.actions_depends.stamp: stamp libgtest.a $
-    libwebrtc_test_common.a libwebrtc.a libgflags.a $
-    libvideo_capture_module.a libwebrtc_utility.a libaudio_coding_module.a $
-    libCNG.a libcommon_audio.a libsystem_wrappers.a libcommon_audio_neon.a $
-    libG711.a libG722.a libiLBC.a libiSAC.a libiSACFix.a libisac_neon.a $
-    libPCM16B.a libNetEq.a libwebrtc_opus.a libopus.a libacm2.a libNetEq4.a $
-    libmedia_file.a libwebrtc_video_coding.a libwebrtc_i420.a $
+    libgflags.a libwebrtc_test_common.a libwebrtc_test_renderer.a $
+    libfield_trial_default.a libwebrtc.a libvideo_capture_module.a $
+    libwebrtc_utility.a libaudio_coding_module.a libCNG.a libcommon_audio.a $
+    libsystem_wrappers.a libwebrtc_base.a libjsoncpp.a libcrssl.a $
+    libcrnspr.a libcrnss.a libnss_static.a libsqlite_regexp.a $
+    libsqlite_regexp.a libicui18n.a libicuuc.a libicudata.a libcrnssckbi.a $
+    libcommon_audio_neon.a libG711.a libG722.a libiLBC.a libiSAC.a $
+    libiSACFix.a libisac_neon.a libPCM16B.a libwebrtc_opus.a libopus.a $
+    libneteq.a libmedia_file.a libwebrtc_video_coding.a libwebrtc_i420.a $
     libcommon_video.a libyuv.a libyuv_neon.a libvideo_coding_utility.a $
     libwebrtc_vp8.a libvpx.a $
     obj/third_party/libvpx/gen_asm_offsets_vp8.actions_rules_copies.stamp $
-    libvpx_asm_offsets_vp8.a $
+    gen/third_party/libvpx/libvpx_asm_offsets_vp8.a $
     obj/third_party/libvpx/gen_asm_offsets_vpx_scale.actions_rules_copies.stamp $
-    libvpx_asm_offsets_vpx_scale.a libframe_generator.a libtest_support.a $
-    libgmock.a libvideo_engine_core.a librtp_rtcp.a libpaced_sender.a $
+    gen/third_party/libvpx/libvpx_asm_offsets_vpx_scale.a $
+    libframe_generator.a libtest_support.a libgmock.a libwebrtc_common.a $
+    libvideo_engine_core.a librtp_rtcp.a libpaced_sender.a $
     libremote_bitrate_estimator.a librbe_components.a $
     libbitrate_controller.a libvideo_processing.a libvideo_render_module.a $
     libvoice_engine.a libaudio_conference_mixer.a libaudio_processing.a $
     libaudio_processing_neon.a $
     obj/webrtc/modules/audio_processing/gen_nsx_core_neon_offsets_h.actions_rules_copies.stamp $
-    lib_core_neon_offsets.a $
+    gen/audio_processing/asm_offsets/lib_core_neon_offsets.a $
     obj/webrtc/modules/audio_processing/gen_aecm_core_neon_offsets_h.actions_rules_copies.stamp $
     libaudio_device.a
 
@@ -30,12 +34,16 @@ build obj/webrtc/video_loopback.compile_depends.stamp: stamp $
     obj/webrtc/modules/audio_processing/gen_nsx_core_neon_offsets_h.actions_rules_copies.stamp $
     obj/webrtc/modules/audio_processing/gen_aecm_core_neon_offsets_h.actions_rules_copies.stamp
 
+build video_loopback.app/icudtl.dat: mac_tool $
+    ../../third_party/icu/source/data/in/icudtl.dat
+  mactool_cmd = copy-bundle-resource
 build video_loopback.app/Default-568h@2x.png: mac_tool $
     ../../testing/gtest_ios/Default-568h@2x.png
   mactool_cmd = copy-bundle-resource
 build video_loopback.app/Info.plist: copy_infoplist $
     ../../testing/gtest_ios/unittest-Info.plist
   env = export ALWAYS_SEARCH_USER_PATHS=NO; export $
+      ARCHS="$${ARCHS_STANDARD_INCLUDING_64_BIT}"; export $
       BUILT_PRODUCTS_DIR=/Users/cwebb/Sqwiggle/webrtc/trunk/out_ios/Profile-iphoneos; $
       export BUNDLE_ID_TEST_NAME=videoloopback; export $
       SRCROOT=/Users/cwebb/Sqwiggle/webrtc/trunk/out_ios/Profile-iphoneos/../../webrtc; $
@@ -65,8 +73,10 @@ build video_loopback.app/Info.plist: copy_infoplist $
       LDPLUSPLUS="$${SOURCE_ROOT}/../third_party/llvm-build/Release+Asserts/bin/clang++"; $
       export MACH_O_TYPE=mh_execute; export OTHER_LDFLAGS="-framework $
       AVFoundation -framework CoreMedia -framework CoreVideo -framework $
-      UIKit -framework OpenGLES -framework QuartzCore -framework UIKit $
-      -Wl,-search_paths_first"; export PRODUCT_NAME=video_loopback; export $
+      UIKit -framework Foundation -framework Security -framework $
+      SystemConfiguration -framework UIKit -framework OpenGLES -framework $
+      QuartzCore -framework UIKit -Wl,-search_paths_first"; export $
+      PRODUCT_NAME=video_loopback; export $
       PRODUCT_TYPE=com.apple.product-type.application; export $
       SDKROOT=/Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS7.1.sdk; $
       export SYMROOT=../xcodebuild; export TARGETED_DEVICE_FAMILY=1,2; $
@@ -79,26 +89,29 @@ build video_loopback.app/Info.plist: copy_infoplist $
       -Wno-missing-field-initializers -Wheader-hygiene -Wno-c++11-narrowing $
       -Wno-char-subscripts -Wno-unneeded-internal-declaration $
       -Wno-covered-switch-default -Wstring-conversion $
-      -Wno-deprecated-register -Wno-absolute-value"; export $
+      -Wno-deprecated-register -Wno-selector-type-mismatch"; export $
       WRAPPER_NAME=video_loopback.app;
-  keys = '{"UIDeviceFamily": [1, 2], "BuildMachineOSBuild": "13C64", $
-      "DTXcodeBuild": "5B130a", "DTSDKBuild": "11D167", $
-      "CFBundleSupportedPlatforms": ["iPhoneOS"], "DTXcode": "0510", $
+  keys = '{"UIDeviceFamily": [1, 2], "BuildMachineOSBuild": "13D65", $
+      "DTXcodeBuild": "5B1008", "DTSDKBuild": "11D167", $
+      "CFBundleSupportedPlatforms": ["iPhoneOS"], "DTXcode": "0511", $
       "DTSDKName": "iphoneos", "DTPlatformVersion": "7.1", $
       "DTPlatformName": "iphoneos"}'
 defines = -DV8_DEPRECATION_WARNINGS -DBLINK_SCALE_FILTERS_AT_RECORD_TIME $
-    -DDISABLE_NACL -DCHROMIUM_BUILD -DUSE_LIBJPEG_TURBO=1 $
-    -DENABLE_CONFIGURATION_POLICY $
+    -DDISABLE_NACL -DCHROMIUM_BUILD -DCR_CLANG_REVISION=206824 $
+    -DUSE_LIBJPEG_TURBO=1 -DENABLE_CONFIGURATION_POLICY $
     -DDISCARDABLE_MEMORY_ALWAYS_SUPPORTED_NATIVELY $
     -DSYSTEM_NATIVELY_SIGNALS_MEMORY_PRESSURE -DENABLE_EGLIMAGE=1 $
     -DCLD_VERSION=1 -DENABLE_SPELLCHECK=1 -DDISABLE_FTP_SUPPORT=1 $
     -DWEBRTC_MODULE_UTILITY_VIDEO -DWEBRTC_ARCH_ARM -DWEBRTC_ARCH_ARM_V7 $
     -DWEBRTC_ARCH_ARM_NEON -DWEBRTC_POSIX -DWEBRTC_MAC -DWEBRTC_IOS $
     -DGTEST_HAS_POSIX_RE=0 -DUNIT_TEST -DGTEST_HAS_RTTI=0 $
+    -DGFLAGS_DLL_DECL= -DGFLAGS_DLL_DECLARE_FLAG= -DGFLAGS_DLL_DEFINE_FLAG= $
     -D__STDC_CONSTANT_MACROS -D__STDC_FORMAT_MACROS -DNDEBUG -DNVALGRIND $
     -DDYNAMIC_ANNOTATIONS_ENABLED=0 -DNS_BLOCK_ASSERTIONS=1 $
     -D_FORTIFY_SOURCE=2
-includes = -I../.. -I../.. -I../../testing/gtest/include
+includes = -I../.. -I../../testing/gtest/include $
+    -I../../third_party/gflags/gen/posix/include $
+    -I../../third_party/gflags/src
 cflags = -isysroot $
     /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS7.1.sdk $
     -Os -gdwarf-2 -fvisibility=hidden -Werror -Wnewline-eof $
@@ -106,7 +119,7 @@ cflags = -isysroot $
     -Wno-unused-parameter -Wno-missing-field-initializers -Wheader-hygiene $
     -Wno-c++11-narrowing -Wno-char-subscripts $
     -Wno-unneeded-internal-declaration -Wno-covered-switch-default $
-    -Wstring-conversion -Wno-deprecated-register -Wno-absolute-value
+    -Wstring-conversion -Wno-deprecated-register -Wno-selector-type-mismatch
 cflags_c = -std=c99 -fcolor-diagnostics
 cflags_cc = -std=gnu++0x -fno-rtti -fno-exceptions $
     -fvisibility-inlines-hidden -fno-threadsafe-statics -fcolor-diagnostics
@@ -114,44 +127,55 @@ cflags_objc = $cflags_c -Wobjc-missing-property-synthesis
 cflags_objcc = $cflags_cc -Wobjc-missing-property-synthesis $
     -fobjc-call-cxx-cdtors
 
+build obj/webrtc/test/video_loopback.run_test.o: cxx $
+    ../../webrtc/test/run_test.cc || $
+    obj/webrtc/video_loopback.compile_depends.stamp
 build obj/webrtc/video/video_loopback.loopback.o: cxx $
     ../../webrtc/video/loopback.cc || $
     obj/webrtc/video_loopback.compile_depends.stamp
-build obj/webrtc/test/video_loopback.test_main.o: cxx $
-    ../../webrtc/test/test_main.cc || $
-    obj/webrtc/video_loopback.compile_depends.stamp
 
 ldflags = -framework AVFoundation -framework CoreMedia -framework CoreVideo $
-    -framework UIKit -framework OpenGLES -framework QuartzCore $
+    -framework UIKit -framework Foundation -framework Security -framework $
+    SystemConfiguration -framework OpenGLES -framework QuartzCore $
     -Wl,-search_paths_first -Wl,-dead_strip -miphoneos-version-min=6.0 $
     -isysroot $
     /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS7.1.sdk $
     -arch armv7 -L.
-libs = -framework Foundation -framework AudioToolbox -framework CoreAudio
+libs = -framework Foundation $
+    /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS7.1.sdk/usr/lib/libsqlite3.dylib $
+    -framework AudioToolbox -framework CoreAudio
 build video_loopback.app/video_loopback: link $
-    obj/webrtc/video/video_loopback.loopback.o $
-    obj/webrtc/test/video_loopback.test_main.o libgtest.a $
-    libwebrtc_test_common.a libwebrtc.a libgflags.a $
-    libvideo_capture_module.a libwebrtc_utility.a libaudio_coding_module.a $
-    libCNG.a libcommon_audio.a libsystem_wrappers.a libcommon_audio_neon.a $
-    libG711.a libG722.a libiLBC.a libiSAC.a libiSACFix.a libisac_neon.a $
-    libPCM16B.a libNetEq.a libwebrtc_opus.a libopus.a libacm2.a libNetEq4.a $
-    libmedia_file.a libwebrtc_video_coding.a libwebrtc_i420.a $
-    libcommon_video.a libyuv.a libyuv_neon.a libvideo_coding_utility.a $
-    libwebrtc_vp8.a libvpx.a libvpx_asm_offsets_vp8.a $
-    libvpx_asm_offsets_vpx_scale.a libframe_generator.a libtest_support.a $
-    libgmock.a libvideo_engine_core.a librtp_rtcp.a libpaced_sender.a $
+    obj/webrtc/test/video_loopback.run_test.o $
+    obj/webrtc/video/video_loopback.loopback.o libgtest.a libgflags.a $
+    libwebrtc_test_common.a libwebrtc_test_renderer.a $
+    libfield_trial_default.a libwebrtc.a libvideo_capture_module.a $
+    libwebrtc_utility.a libaudio_coding_module.a libCNG.a libcommon_audio.a $
+    libsystem_wrappers.a libwebrtc_base.a libjsoncpp.a libcrssl.a $
+    libcrnspr.a libcrnss.a libnss_static.a libsqlite_regexp.a libicui18n.a $
+    libicuuc.a libicudata.a libcrnssckbi.a libcommon_audio_neon.a libG711.a $
+    libG722.a libiLBC.a libiSAC.a libiSACFix.a libisac_neon.a libPCM16B.a $
+    libwebrtc_opus.a libopus.a libneteq.a libmedia_file.a $
+    libwebrtc_video_coding.a libwebrtc_i420.a libcommon_video.a libyuv.a $
+    libyuv_neon.a libvideo_coding_utility.a libwebrtc_vp8.a libvpx.a $
+    gen/third_party/libvpx/libvpx_asm_offsets_vp8.a $
+    gen/third_party/libvpx/libvpx_asm_offsets_vpx_scale.a $
+    libframe_generator.a libtest_support.a libgmock.a libwebrtc_common.a $
+    libvideo_engine_core.a librtp_rtcp.a libpaced_sender.a $
     libremote_bitrate_estimator.a librbe_components.a $
     libbitrate_controller.a libvideo_processing.a libvideo_render_module.a $
     libvoice_engine.a libaudio_conference_mixer.a libaudio_processing.a $
-    libaudio_processing_neon.a lib_core_neon_offsets.a libaudio_device.a | $
+    libaudio_processing_neon.a $
+    gen/audio_processing/asm_offsets/lib_core_neon_offsets.a $
+    libaudio_device.a | $
     obj/webrtc/modules/audio_processing/gen_nsx_core_neon_offsets_h.actions_rules_copies.stamp $
     obj/webrtc/modules/audio_processing/gen_aecm_core_neon_offsets_h.actions_rules_copies.stamp $
-    obj/third_party/libvpx/gen_asm_offsets_vpx_scale.actions_rules_copies.stamp $
-    obj/third_party/libvpx/gen_asm_offsets_vp8.actions_rules_copies.stamp
+    obj/third_party/libvpx/gen_asm_offsets_vp8.actions_rules_copies.stamp $
+    libsqlite_regexp.a $
+    obj/third_party/libvpx/gen_asm_offsets_vpx_scale.actions_rules_copies.stamp
   ld = $ldxx
-build video_loopback.app: stamp video_loopback.app/Default-568h@2x.png $
-    video_loopback.app/Info.plist video_loopback.app/video_loopback
+build video_loopback.app: stamp video_loopback.app/icudtl.dat $
+    video_loopback.app/Default-568h@2x.png video_loopback.app/Info.plist $
+    video_loopback.app/video_loopback
   postbuilds = (export $
       BUILT_PRODUCTS_DIR=/Users/cwebb/Sqwiggle/webrtc/trunk/out_ios/Profile-iphoneos; $
       export CONFIGURATION=Profile-iphoneos; export $

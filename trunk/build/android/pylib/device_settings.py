@@ -7,7 +7,7 @@ import logging
 from pylib import content_settings
 
 
-def ConfigureContentSettingsDict(adb, desired_settings):
+def ConfigureContentSettingsDict(device, desired_settings):
   """Configures device content setings from a dictionary.
 
   Many settings are documented at:
@@ -18,15 +18,17 @@ def ConfigureContentSettingsDict(adb, desired_settings):
   Many others are undocumented.
 
   Args:
-    adb: An AndroidCommands instance for the device to configure.
+    device: A DeviceUtils instance for the device to configure.
     desired_settings: A dict of {table: {key: value}} for all
         settings to configure.
   """
   try:
-    sdk_version = int(adb.system_properties['ro.build.version.sdk'])
+    sdk_version = int(device.old_interface.system_properties[
+        'ro.build.version.sdk'])
   except ValueError:
     logging.error('Skipping content settings configuration, unknown sdk %s',
-                  adb.system_properties['ro.build.version.sdk'])
+                  device.old_interface.system_properties[
+                      'ro.build.version.sdk'])
     return
 
   if sdk_version < 16:
@@ -34,7 +36,7 @@ def ConfigureContentSettingsDict(adb, desired_settings):
     return
 
   for table, key_value in sorted(desired_settings.iteritems()):
-    settings = content_settings.ContentSettings(table, adb)
+    settings = content_settings.ContentSettings(table, device)
     for key, value in key_value.iteritems():
       settings[key] = value
     logging.info('\n%s %s', table, (80 - len(table)) * '-')
@@ -44,20 +46,34 @@ def ConfigureContentSettingsDict(adb, desired_settings):
 
 DETERMINISTIC_DEVICE_SETTINGS = {
   'com.google.settings/partner': {
+    'network_location_opt_in': 0,
     'use_location_for_services': 1,
   },
   'settings/global': {
+    'assisted_gps_enabled': 0,
+
     # Disable "auto time" and "auto time zone" to avoid network-provided time
     # to overwrite the device's datetime and timezone synchronized from host
     # when running tests later. See b/6569849.
     'auto_time': 0,
     'auto_time_zone': 0,
 
+    'development_settings_enabled': 1,
+
+    # Flag for allowing ActivityManagerService to send ACTION_APP_ERROR intents
+    # on application crashes and ANRs. If this is disabled, the crash/ANR dialog
+    # will never display the "Report" button.
+    # Type: int ( 0 = disallow, 1 = allow )
+    'send_action_app_error': 0,
+
     'stay_on_while_plugged_in': 3,
 
     'verifier_verify_adb_installs' : 0,
   },
   'settings/secure': {
+    'allowed_geolocation_origins':
+        'http://www.google.co.uk http://www.google.com',
+
     # Ensure that we never get random dialogs like "Unfortunately the process
     # android.process.acore has stopped", which steal the focus, and make our
     # automation fail (because the dialog steals the focus then mistakenly
@@ -90,5 +106,6 @@ DETERMINISTIC_DEVICE_SETTINGS = {
 NETWORK_DISABLED_SETTINGS = {
   'settings/global': {
     'airplane_mode_on': 1,
+    'wifi_on': 0,
   },
 }

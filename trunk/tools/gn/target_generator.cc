@@ -37,8 +37,19 @@ TargetGenerator::~TargetGenerator() {
 void TargetGenerator::Run() {
   // All target types use these.
   FillDependentConfigs();
+  if (err_->has_error())
+    return;
+
   FillData();
+  if (err_->has_error())
+    return;
+
   FillDependencies();
+  if (err_->has_error())
+    return;
+
+  if (!Visibility::FillItemVisibility(target_, scope_, err_))
+    return;
 
   // Do type-specific generation.
   DoRun();
@@ -106,8 +117,16 @@ void TargetGenerator::GenerateTarget(Scope* scope,
                "I am very confused.");
   }
 
-  if (!err->has_error())
-    scope->settings()->build_settings()->ItemDefined(target.PassAs<Item>());
+  if (err->has_error())
+    return;
+
+  // Save this target for the file.
+  Scope::ItemVector* collector = scope->GetItemCollector();
+  if (!collector) {
+    *err = Err(function_call, "Can't define a target in this context.");
+    return;
+  }
+  collector->push_back(new scoped_ptr<Item>(target.PassAs<Item>()));
 }
 
 const BuildSettings* TargetGenerator::GetBuildSettings() const {
@@ -124,6 +143,21 @@ void TargetGenerator::FillSources() {
                                   scope_->GetSourceDir(), &dest_sources, err_))
     return;
   target_->sources().swap(dest_sources);
+}
+
+void TargetGenerator::FillPublic() {
+  const Value* value = scope_->GetValue(variables::kPublic, true);
+  if (!value)
+    return;
+
+  // If the public headers are defined, don't default to public.
+  target_->set_all_headers_public(false);
+
+  Target::FileList dest_public;
+  if (!ExtractListOfRelativeFiles(scope_->settings()->build_settings(), *value,
+                                  scope_->GetSourceDir(), &dest_public, err_))
+    return;
+  target_->public_headers().swap(dest_public);
 }
 
 void TargetGenerator::FillSourcePrereqs() {
@@ -163,22 +197,17 @@ void TargetGenerator::FillData() {
 
 void TargetGenerator::FillDependencies() {
   FillGenericDeps(variables::kDeps, &target_->deps());
+  if (err_->has_error())
+    return;
   FillGenericDeps(variables::kDatadeps, &target_->datadeps());
+  if (err_->has_error())
+    return;
 
   // This is a list of dependent targets to have their configs fowarded, so
   // it goes here rather than in FillConfigs.
   FillForwardDependentConfigs();
-
-  FillHardDep();
-}
-
-void TargetGenerator::FillHardDep() {
-  const Value* hard_dep_value = scope_->GetValue(variables::kHardDep, true);
-  if (!hard_dep_value)
+  if (err_->has_error())
     return;
-  if (!hard_dep_value->VerifyTypeIs(Value::BOOLEAN, err_))
-    return;
-  target_->set_hard_dep(hard_dep_value->boolean_value());
 }
 
 void TargetGenerator::FillOutputs() {

@@ -4,13 +4,72 @@ build obj/talk/libjingle_unittest.actions_depends.stamp: stamp libcrssl.a $
     libicuuc.a libicudata.a libcrnssckbi.a libexpat.a libjsoncpp.a libyuv.a $
     libyuv_neon.a
 
+build libjingle_unittest.app/icudtl.dat: mac_tool $
+    ../../third_party/icu/source/data/in/icudtl.dat
+  mactool_cmd = copy-bundle-resource
+build libjingle_unittest.app/Info.plist: copy_infoplist $
+    ../../talk/build/ios_test.plist
+  env = export ALWAYS_SEARCH_USER_PATHS=NO; export $
+      ARCHS="$${ARCHS_STANDARD_INCLUDING_64_BIT}"; export $
+      BUILT_PRODUCTS_DIR=/Users/cwebb/Sqwiggle/webrtc/trunk/out_ios/Release; $
+      export $
+      SRCROOT=/Users/cwebb/Sqwiggle/webrtc/trunk/out_ios/Release/../../talk; $
+      export SOURCE_ROOT="$${SRCROOT}"; export $
+      CC="$${SOURCE_ROOT}/../third_party/llvm-build/Release+Asserts/bin/clang"; $
+      export CLANG_CXX_LANGUAGE_STANDARD=gnu++0x; export $
+      CLANG_ENABLE_OBJC_ARC=YES; export CLANG_LINK_OBJC_RUNTIME=NO; export $
+      CLANG_WARN_OBJC_MISSING_PROPERTY_SYNTHESIS=NO; export $
+      CONFIGURATION=Release; export $
+      CONTENTS_FOLDER_PATH=libjingle_unittest.app; export $
+      COPY_PHASE_STRIP=NO; export EXECUTABLE_NAME=libjingle_unittest; $
+      export EXECUTABLE_PATH=libjingle_unittest.app/libjingle_unittest; $
+      export FULL_PRODUCT_NAME=libjingle_unittest.app; export $
+      GCC_CW_ASM_SYNTAX=NO; export GCC_C_LANGUAGE_STANDARD=c99; export $
+      GCC_ENABLE_CPP_EXCEPTIONS=NO; export GCC_ENABLE_CPP_RTTI=NO; export $
+      GCC_ENABLE_PASCAL_STRINGS=NO; export $
+      GCC_INLINES_ARE_PRIVATE_EXTERN=YES; export $
+      GCC_OBJC_CALL_CXX_CDTORS=YES; export $
+      GCC_PRECOMPILE_PREFIX_HEADER=YES; export $
+      GCC_SYMBOLS_PRIVATE_EXTERN=YES; export GCC_THREADSAFE_STATICS=NO; $
+      export GCC_TREAT_WARNINGS_AS_ERRORS=NO; export $
+      GCC_VERSION=com.apple.compilers.llvm.clang.1_0; export $
+      GCC_WARN_ABOUT_MISSING_NEWLINE=YES; export $
+      INFOPLIST_FILE=build/ios_test.plist; export $
+      INFOPLIST_PATH=libjingle_unittest.app/Info.plist; export $
+      IPHONEOS_DEPLOYMENT_TARGET=6.0; export $
+      LDPLUSPLUS="$${SOURCE_ROOT}/../third_party/llvm-build/Release+Asserts/bin/clang++"; $
+      export MACH_O_TYPE=mh_execute; export OTHER_LDFLAGS="-framework $
+      Foundation -framework Security -framework SystemConfiguration $
+      -framework UIKit -Wl,-search_paths_first -Wl,-ObjC"; export $
+      PRODUCT_NAME=libjingle_unittest; export $
+      PRODUCT_TYPE=com.apple.product-type.application; export $
+      RUN_CLANG_STATIC_ANALYZER=NO; export $
+      SDKROOT=/Applications/Xcode.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator7.1.sdk; $
+      export SYMROOT=../xcodebuild; export TARGETED_DEVICE_FAMILY=1,2; $
+      export $
+      TARGET_BUILD_DIR=/Users/cwebb/Sqwiggle/webrtc/trunk/out_ios/Release; $
+      export TEMP_DIR="$${TMPDIR}"; export $
+      UNLOCALIZED_RESOURCES_FOLDER_PATH=libjingle_unittest.app; export $
+      USE_HEADERMAP=NO; export VALID_ARCHS="armv7 i386"; export $
+      WARNING_CFLAGS="-Wendif-labels -Wno-unused-parameter $
+      -Wno-missing-field-initializers -Wheader-hygiene -Wno-c++11-narrowing $
+      -Wno-char-subscripts -Wno-unneeded-internal-declaration $
+      -Wno-covered-switch-default -Wstring-conversion $
+      -Wno-deprecated-register -Wno-selector-type-mismatch"; export $
+      WARNING_CFLAGS_excluded="-Wall -Wextra"; export $
+      WRAPPER_NAME=libjingle_unittest.app;
+  keys = '{"DTXcode": "0511", "DTSDKName": "iphonesimulator", $
+      "DTPlatformName": "iphonesimulator", "UIDeviceFamily": [1, 2], $
+      "BuildMachineOSBuild": "13D65", "DTXcodeBuild": "5B1008", $
+      "DTSDKBuild": "11D167", "CFBundleSupportedPlatforms": $
+      ["iPhoneSimulator"]}'
 defines = -DV8_DEPRECATION_WARNINGS -DBLINK_SCALE_FILTERS_AT_RECORD_TIME $
     -DEXPAT_RELATIVE_PATH -DFEATURE_ENABLE_VOICEMAIL -DGTEST_RELATIVE_PATH $
     -DJSONCPP_RELATIVE_PATH -DLOGGING=1 -DSRTP_RELATIVE_PATH $
     -DFEATURE_ENABLE_SSL -DFEATURE_ENABLE_PSTN -DHAVE_SRTP $
     -DHAVE_WEBRTC_VIDEO -DHAVE_WEBRTC_VOICE -DUSE_WEBRTC_DEV_BRANCH $
-    -DDISABLE_NACL -DCHROMIUM_BUILD -DUSE_LIBJPEG_TURBO=1 $
-    -DENABLE_CONFIGURATION_POLICY $
+    -DDISABLE_NACL -DCHROMIUM_BUILD -DCR_CLANG_REVISION=206824 $
+    -DUSE_LIBJPEG_TURBO=1 -DENABLE_CONFIGURATION_POLICY $
     -DDISCARDABLE_MEMORY_ALWAYS_SUPPORTED_NATIVELY $
     -DSYSTEM_NATIVELY_SIGNALS_MEMORY_PRESSURE -DENABLE_EGLIMAGE=1 $
     -DCLD_VERSION=1 -DENABLE_SPELLCHECK=1 -DDISABLE_FTP_SUPPORT=1 $
@@ -51,12 +110,12 @@ cflags = -isysroot $
     -Wno-unused-parameter -Wno-missing-field-initializers -Wheader-hygiene $
     -Wno-c++11-narrowing -Wno-char-subscripts $
     -Wno-unneeded-internal-declaration -Wno-covered-switch-default $
-    -Wstring-conversion -Wno-deprecated-register -Wno-absolute-value
+    -Wstring-conversion -Wno-deprecated-register -Wno-selector-type-mismatch
 cflags_c = -std=c99 -fcolor-diagnostics
 cflags_cc = -std=gnu++0x -fno-rtti -fno-exceptions $
     -fvisibility-inlines-hidden -fno-threadsafe-statics -fcolor-diagnostics
-cflags_objc = $cflags_c
-cflags_objcc = $cflags_cc -fobjc-call-cxx-cdtors
+cflags_objc = $cflags_c -fobjc-arc
+cflags_objcc = $cflags_cc -fobjc-arc -fobjc-call-cxx-cdtors
 
 build obj/talk/base/libjingle_unittest.asynchttprequest_unittest.o: cxx $
     ../../talk/base/asynchttprequest_unittest.cc
@@ -218,13 +277,13 @@ build obj/talk/base/libjingle_unittest.sslstreamadapter_unittest.o: cxx $
     ../../talk/base/sslstreamadapter_unittest.cc
 
 ldflags = -framework Foundation -framework Security -framework $
-    SystemConfiguration -framework UIKit -Wl,-search_paths_first $
+    SystemConfiguration -framework UIKit -Wl,-search_paths_first -Wl,-ObjC $
     -Wl,-dead_strip -mios-simulator-version-min=6.0 -isysroot $
     /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator7.1.sdk $
     -arch i386 -L.
 libs = $
     /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator7.1.sdk/usr/lib/libsqlite3.dylib
-build libjingle_unittest: link $
+build libjingle_unittest.app/libjingle_unittest: link $
     obj/talk/base/libjingle_unittest.asynchttprequest_unittest.o $
     obj/talk/base/libjingle_unittest.atomicops_unittest.o $
     obj/talk/base/libjingle_unittest.autodetectproxy_unittest.o $
@@ -308,19 +367,26 @@ build libjingle_unittest: link $
     libcrnssckbi.a libexpat.a libjsoncpp.a libyuv.a libyuv_neon.a | $
     libsqlite_regexp.a
   ld = $ldxx
-  postbuilds = $ && (export $
+build libjingle_unittest.app: stamp libjingle_unittest.app/icudtl.dat $
+    libjingle_unittest.app/Info.plist $
+    libjingle_unittest.app/libjingle_unittest
+  postbuilds = (export $
       BUILT_PRODUCTS_DIR=/Users/cwebb/Sqwiggle/webrtc/trunk/out_ios/Release; $
       export CONFIGURATION=Release; export $
+      CONTENTS_FOLDER_PATH=libjingle_unittest.app; export $
       EXECUTABLE_NAME=libjingle_unittest; export $
-      EXECUTABLE_PATH=libjingle_unittest; export $
-      FULL_PRODUCT_NAME=libjingle_unittest; export $
-      PRODUCT_NAME=libjingle_unittest; export $
-      PRODUCT_TYPE=com.apple.product-type.tool; export $
+      EXECUTABLE_PATH=libjingle_unittest.app/libjingle_unittest; export $
+      FULL_PRODUCT_NAME=libjingle_unittest.app; export $
+      INFOPLIST_PATH=libjingle_unittest.app/Info.plist; export $
+      MACH_O_TYPE=mh_execute; export PRODUCT_NAME=libjingle_unittest; $
+      export PRODUCT_TYPE=com.apple.product-type.application; export $
       SDKROOT=/Applications/Xcode.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator7.1.sdk; $
       export $
       SRCROOT=/Users/cwebb/Sqwiggle/webrtc/trunk/out_ios/Release/../../talk; $
       export SOURCE_ROOT="$${SRCROOT}"; export $
       TARGET_BUILD_DIR=/Users/cwebb/Sqwiggle/webrtc/trunk/out_ios/Release; $
-      export TEMP_DIR="$${TMPDIR}"; (cd ../../talk && strip  $
-      ../out_ios/Release/libjingle_unittest); G=$$?; ((exit $$G) || rm -rf $
-      libjingle_unittest) && exit $$G)
+      export TEMP_DIR="$${TMPDIR}"; export $
+      UNLOCALIZED_RESOURCES_FOLDER_PATH=libjingle_unittest.app; export $
+      WRAPPER_NAME=libjingle_unittest.app; (cd ../../talk && strip  $
+      ../out_ios/Release/libjingle_unittest.app/libjingle_unittest); G=$$?; $
+      ((exit $$G) || rm -rf libjingle_unittest.app) && exit $$G) && 

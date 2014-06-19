@@ -15,8 +15,6 @@
  @
 
 
-     @.globl _vp8_loop_filter_simple_horizontal_edge_neon
-	.globl vp8_loop_filter_simple_horizontal_edge_neon
     .globl _vp8_loop_filter_bhs_neon
 	.globl vp8_loop_filter_bhs_neon
     .globl _vp8_loop_filter_mbhs_neon
@@ -33,7 +31,7 @@
 
 _vp8_loop_filter_simple_horizontal_edge_neon:
 	vp8_loop_filter_simple_horizontal_edge_neon: @
-
+    vpush       {d8-d15}
     sub         r3, r0, r1, lsl #1           @ move src pointer down by 2 lines
 
     vld1.u8     {q7}, [r0,:128], r1           @ q0
@@ -93,6 +91,7 @@ _vp8_loop_filter_simple_horizontal_edge_neon:
     vst1.u8     {q6}, [r3,:128]               @ store op0
     vst1.u8     {q7}, [r0,:128]               @ store oq0
 
+    vpop        {d8-d15}
     bx          lr
     @         @ |vp8_loop_filter_simple_horizontal_edge_neon|
 

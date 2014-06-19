@@ -30,6 +30,7 @@
  @                             int sz) @
 _vp8_memcpy_partial_neon:
 	vp8_memcpy_partial_neon: @
+    vpush               {d8-d15}
      @pld                [r1]                         @preload pred data
      @pld                [r1, #128]
      @pld                [r1, #256]
@@ -73,6 +74,7 @@ extra_copy_neon_loop:
     bne             extra_copy_neon_loop
 
 done_copy_neon_loop:
+    vpop            {d8-d15}
     bx              lr
     @
 

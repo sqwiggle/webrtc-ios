@@ -1,25 +1,27 @@
 build obj/webrtc/modules/modules_unittests.actions_depends.stamp: stamp $
     libaudio_coding_module.a libaudio_processing.a libbitrate_controller.a $
-    libCNG.a libdesktop_capture.a libiSACFix.a libmedia_file.a libNetEq.a $
-    libNetEq4.a libNetEq4TestTools.a libneteq_unittest_tools.a $
-    libpaced_sender.a libPCM16B.a libremote_bitrate_estimator.a $
-    librtp_rtcp.a libtest_framework.a libvideo_codecs_test_framework.a $
+    libCNG.a libdesktop_capture.a libiSACFix.a libmedia_file.a libneteq.a $
+    libneteq_test_tools.a libneteq_unittest_tools.a libpaced_sender.a $
+    libPCM16B.a libremote_bitrate_estimator.a librtp_rtcp.a $
+    libtest_framework.a libvideo_codecs_test_framework.a $
     libvideo_processing.a libwebrtc_utility.a libwebrtc_video_coding.a $
-    libG711.a libG722.a libiLBC.a libiSAC.a libopus.a libcommon_audio.a $
-    libsystem_wrappers.a libwebrtc_opus.a librbe_components.a libgmock.a $
+    libG711.a libG722.a libiLBC.a libiSAC.a libwebrtc_opus.a libopus.a $
+    libcommon_audio.a libsystem_wrappers.a librbe_components.a libgmock.a $
     libgtest.a libgflags.a libwebrtc_vp8.a libtest_support_main.a $
-    libframe_generator.a librtcp_packet_parser.a libvpx.a $
-    libcommon_audio_neon.a libisac_neon.a libacm2.a $
+    libframe_generator.a librtcp_packet_parser.a libvpx.a libwebrtc_base.a $
+    libjsoncpp.a libcrssl.a libcrnspr.a libcrnss.a libnss_static.a $
+    libsqlite_regexp.a libsqlite_regexp.a libicui18n.a libicuuc.a $
+    libicudata.a libcrnssckbi.a libcommon_audio_neon.a libisac_neon.a $
     libaudio_processing_neon.a $
     obj/webrtc/modules/audio_processing/gen_nsx_core_neon_offsets_h.actions_rules_copies.stamp $
-    lib_core_neon_offsets.a $
+    gen/audio_processing/asm_offsets/lib_core_neon_offsets.a $
     obj/webrtc/modules/audio_processing/gen_aecm_core_neon_offsets_h.actions_rules_copies.stamp $
     libcommon_video.a libyuv.a libyuv_neon.a libmetrics.a libtest_support.a $
     libwebrtc_i420.a libvideo_coding_utility.a $
     obj/third_party/libvpx/gen_asm_offsets_vp8.actions_rules_copies.stamp $
-    libvpx_asm_offsets_vp8.a $
+    gen/third_party/libvpx/libvpx_asm_offsets_vp8.a $
     obj/third_party/libvpx/gen_asm_offsets_vpx_scale.actions_rules_copies.stamp $
-    libvpx_asm_offsets_vpx_scale.a
+    gen/third_party/libvpx/libvpx_asm_offsets_vpx_scale.a libfield_trial.a
 
 build obj/webrtc/modules/modules_unittests.compile_depends.stamp: stamp $
     obj.host/testing/iossim/iossim.gen/iossim/DVTiPhoneSimulatorRemoteClient.h $
@@ -30,12 +32,16 @@ build obj/webrtc/modules/modules_unittests.compile_depends.stamp: stamp $
     obj/third_party/libvpx/gen_asm_offsets_vp8.actions_rules_copies.stamp $
     obj/third_party/libvpx/gen_asm_offsets_vpx_scale.actions_rules_copies.stamp
 
+build modules_unittests.app/icudtl.dat: mac_tool $
+    ../../third_party/icu/source/data/in/icudtl.dat
+  mactool_cmd = copy-bundle-resource
 build modules_unittests.app/Default-568h@2x.png: mac_tool $
     ../../testing/gtest_ios/Default-568h@2x.png
   mactool_cmd = copy-bundle-resource
 build modules_unittests.app/Info.plist: copy_infoplist $
     ../../testing/gtest_ios/unittest-Info.plist
   env = export ALWAYS_SEARCH_USER_PATHS=NO; export $
+      ARCHS="$${ARCHS_STANDARD_INCLUDING_64_BIT}"; export $
       BUILT_PRODUCTS_DIR=/Users/cwebb/Sqwiggle/webrtc/trunk/out_ios/Debug-iphoneos; $
       export BUNDLE_ID_TEST_NAME=modulesunittests; export $
       SRCROOT=/Users/cwebb/Sqwiggle/webrtc/trunk/out_ios/Debug-iphoneos/../../webrtc/modules; $
@@ -63,8 +69,9 @@ build modules_unittests.app/Info.plist: copy_infoplist $
       INFOPLIST_PATH=modules_unittests.app/Info.plist; export $
       IPHONEOS_DEPLOYMENT_TARGET=6.0; export $
       LDPLUSPLUS="$${SOURCE_ROOT}/../../third_party/llvm-build/Release+Asserts/bin/clang++"; $
-      export MACH_O_TYPE=mh_execute; export $
-      OTHER_LDFLAGS=-Wl,-search_paths_first; export $
+      export MACH_O_TYPE=mh_execute; export OTHER_LDFLAGS="-framework $
+      Foundation -framework Security -framework SystemConfiguration $
+      -framework UIKit -Wl,-search_paths_first"; export $
       PRODUCT_NAME=modules_unittests; export $
       PRODUCT_TYPE=com.apple.product-type.application; export $
       SDKROOT=/Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS7.1.sdk; $
@@ -78,16 +85,16 @@ build modules_unittests.app/Info.plist: copy_infoplist $
       -Wno-missing-field-initializers -Wheader-hygiene -Wno-c++11-narrowing $
       -Wno-char-subscripts -Wno-unneeded-internal-declaration $
       -Wno-covered-switch-default -Wstring-conversion $
-      -Wno-deprecated-register -Wno-absolute-value"; export $
+      -Wno-deprecated-register -Wno-selector-type-mismatch"; export $
       WRAPPER_NAME=modules_unittests.app;
-  keys = '{"UIDeviceFamily": [1, 2], "BuildMachineOSBuild": "13C64", $
-      "DTXcodeBuild": "5B130a", "DTSDKBuild": "11D167", $
-      "CFBundleSupportedPlatforms": ["iPhoneOS"], "DTXcode": "0510", $
+  keys = '{"UIDeviceFamily": [1, 2], "BuildMachineOSBuild": "13D65", $
+      "DTXcodeBuild": "5B1008", "DTSDKBuild": "11D167", $
+      "CFBundleSupportedPlatforms": ["iPhoneOS"], "DTXcode": "0511", $
       "DTSDKName": "iphoneos", "DTPlatformVersion": "7.1", $
       "DTPlatformName": "iphoneos"}'
 defines = -DV8_DEPRECATION_WARNINGS -DBLINK_SCALE_FILTERS_AT_RECORD_TIME $
-    -DDISABLE_NACL -DCHROMIUM_BUILD -DUSE_LIBJPEG_TURBO=1 $
-    -DENABLE_CONFIGURATION_POLICY $
+    -DDISABLE_NACL -DCHROMIUM_BUILD -DCR_CLANG_REVISION=206824 $
+    -DUSE_LIBJPEG_TURBO=1 -DENABLE_CONFIGURATION_POLICY $
     -DDISCARDABLE_MEMORY_ALWAYS_SUPPORTED_NATIVELY $
     -DSYSTEM_NATIVELY_SIGNALS_MEMORY_PRESSURE -DENABLE_EGLIMAGE=1 $
     -DCLD_VERSION=1 -DENABLE_SPELLCHECK=1 -DDISABLE_FTP_SUPPORT=1 $
@@ -99,17 +106,15 @@ defines = -DV8_DEPRECATION_WARNINGS -DBLINK_SCALE_FILTERS_AT_RECORD_TIME $
     -DGFLAGS_DLL_DEFINE_FLAG= -D__STDC_CONSTANT_MACROS $
     -D__STDC_FORMAT_MACROS -DDYNAMIC_ANNOTATIONS_ENABLED=1 $
     -DWTF_USE_DYNAMIC_ANNOTATIONS=1
-includes = -I../.. -I../.. $
-    -I../../webrtc/modules/audio_coding/main/interface $
+includes = -I../.. -I../../webrtc/modules/audio_coding/main/interface $
     -I../../webrtc/modules/interface -I../../webrtc $
     -I../../webrtc/modules/audio_coding/codecs/cng/include $
     -I../../webrtc/modules/audio_coding/codecs/isac/fix/interface $
     -I../../webrtc/modules/media_file/interface $
-    -I../../webrtc/modules/audio_coding/neteq/interface $
     -I../../third_party/opus/src/celt -I../../third_party/opus/src/src $
-    -I../../webrtc/modules/audio_coding/neteq4/interface $
-    -I../../webrtc/modules/audio_coding/neteq4/test $
-    -I../../webrtc/modules/audio_coding/neteq4/tools $
+    -I../../webrtc/modules/audio_coding/neteq/interface $
+    -I../../webrtc/modules/audio_coding/neteq/test $
+    -I../../webrtc/modules/audio_coding/neteq/tools $
     -I../../webrtc/modules/audio_coding/codecs/pcm16b/include $
     -I../../webrtc/modules/audio_coding/codecs/g711/include $
     -I../../webrtc/modules/audio_coding/codecs/g722/include $
@@ -130,7 +135,7 @@ cflags = -isysroot $
     -Wno-unused-parameter -Wno-missing-field-initializers -Wheader-hygiene $
     -Wno-c++11-narrowing -Wno-char-subscripts $
     -Wno-unneeded-internal-declaration -Wno-covered-switch-default $
-    -Wstring-conversion -Wno-deprecated-register -Wno-absolute-value
+    -Wstring-conversion -Wno-deprecated-register -Wno-selector-type-mismatch
 cflags_c = -std=c99 -fcolor-diagnostics -fstack-protector-all
 cflags_cc = -std=gnu++0x -fno-rtti -fno-exceptions $
     -fvisibility-inlines-hidden -fno-threadsafe-statics -fcolor-diagnostics $
@@ -145,6 +150,11 @@ build $
     ../../webrtc/modules/audio_coding/main/acm2/acm_receiver_unittest.cc || $
     obj/webrtc/modules/modules_unittests.compile_depends.stamp
 build $
+    obj/webrtc/modules/audio_coding/main/acm2/modules_unittests.audio_coding_module_unittest.o: $
+    cxx $
+    ../../webrtc/modules/audio_coding/main/acm2/audio_coding_module_unittest.cc $
+    || obj/webrtc/modules/modules_unittests.compile_depends.stamp
+build $
     obj/webrtc/modules/audio_coding/main/acm2/modules_unittests.call_statistics_unittest.o: $
     cxx $
     ../../webrtc/modules/audio_coding/main/acm2/call_statistics_unittest.cc $
@@ -158,10 +168,6 @@ build $
     obj/webrtc/modules/audio_coding/main/acm2/modules_unittests.nack_unittest.o: $
     cxx ../../webrtc/modules/audio_coding/main/acm2/nack_unittest.cc || $
     obj/webrtc/modules/modules_unittests.compile_depends.stamp
-build $
-    obj/webrtc/modules/audio_coding/main/source/modules_unittests.acm_neteq_unittest.o: $
-    cxx ../../webrtc/modules/audio_coding/main/source/acm_neteq_unittest.cc $
-    || obj/webrtc/modules/modules_unittests.compile_depends.stamp
 build $
     obj/webrtc/modules/audio_coding/codecs/cng/modules_unittests.cng_unittest.o: $
     cxx ../../webrtc/modules/audio_coding/codecs/cng/cng_unittest.cc || $
@@ -196,128 +202,127 @@ build $
     cxx ../../webrtc/modules/audio_coding/codecs/opus/opus_unittest.cc || $
     obj/webrtc/modules/modules_unittests.compile_depends.stamp
 build $
-    obj/webrtc/modules/audio_coding/neteq4/modules_unittests.audio_classifier_unittest.o: $
+    obj/webrtc/modules/audio_coding/neteq/modules_unittests.audio_classifier_unittest.o: $
     cxx $
-    ../../webrtc/modules/audio_coding/neteq4/audio_classifier_unittest.cc $
-    || obj/webrtc/modules/modules_unittests.compile_depends.stamp
-build $
-    obj/webrtc/modules/audio_coding/neteq4/modules_unittests.audio_multi_vector_unittest.o: $
-    cxx $
-    ../../webrtc/modules/audio_coding/neteq4/audio_multi_vector_unittest.cc $
-    || obj/webrtc/modules/modules_unittests.compile_depends.stamp
-build $
-    obj/webrtc/modules/audio_coding/neteq4/modules_unittests.audio_vector_unittest.o: $
-    cxx ../../webrtc/modules/audio_coding/neteq4/audio_vector_unittest.cc $
-    || obj/webrtc/modules/modules_unittests.compile_depends.stamp
-build $
-    obj/webrtc/modules/audio_coding/neteq4/modules_unittests.background_noise_unittest.o: $
-    cxx $
-    ../../webrtc/modules/audio_coding/neteq4/background_noise_unittest.cc $
-    || obj/webrtc/modules/modules_unittests.compile_depends.stamp
-build $
-    obj/webrtc/modules/audio_coding/neteq4/modules_unittests.buffer_level_filter_unittest.o: $
-    cxx $
-    ../../webrtc/modules/audio_coding/neteq4/buffer_level_filter_unittest.cc $
-    || obj/webrtc/modules/modules_unittests.compile_depends.stamp
-build $
-    obj/webrtc/modules/audio_coding/neteq4/modules_unittests.comfort_noise_unittest.o: $
-    cxx ../../webrtc/modules/audio_coding/neteq4/comfort_noise_unittest.cc $
-    || obj/webrtc/modules/modules_unittests.compile_depends.stamp
-build $
-    obj/webrtc/modules/audio_coding/neteq4/modules_unittests.decision_logic_unittest.o: $
-    cxx ../../webrtc/modules/audio_coding/neteq4/decision_logic_unittest.cc $
-    || obj/webrtc/modules/modules_unittests.compile_depends.stamp
-build $
-    obj/webrtc/modules/audio_coding/neteq4/modules_unittests.decoder_database_unittest.o: $
-    cxx $
-    ../../webrtc/modules/audio_coding/neteq4/decoder_database_unittest.cc $
-    || obj/webrtc/modules/modules_unittests.compile_depends.stamp
-build $
-    obj/webrtc/modules/audio_coding/neteq4/modules_unittests.delay_manager_unittest.o: $
-    cxx ../../webrtc/modules/audio_coding/neteq4/delay_manager_unittest.cc $
-    || obj/webrtc/modules/modules_unittests.compile_depends.stamp
-build $
-    obj/webrtc/modules/audio_coding/neteq4/modules_unittests.delay_peak_detector_unittest.o: $
-    cxx $
-    ../../webrtc/modules/audio_coding/neteq4/delay_peak_detector_unittest.cc $
-    || obj/webrtc/modules/modules_unittests.compile_depends.stamp
-build $
-    obj/webrtc/modules/audio_coding/neteq4/modules_unittests.dsp_helper_unittest.o: $
-    cxx ../../webrtc/modules/audio_coding/neteq4/dsp_helper_unittest.cc || $
+    ../../webrtc/modules/audio_coding/neteq/audio_classifier_unittest.cc || $
     obj/webrtc/modules/modules_unittests.compile_depends.stamp
 build $
-    obj/webrtc/modules/audio_coding/neteq4/modules_unittests.dtmf_buffer_unittest.o: $
-    cxx ../../webrtc/modules/audio_coding/neteq4/dtmf_buffer_unittest.cc || $
-    obj/webrtc/modules/modules_unittests.compile_depends.stamp
-build $
-    obj/webrtc/modules/audio_coding/neteq4/modules_unittests.dtmf_tone_generator_unittest.o: $
+    obj/webrtc/modules/audio_coding/neteq/modules_unittests.audio_multi_vector_unittest.o: $
     cxx $
-    ../../webrtc/modules/audio_coding/neteq4/dtmf_tone_generator_unittest.cc $
+    ../../webrtc/modules/audio_coding/neteq/audio_multi_vector_unittest.cc $
     || obj/webrtc/modules/modules_unittests.compile_depends.stamp
 build $
-    obj/webrtc/modules/audio_coding/neteq4/modules_unittests.expand_unittest.o: $
-    cxx ../../webrtc/modules/audio_coding/neteq4/expand_unittest.cc || $
+    obj/webrtc/modules/audio_coding/neteq/modules_unittests.audio_vector_unittest.o: $
+    cxx ../../webrtc/modules/audio_coding/neteq/audio_vector_unittest.cc || $
     obj/webrtc/modules/modules_unittests.compile_depends.stamp
 build $
-    obj/webrtc/modules/audio_coding/neteq4/modules_unittests.merge_unittest.o: $
-    cxx ../../webrtc/modules/audio_coding/neteq4/merge_unittest.cc || $
-    obj/webrtc/modules/modules_unittests.compile_depends.stamp
-build $
-    obj/webrtc/modules/audio_coding/neteq4/modules_unittests.neteq_external_decoder_unittest.o: $
+    obj/webrtc/modules/audio_coding/neteq/modules_unittests.background_noise_unittest.o: $
     cxx $
-    ../../webrtc/modules/audio_coding/neteq4/neteq_external_decoder_unittest.cc $
-    || obj/webrtc/modules/modules_unittests.compile_depends.stamp
-build $
-    obj/webrtc/modules/audio_coding/neteq4/modules_unittests.neteq_impl_unittest.o: $
-    cxx ../../webrtc/modules/audio_coding/neteq4/neteq_impl_unittest.cc || $
+    ../../webrtc/modules/audio_coding/neteq/background_noise_unittest.cc || $
     obj/webrtc/modules/modules_unittests.compile_depends.stamp
 build $
-    obj/webrtc/modules/audio_coding/neteq4/modules_unittests.neteq_stereo_unittest.o: $
-    cxx ../../webrtc/modules/audio_coding/neteq4/neteq_stereo_unittest.cc $
-    || obj/webrtc/modules/modules_unittests.compile_depends.stamp
-build $
-    obj/webrtc/modules/audio_coding/neteq4/modules_unittests.neteq_unittest.o: $
-    cxx ../../webrtc/modules/audio_coding/neteq4/neteq_unittest.cc || $
-    obj/webrtc/modules/modules_unittests.compile_depends.stamp
-build $
-    obj/webrtc/modules/audio_coding/neteq4/modules_unittests.normal_unittest.o: $
-    cxx ../../webrtc/modules/audio_coding/neteq4/normal_unittest.cc || $
-    obj/webrtc/modules/modules_unittests.compile_depends.stamp
-build $
-    obj/webrtc/modules/audio_coding/neteq4/modules_unittests.packet_buffer_unittest.o: $
-    cxx ../../webrtc/modules/audio_coding/neteq4/packet_buffer_unittest.cc $
-    || obj/webrtc/modules/modules_unittests.compile_depends.stamp
-build $
-    obj/webrtc/modules/audio_coding/neteq4/modules_unittests.payload_splitter_unittest.o: $
+    obj/webrtc/modules/audio_coding/neteq/modules_unittests.buffer_level_filter_unittest.o: $
     cxx $
-    ../../webrtc/modules/audio_coding/neteq4/payload_splitter_unittest.cc $
+    ../../webrtc/modules/audio_coding/neteq/buffer_level_filter_unittest.cc $
     || obj/webrtc/modules/modules_unittests.compile_depends.stamp
 build $
-    obj/webrtc/modules/audio_coding/neteq4/modules_unittests.post_decode_vad_unittest.o: $
+    obj/webrtc/modules/audio_coding/neteq/modules_unittests.comfort_noise_unittest.o: $
+    cxx ../../webrtc/modules/audio_coding/neteq/comfort_noise_unittest.cc $
+    || obj/webrtc/modules/modules_unittests.compile_depends.stamp
+build $
+    obj/webrtc/modules/audio_coding/neteq/modules_unittests.decision_logic_unittest.o: $
+    cxx ../../webrtc/modules/audio_coding/neteq/decision_logic_unittest.cc $
+    || obj/webrtc/modules/modules_unittests.compile_depends.stamp
+build $
+    obj/webrtc/modules/audio_coding/neteq/modules_unittests.decoder_database_unittest.o: $
     cxx $
-    ../../webrtc/modules/audio_coding/neteq4/post_decode_vad_unittest.cc || $
+    ../../webrtc/modules/audio_coding/neteq/decoder_database_unittest.cc || $
     obj/webrtc/modules/modules_unittests.compile_depends.stamp
 build $
-    obj/webrtc/modules/audio_coding/neteq4/modules_unittests.random_vector_unittest.o: $
-    cxx ../../webrtc/modules/audio_coding/neteq4/random_vector_unittest.cc $
+    obj/webrtc/modules/audio_coding/neteq/modules_unittests.delay_manager_unittest.o: $
+    cxx ../../webrtc/modules/audio_coding/neteq/delay_manager_unittest.cc $
     || obj/webrtc/modules/modules_unittests.compile_depends.stamp
 build $
-    obj/webrtc/modules/audio_coding/neteq4/modules_unittests.sync_buffer_unittest.o: $
-    cxx ../../webrtc/modules/audio_coding/neteq4/sync_buffer_unittest.cc || $
+    obj/webrtc/modules/audio_coding/neteq/modules_unittests.delay_peak_detector_unittest.o: $
+    cxx $
+    ../../webrtc/modules/audio_coding/neteq/delay_peak_detector_unittest.cc $
+    || obj/webrtc/modules/modules_unittests.compile_depends.stamp
+build $
+    obj/webrtc/modules/audio_coding/neteq/modules_unittests.dsp_helper_unittest.o: $
+    cxx ../../webrtc/modules/audio_coding/neteq/dsp_helper_unittest.cc || $
     obj/webrtc/modules/modules_unittests.compile_depends.stamp
 build $
-    obj/webrtc/modules/audio_coding/neteq4/modules_unittests.timestamp_scaler_unittest.o: $
+    obj/webrtc/modules/audio_coding/neteq/modules_unittests.dtmf_buffer_unittest.o: $
+    cxx ../../webrtc/modules/audio_coding/neteq/dtmf_buffer_unittest.cc || $
+    obj/webrtc/modules/modules_unittests.compile_depends.stamp
+build $
+    obj/webrtc/modules/audio_coding/neteq/modules_unittests.dtmf_tone_generator_unittest.o: $
     cxx $
-    ../../webrtc/modules/audio_coding/neteq4/timestamp_scaler_unittest.cc $
+    ../../webrtc/modules/audio_coding/neteq/dtmf_tone_generator_unittest.cc $
     || obj/webrtc/modules/modules_unittests.compile_depends.stamp
 build $
-    obj/webrtc/modules/audio_coding/neteq4/modules_unittests.time_stretch_unittest.o: $
-    cxx ../../webrtc/modules/audio_coding/neteq4/time_stretch_unittest.cc $
+    obj/webrtc/modules/audio_coding/neteq/modules_unittests.expand_unittest.o: $
+    cxx ../../webrtc/modules/audio_coding/neteq/expand_unittest.cc || $
+    obj/webrtc/modules/modules_unittests.compile_depends.stamp
+build $
+    obj/webrtc/modules/audio_coding/neteq/modules_unittests.merge_unittest.o: $
+    cxx ../../webrtc/modules/audio_coding/neteq/merge_unittest.cc || $
+    obj/webrtc/modules/modules_unittests.compile_depends.stamp
+build $
+    obj/webrtc/modules/audio_coding/neteq/modules_unittests.neteq_external_decoder_unittest.o: $
+    cxx $
+    ../../webrtc/modules/audio_coding/neteq/neteq_external_decoder_unittest.cc $
     || obj/webrtc/modules/modules_unittests.compile_depends.stamp
 build $
-    obj/webrtc/modules/audio_coding/neteq4/tools/modules_unittests.packet_unittest.o: $
-    cxx ../../webrtc/modules/audio_coding/neteq4/tools/packet_unittest.cc $
+    obj/webrtc/modules/audio_coding/neteq/modules_unittests.neteq_impl_unittest.o: $
+    cxx ../../webrtc/modules/audio_coding/neteq/neteq_impl_unittest.cc || $
+    obj/webrtc/modules/modules_unittests.compile_depends.stamp
+build $
+    obj/webrtc/modules/audio_coding/neteq/modules_unittests.neteq_stereo_unittest.o: $
+    cxx ../../webrtc/modules/audio_coding/neteq/neteq_stereo_unittest.cc || $
+    obj/webrtc/modules/modules_unittests.compile_depends.stamp
+build $
+    obj/webrtc/modules/audio_coding/neteq/modules_unittests.neteq_unittest.o: $
+    cxx ../../webrtc/modules/audio_coding/neteq/neteq_unittest.cc || $
+    obj/webrtc/modules/modules_unittests.compile_depends.stamp
+build $
+    obj/webrtc/modules/audio_coding/neteq/modules_unittests.normal_unittest.o: $
+    cxx ../../webrtc/modules/audio_coding/neteq/normal_unittest.cc || $
+    obj/webrtc/modules/modules_unittests.compile_depends.stamp
+build $
+    obj/webrtc/modules/audio_coding/neteq/modules_unittests.packet_buffer_unittest.o: $
+    cxx ../../webrtc/modules/audio_coding/neteq/packet_buffer_unittest.cc $
     || obj/webrtc/modules/modules_unittests.compile_depends.stamp
+build $
+    obj/webrtc/modules/audio_coding/neteq/modules_unittests.payload_splitter_unittest.o: $
+    cxx $
+    ../../webrtc/modules/audio_coding/neteq/payload_splitter_unittest.cc || $
+    obj/webrtc/modules/modules_unittests.compile_depends.stamp
+build $
+    obj/webrtc/modules/audio_coding/neteq/modules_unittests.post_decode_vad_unittest.o: $
+    cxx ../../webrtc/modules/audio_coding/neteq/post_decode_vad_unittest.cc $
+    || obj/webrtc/modules/modules_unittests.compile_depends.stamp
+build $
+    obj/webrtc/modules/audio_coding/neteq/modules_unittests.random_vector_unittest.o: $
+    cxx ../../webrtc/modules/audio_coding/neteq/random_vector_unittest.cc $
+    || obj/webrtc/modules/modules_unittests.compile_depends.stamp
+build $
+    obj/webrtc/modules/audio_coding/neteq/modules_unittests.sync_buffer_unittest.o: $
+    cxx ../../webrtc/modules/audio_coding/neteq/sync_buffer_unittest.cc || $
+    obj/webrtc/modules/modules_unittests.compile_depends.stamp
+build $
+    obj/webrtc/modules/audio_coding/neteq/modules_unittests.timestamp_scaler_unittest.o: $
+    cxx $
+    ../../webrtc/modules/audio_coding/neteq/timestamp_scaler_unittest.cc || $
+    obj/webrtc/modules/modules_unittests.compile_depends.stamp
+build $
+    obj/webrtc/modules/audio_coding/neteq/modules_unittests.time_stretch_unittest.o: $
+    cxx ../../webrtc/modules/audio_coding/neteq/time_stretch_unittest.cc || $
+    obj/webrtc/modules/modules_unittests.compile_depends.stamp
+build $
+    obj/webrtc/modules/audio_coding/neteq/tools/modules_unittests.packet_unittest.o: $
+    cxx ../../webrtc/modules/audio_coding/neteq/tools/packet_unittest.cc || $
+    obj/webrtc/modules/modules_unittests.compile_depends.stamp
 build $
     obj/webrtc/modules/audio_processing/aec/modules_unittests.system_delay_unittest.o: $
     cxx ../../webrtc/modules/audio_processing/aec/system_delay_unittest.cc $
@@ -394,11 +399,6 @@ build $
     ../../webrtc/modules/remote_bitrate_estimator/remote_bitrate_estimators_test.cc $
     || obj/webrtc/modules/modules_unittests.compile_depends.stamp
 build $
-    obj/webrtc/modules/remote_bitrate_estimator/modules_unittests.rtp_to_ntp_unittest.o: $
-    cxx $
-    ../../webrtc/modules/remote_bitrate_estimator/rtp_to_ntp_unittest.cc || $
-    obj/webrtc/modules/modules_unittests.compile_depends.stamp
-build $
     obj/webrtc/modules/remote_bitrate_estimator/test/modules_unittests.bwe_test_baselinefile.o: $
     cxx $
     ../../webrtc/modules/remote_bitrate_estimator/test/bwe_test_baselinefile.cc $
@@ -445,6 +445,11 @@ build $
 build $
     obj/webrtc/modules/rtp_rtcp/source/modules_unittests.receive_statistics_unittest.o: $
     cxx ../../webrtc/modules/rtp_rtcp/source/receive_statistics_unittest.cc $
+    || obj/webrtc/modules/modules_unittests.compile_depends.stamp
+build $
+    obj/webrtc/modules/rtp_rtcp/source/modules_unittests.remote_ntp_time_estimator_unittest.o: $
+    cxx $
+    ../../webrtc/modules/rtp_rtcp/source/remote_ntp_time_estimator_unittest.cc $
     || obj/webrtc/modules/modules_unittests.compile_depends.stamp
 build $
     obj/webrtc/modules/rtp_rtcp/source/modules_unittests.rtcp_format_remb_unittest.o: $
@@ -526,6 +531,10 @@ build $
     cxx $
     ../../webrtc/modules/utility/source/audio_frame_operations_unittest.cc $
     || obj/webrtc/modules/modules_unittests.compile_depends.stamp
+build $
+    obj/webrtc/modules/utility/source/modules_unittests.file_player_unittests.o: $
+    cxx ../../webrtc/modules/utility/source/file_player_unittests.cc || $
+    obj/webrtc/modules/modules_unittests.compile_depends.stamp
 build $
     obj/webrtc/modules/video_coding/codecs/test/modules_unittests.packet_manipulator_unittest.o: $
     cxx $
@@ -651,16 +660,20 @@ build $
     ../../webrtc/modules/video_processing/main/test/unit_test/video_processing_unittest.cc $
     || obj/webrtc/modules/modules_unittests.compile_depends.stamp
 
-ldflags = -Wl,-search_paths_first -miphoneos-version-min=6.0 -isysroot $
+ldflags = -framework Foundation -framework Security -framework $
+    SystemConfiguration -framework UIKit -Wl,-search_paths_first $
+    -miphoneos-version-min=6.0 -isysroot $
     /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS7.1.sdk $
     -arch armv7 -L.
-libs = -framework Foundation
+libs = $
+    /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS7.1.sdk/usr/lib/libsqlite3.dylib $
+    -framework Foundation
 build modules_unittests.app/modules_unittests: link $
     obj/webrtc/modules/audio_coding/main/acm2/modules_unittests.acm_receiver_unittest.o $
+    obj/webrtc/modules/audio_coding/main/acm2/modules_unittests.audio_coding_module_unittest.o $
     obj/webrtc/modules/audio_coding/main/acm2/modules_unittests.call_statistics_unittest.o $
     obj/webrtc/modules/audio_coding/main/acm2/modules_unittests.initial_delay_manager_unittest.o $
     obj/webrtc/modules/audio_coding/main/acm2/modules_unittests.nack_unittest.o $
-    obj/webrtc/modules/audio_coding/main/source/modules_unittests.acm_neteq_unittest.o $
     obj/webrtc/modules/audio_coding/codecs/cng/modules_unittests.cng_unittest.o $
     obj/webrtc/modules/audio_coding/codecs/isac/fix/source/modules_unittests.filters_unittest.o $
     obj/webrtc/modules/audio_coding/codecs/isac/fix/source/modules_unittests.filterbanks_unittest.o $
@@ -668,34 +681,34 @@ build modules_unittests.app/modules_unittests: link $
     obj/webrtc/modules/audio_coding/codecs/isac/fix/source/modules_unittests.transform_unittest.o $
     obj/webrtc/modules/audio_coding/codecs/isac/main/source/modules_unittests.isac_unittest.o $
     obj/webrtc/modules/audio_coding/codecs/opus/modules_unittests.opus_unittest.o $
-    obj/webrtc/modules/audio_coding/neteq4/modules_unittests.audio_classifier_unittest.o $
-    obj/webrtc/modules/audio_coding/neteq4/modules_unittests.audio_multi_vector_unittest.o $
-    obj/webrtc/modules/audio_coding/neteq4/modules_unittests.audio_vector_unittest.o $
-    obj/webrtc/modules/audio_coding/neteq4/modules_unittests.background_noise_unittest.o $
-    obj/webrtc/modules/audio_coding/neteq4/modules_unittests.buffer_level_filter_unittest.o $
-    obj/webrtc/modules/audio_coding/neteq4/modules_unittests.comfort_noise_unittest.o $
-    obj/webrtc/modules/audio_coding/neteq4/modules_unittests.decision_logic_unittest.o $
-    obj/webrtc/modules/audio_coding/neteq4/modules_unittests.decoder_database_unittest.o $
-    obj/webrtc/modules/audio_coding/neteq4/modules_unittests.delay_manager_unittest.o $
-    obj/webrtc/modules/audio_coding/neteq4/modules_unittests.delay_peak_detector_unittest.o $
-    obj/webrtc/modules/audio_coding/neteq4/modules_unittests.dsp_helper_unittest.o $
-    obj/webrtc/modules/audio_coding/neteq4/modules_unittests.dtmf_buffer_unittest.o $
-    obj/webrtc/modules/audio_coding/neteq4/modules_unittests.dtmf_tone_generator_unittest.o $
-    obj/webrtc/modules/audio_coding/neteq4/modules_unittests.expand_unittest.o $
-    obj/webrtc/modules/audio_coding/neteq4/modules_unittests.merge_unittest.o $
-    obj/webrtc/modules/audio_coding/neteq4/modules_unittests.neteq_external_decoder_unittest.o $
-    obj/webrtc/modules/audio_coding/neteq4/modules_unittests.neteq_impl_unittest.o $
-    obj/webrtc/modules/audio_coding/neteq4/modules_unittests.neteq_stereo_unittest.o $
-    obj/webrtc/modules/audio_coding/neteq4/modules_unittests.neteq_unittest.o $
-    obj/webrtc/modules/audio_coding/neteq4/modules_unittests.normal_unittest.o $
-    obj/webrtc/modules/audio_coding/neteq4/modules_unittests.packet_buffer_unittest.o $
-    obj/webrtc/modules/audio_coding/neteq4/modules_unittests.payload_splitter_unittest.o $
-    obj/webrtc/modules/audio_coding/neteq4/modules_unittests.post_decode_vad_unittest.o $
-    obj/webrtc/modules/audio_coding/neteq4/modules_unittests.random_vector_unittest.o $
-    obj/webrtc/modules/audio_coding/neteq4/modules_unittests.sync_buffer_unittest.o $
-    obj/webrtc/modules/audio_coding/neteq4/modules_unittests.timestamp_scaler_unittest.o $
-    obj/webrtc/modules/audio_coding/neteq4/modules_unittests.time_stretch_unittest.o $
-    obj/webrtc/modules/audio_coding/neteq4/tools/modules_unittests.packet_unittest.o $
+    obj/webrtc/modules/audio_coding/neteq/modules_unittests.audio_classifier_unittest.o $
+    obj/webrtc/modules/audio_coding/neteq/modules_unittests.audio_multi_vector_unittest.o $
+    obj/webrtc/modules/audio_coding/neteq/modules_unittests.audio_vector_unittest.o $
+    obj/webrtc/modules/audio_coding/neteq/modules_unittests.background_noise_unittest.o $
+    obj/webrtc/modules/audio_coding/neteq/modules_unittests.buffer_level_filter_unittest.o $
+    obj/webrtc/modules/audio_coding/neteq/modules_unittests.comfort_noise_unittest.o $
+    obj/webrtc/modules/audio_coding/neteq/modules_unittests.decision_logic_unittest.o $
+    obj/webrtc/modules/audio_coding/neteq/modules_unittests.decoder_database_unittest.o $
+    obj/webrtc/modules/audio_coding/neteq/modules_unittests.delay_manager_unittest.o $
+    obj/webrtc/modules/audio_coding/neteq/modules_unittests.delay_peak_detector_unittest.o $
+    obj/webrtc/modules/audio_coding/neteq/modules_unittests.dsp_helper_unittest.o $
+    obj/webrtc/modules/audio_coding/neteq/modules_unittests.dtmf_buffer_unittest.o $
+    obj/webrtc/modules/audio_coding/neteq/modules_unittests.dtmf_tone_generator_unittest.o $
+    obj/webrtc/modules/audio_coding/neteq/modules_unittests.expand_unittest.o $
+    obj/webrtc/modules/audio_coding/neteq/modules_unittests.merge_unittest.o $
+    obj/webrtc/modules/audio_coding/neteq/modules_unittests.neteq_external_decoder_unittest.o $
+    obj/webrtc/modules/audio_coding/neteq/modules_unittests.neteq_impl_unittest.o $
+    obj/webrtc/modules/audio_coding/neteq/modules_unittests.neteq_stereo_unittest.o $
+    obj/webrtc/modules/audio_coding/neteq/modules_unittests.neteq_unittest.o $
+    obj/webrtc/modules/audio_coding/neteq/modules_unittests.normal_unittest.o $
+    obj/webrtc/modules/audio_coding/neteq/modules_unittests.packet_buffer_unittest.o $
+    obj/webrtc/modules/audio_coding/neteq/modules_unittests.payload_splitter_unittest.o $
+    obj/webrtc/modules/audio_coding/neteq/modules_unittests.post_decode_vad_unittest.o $
+    obj/webrtc/modules/audio_coding/neteq/modules_unittests.random_vector_unittest.o $
+    obj/webrtc/modules/audio_coding/neteq/modules_unittests.sync_buffer_unittest.o $
+    obj/webrtc/modules/audio_coding/neteq/modules_unittests.timestamp_scaler_unittest.o $
+    obj/webrtc/modules/audio_coding/neteq/modules_unittests.time_stretch_unittest.o $
+    obj/webrtc/modules/audio_coding/neteq/tools/modules_unittests.packet_unittest.o $
     obj/webrtc/modules/audio_processing/aec/modules_unittests.system_delay_unittest.o $
     obj/webrtc/modules/audio_processing/aec/modules_unittests.echo_cancellation_unittest.o $
     obj/webrtc/modules/audio_processing/modules_unittests.echo_cancellation_impl_unittest.o $
@@ -713,7 +726,6 @@ build modules_unittests.app/modules_unittests: link $
     obj/webrtc/modules/remote_bitrate_estimator/modules_unittests.remote_bitrate_estimator_single_stream_unittest.o $
     obj/webrtc/modules/remote_bitrate_estimator/modules_unittests.remote_bitrate_estimator_unittest_helper.o $
     obj/webrtc/modules/remote_bitrate_estimator/modules_unittests.remote_bitrate_estimators_test.o $
-    obj/webrtc/modules/remote_bitrate_estimator/modules_unittests.rtp_to_ntp_unittest.o $
     obj/webrtc/modules/remote_bitrate_estimator/test/modules_unittests.bwe_test_baselinefile.o $
     obj/webrtc/modules/remote_bitrate_estimator/test/modules_unittests.bwe_test_fileutils.o $
     obj/webrtc/modules/remote_bitrate_estimator/test/modules_unittests.bwe_test_framework.o $
@@ -725,6 +737,7 @@ build modules_unittests.app/modules_unittests: link $
     obj/webrtc/modules/rtp_rtcp/source/modules_unittests.nack_rtx_unittest.o $
     obj/webrtc/modules/rtp_rtcp/source/modules_unittests.producer_fec_unittest.o $
     obj/webrtc/modules/rtp_rtcp/source/modules_unittests.receive_statistics_unittest.o $
+    obj/webrtc/modules/rtp_rtcp/source/modules_unittests.remote_ntp_time_estimator_unittest.o $
     obj/webrtc/modules/rtp_rtcp/source/modules_unittests.rtcp_format_remb_unittest.o $
     obj/webrtc/modules/rtp_rtcp/source/modules_unittests.rtcp_packet_unittest.o $
     obj/webrtc/modules/rtp_rtcp/source/modules_unittests.rtcp_receiver_unittest.o $
@@ -744,6 +757,7 @@ build modules_unittests.app/modules_unittests: link $
     obj/webrtc/modules/rtp_rtcp/test/testAPI/modules_unittests.test_api_rtcp.o $
     obj/webrtc/modules/rtp_rtcp/test/testAPI/modules_unittests.test_api_video.o $
     obj/webrtc/modules/utility/source/modules_unittests.audio_frame_operations_unittest.o $
+    obj/webrtc/modules/utility/source/modules_unittests.file_player_unittests.o $
     obj/webrtc/modules/video_coding/codecs/test/modules_unittests.packet_manipulator_unittest.o $
     obj/webrtc/modules/video_coding/codecs/test/modules_unittests.stats_unittest.o $
     obj/webrtc/modules/video_coding/codecs/test/modules_unittests.videoprocessor_unittest.o $
@@ -771,26 +785,31 @@ build modules_unittests.app/modules_unittests: link $
     obj/webrtc/modules/video_processing/main/test/unit_test/modules_unittests.denoising_test.o $
     obj/webrtc/modules/video_processing/main/test/unit_test/modules_unittests.video_processing_unittest.o $
     libaudio_coding_module.a libaudio_processing.a libbitrate_controller.a $
-    libCNG.a libdesktop_capture.a libiSACFix.a libmedia_file.a libNetEq.a $
-    libNetEq4.a libNetEq4TestTools.a libneteq_unittest_tools.a $
-    libpaced_sender.a libPCM16B.a libremote_bitrate_estimator.a $
-    librtp_rtcp.a libtest_framework.a libvideo_codecs_test_framework.a $
+    libCNG.a libdesktop_capture.a libiSACFix.a libmedia_file.a libneteq.a $
+    libneteq_test_tools.a libneteq_unittest_tools.a libpaced_sender.a $
+    libPCM16B.a libremote_bitrate_estimator.a librtp_rtcp.a $
+    libtest_framework.a libvideo_codecs_test_framework.a $
     libvideo_processing.a libwebrtc_utility.a libwebrtc_video_coding.a $
-    libG711.a libG722.a libiLBC.a libiSAC.a libopus.a libcommon_audio.a $
-    libsystem_wrappers.a libwebrtc_opus.a librbe_components.a libgmock.a $
+    libG711.a libG722.a libiLBC.a libiSAC.a libwebrtc_opus.a libopus.a $
+    libcommon_audio.a libsystem_wrappers.a librbe_components.a libgmock.a $
     libgtest.a libgflags.a libwebrtc_vp8.a libtest_support_main.a $
-    libframe_generator.a librtcp_packet_parser.a libvpx.a $
-    libcommon_audio_neon.a libisac_neon.a libacm2.a $
-    libaudio_processing_neon.a lib_core_neon_offsets.a libcommon_video.a $
-    libyuv.a libyuv_neon.a libmetrics.a libtest_support.a libwebrtc_i420.a $
-    libvideo_coding_utility.a libvpx_asm_offsets_vp8.a $
-    libvpx_asm_offsets_vpx_scale.a | $
+    libframe_generator.a librtcp_packet_parser.a libvpx.a libwebrtc_base.a $
+    libjsoncpp.a libcrssl.a libcrnspr.a libcrnss.a libnss_static.a $
+    libsqlite_regexp.a libicui18n.a libicuuc.a libicudata.a libcrnssckbi.a $
+    libcommon_audio_neon.a libisac_neon.a libaudio_processing_neon.a $
+    gen/audio_processing/asm_offsets/lib_core_neon_offsets.a $
+    libcommon_video.a libyuv.a libyuv_neon.a libmetrics.a libtest_support.a $
+    libwebrtc_i420.a libvideo_coding_utility.a $
+    gen/third_party/libvpx/libvpx_asm_offsets_vp8.a $
+    gen/third_party/libvpx/libvpx_asm_offsets_vpx_scale.a libfield_trial.a $
+    | $
     obj/webrtc/modules/audio_processing/gen_nsx_core_neon_offsets_h.actions_rules_copies.stamp $
     obj/webrtc/modules/audio_processing/gen_aecm_core_neon_offsets_h.actions_rules_copies.stamp $
-    obj/third_party/libvpx/gen_asm_offsets_vpx_scale.actions_rules_copies.stamp $
-    obj/third_party/libvpx/gen_asm_offsets_vp8.actions_rules_copies.stamp
+    obj/third_party/libvpx/gen_asm_offsets_vp8.actions_rules_copies.stamp $
+    libsqlite_regexp.a $
+    obj/third_party/libvpx/gen_asm_offsets_vpx_scale.actions_rules_copies.stamp
   ld = $ldxx
-build modules_unittests.app: stamp $
+build modules_unittests.app: stamp modules_unittests.app/icudtl.dat $
     modules_unittests.app/Default-568h@2x.png $
     modules_unittests.app/Info.plist modules_unittests.app/modules_unittests
   postbuilds = (export $

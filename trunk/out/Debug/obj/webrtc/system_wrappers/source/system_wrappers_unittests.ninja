@@ -1,27 +1,31 @@
 build $
     obj/webrtc/system_wrappers/source/system_wrappers_unittests.actions_depends.stamp: $
     stamp libgtest.a libsystem_wrappers.a libtest_support_main.a $
-    libtest_support.a libgmock.a libgflags.a
+    libwebrtc_base.a libjsoncpp.a libcrssl.a libcrnspr.a libcrnss.a $
+    libnss_static.a libsqlite3.a libicui18n.a libicuuc.a libicudata.a $
+    libfield_trial.a libtest_support.a libgmock.a libgflags.a
 
 defines = -DV8_DEPRECATION_WARNINGS -DBLINK_SCALE_FILTERS_AT_RECORD_TIME $
-    -DCHROMIUM_BUILD -DUSE_LIBJPEG_TURBO=1 -DENABLE_ONE_CLICK_SIGNIN $
-    -DENABLE_REMOTING=1 -DENABLE_WEBRTC=1 -DENABLE_PEPPER_CDMS $
-    -DENABLE_CONFIGURATION_POLICY -DENABLE_INPUT_SPEECH $
+    -D__ASSERT_MACROS_DEFINE_VERSIONS_WITHOUT_UNDERSCORE=0 -DCHROMIUM_BUILD $
+    -DCR_CLANG_REVISION=206824 -DUSE_LIBJPEG_TURBO=1 $
+    -DENABLE_ONE_CLICK_SIGNIN -DENABLE_REMOTING=1 -DENABLE_WEBRTC=1 $
+    -DENABLE_PEPPER_CDMS -DENABLE_CONFIGURATION_POLICY $
     -DENABLE_NOTIFICATIONS -DENABLE_HIDPI=1 $
     -DDISCARDABLE_MEMORY_ALWAYS_SUPPORTED_NATIVELY $
     -DSYSTEM_NATIVELY_SIGNALS_MEMORY_PRESSURE -DENABLE_EGLIMAGE=1 $
     -DENABLE_TASK_MANAGER=1 -DENABLE_EXTENSIONS=1 $
     -DENABLE_PLUGIN_INSTALLATION=1 -DENABLE_PLUGINS=1 $
     -DENABLE_SESSION_SERVICE=1 -DENABLE_THEMES=1 -DENABLE_AUTOFILL_DIALOG=1 $
-    -DENABLE_BACKGROUND=1 -DENABLE_AUTOMATION=1 -DENABLE_GOOGLE_NOW=1 $
-    -DCLD_VERSION=2 -DENABLE_FULL_PRINTING=1 -DENABLE_PRINTING=1 $
-    -DENABLE_SPELLCHECK=1 -DENABLE_CAPTIVE_PORTAL_DETECTION=1 $
-    -DENABLE_APP_LIST=1 -DENABLE_SETTINGS_APP=1 -DENABLE_MANAGED_USERS=1 $
-    -DENABLE_SERVICE_DISCOVERY=1 -DWEBRTC_MODULE_UTILITY_VIDEO $
-    -DWEBRTC_POSIX -DWEBRTC_MAC -DGTEST_HAS_POSIX_RE=0 -DUNIT_TEST $
-    -DGTEST_HAS_RTTI=0 -D__STDC_CONSTANT_MACROS -D__STDC_FORMAT_MACROS $
+    -DENABLE_BACKGROUND=1 -DENABLE_GOOGLE_NOW=1 -DCLD_VERSION=2 $
+    -DENABLE_FULL_PRINTING=1 -DENABLE_PRINTING=1 -DENABLE_SPELLCHECK=1 $
+    -DENABLE_CAPTIVE_PORTAL_DETECTION=1 -DENABLE_APP_LIST=1 $
+    -DENABLE_SETTINGS_APP=1 -DENABLE_MANAGED_USERS=1 $
+    -DENABLE_SERVICE_DISCOVERY=1 -DENABLE_WIFI_BOOTSTRAPPING=1 $
+    -DWEBRTC_MODULE_UTILITY_VIDEO -DWEBRTC_POSIX -DWEBRTC_MAC $
+    -DGTEST_HAS_POSIX_RE=0 -DUNIT_TEST -DGTEST_HAS_RTTI=0 $
+    -D__STDC_CONSTANT_MACROS -D__STDC_FORMAT_MACROS $
     -DDYNAMIC_ANNOTATIONS_ENABLED=1 -DWTF_USE_DYNAMIC_ANNOTATIONS=1
-includes = -I../.. -I../.. -I../../testing/gtest/include $
+includes = -I../.. -I../../testing/gtest/include $
     -I../../webrtc/system_wrappers/interface
 cflags = -isysroot $
     /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.8.sdk $
@@ -30,7 +34,7 @@ cflags = -isysroot $
     -Wno-unused-parameter -Wno-missing-field-initializers -Wheader-hygiene $
     -Wno-c++11-narrowing -Wno-char-subscripts $
     -Wno-unneeded-internal-declaration -Wno-covered-switch-default $
-    -Wstring-conversion -Wno-deprecated-register -Wno-absolute-value
+    -Wstring-conversion -Wno-deprecated-register -Wno-selector-type-mismatch
 cflags_c = -std=c99 -fcolor-diagnostics -fno-strict-aliasing $
     -fstack-protector-all
 cflags_cc = -std=gnu++11 -fno-rtti -fno-exceptions $
@@ -42,49 +46,74 @@ cflags_objcc = $cflags_cc -Wobjc-missing-property-synthesis $
 
 build $
     obj/webrtc/system_wrappers/source/system_wrappers_unittests.aligned_malloc_unittest.o: $
-    cxx ../../webrtc/system_wrappers/source/aligned_malloc_unittest.cc
+    cxx ../../webrtc/system_wrappers/source/aligned_malloc_unittest.cc || $
+    icudtl.dat
 build $
     obj/webrtc/system_wrappers/source/system_wrappers_unittests.clock_unittest.o: $
-    cxx ../../webrtc/system_wrappers/source/clock_unittest.cc
+    cxx ../../webrtc/system_wrappers/source/clock_unittest.cc || icudtl.dat
 build $
     obj/webrtc/system_wrappers/source/system_wrappers_unittests.condition_variable_unittest.o: $
-    cxx ../../webrtc/system_wrappers/source/condition_variable_unittest.cc
+    cxx ../../webrtc/system_wrappers/source/condition_variable_unittest.cc $
+    || icudtl.dat
 build $
     obj/webrtc/system_wrappers/source/system_wrappers_unittests.critical_section_unittest.o: $
-    cxx ../../webrtc/system_wrappers/source/critical_section_unittest.cc
+    cxx ../../webrtc/system_wrappers/source/critical_section_unittest.cc || $
+    icudtl.dat
 build $
     obj/webrtc/system_wrappers/source/system_wrappers_unittests.event_tracer_unittest.o: $
-    cxx ../../webrtc/system_wrappers/source/event_tracer_unittest.cc
+    cxx ../../webrtc/system_wrappers/source/event_tracer_unittest.cc || $
+    icudtl.dat
 build $
     obj/webrtc/system_wrappers/source/system_wrappers_unittests.logging_unittest.o: $
-    cxx ../../webrtc/system_wrappers/source/logging_unittest.cc
+    cxx ../../webrtc/system_wrappers/source/logging_unittest.cc || icudtl.dat
 build $
     obj/webrtc/system_wrappers/source/system_wrappers_unittests.data_log_unittest_disabled.o: $
-    cxx ../../webrtc/system_wrappers/source/data_log_unittest_disabled.cc
+    cxx ../../webrtc/system_wrappers/source/data_log_unittest_disabled.cc $
+    || icudtl.dat
 build $
     obj/webrtc/system_wrappers/source/system_wrappers_unittests.data_log_helpers_unittest.o: $
-    cxx ../../webrtc/system_wrappers/source/data_log_helpers_unittest.cc
+    cxx ../../webrtc/system_wrappers/source/data_log_helpers_unittest.cc || $
+    icudtl.dat
 build $
     obj/webrtc/system_wrappers/source/system_wrappers_unittests.data_log_c_helpers_unittest.o: $
-    cc ../../webrtc/system_wrappers/source/data_log_c_helpers_unittest.c
+    cc ../../webrtc/system_wrappers/source/data_log_c_helpers_unittest.c || $
+    icudtl.dat
+build $
+    obj/webrtc/system_wrappers/source/system_wrappers_unittests.rtp_to_ntp_unittest.o: $
+    cxx ../../webrtc/system_wrappers/source/rtp_to_ntp_unittest.cc || $
+    icudtl.dat
+build $
+    obj/webrtc/system_wrappers/source/system_wrappers_unittests.scoped_vector_unittest.o: $
+    cxx ../../webrtc/system_wrappers/source/scoped_vector_unittest.cc || $
+    icudtl.dat
 build $
     obj/webrtc/system_wrappers/source/system_wrappers_unittests.stringize_macros_unittest.o: $
-    cxx ../../webrtc/system_wrappers/source/stringize_macros_unittest.cc
+    cxx ../../webrtc/system_wrappers/source/stringize_macros_unittest.cc || $
+    icudtl.dat
+build $
+    obj/webrtc/system_wrappers/source/system_wrappers_unittests.stl_util_unittest.o: $
+    cxx ../../webrtc/system_wrappers/source/stl_util_unittest.cc || icudtl.dat
 build $
     obj/webrtc/system_wrappers/source/system_wrappers_unittests.thread_unittest.o: $
-    cxx ../../webrtc/system_wrappers/source/thread_unittest.cc
+    cxx ../../webrtc/system_wrappers/source/thread_unittest.cc || icudtl.dat
 build $
     obj/webrtc/system_wrappers/source/system_wrappers_unittests.thread_posix_unittest.o: $
-    cxx ../../webrtc/system_wrappers/source/thread_posix_unittest.cc
+    cxx ../../webrtc/system_wrappers/source/thread_posix_unittest.cc || $
+    icudtl.dat
 build $
     obj/webrtc/system_wrappers/source/system_wrappers_unittests.unittest_utilities_unittest.o: $
-    cxx ../../webrtc/system_wrappers/source/unittest_utilities_unittest.cc
+    cxx ../../webrtc/system_wrappers/source/unittest_utilities_unittest.cc $
+    || icudtl.dat
 
-ldflags = -Wl,-search_paths_first -Wl,-pie -mmacosx-version-min=10.6 $
-    -isysroot $
+ldflags = -framework Cocoa -framework Foundation  -framework Security $
+    -framework SystemConfiguration -framework Carbon $
+    -Wl,-search_paths_first -Wl,-pie -mmacosx-version-min=10.6 -isysroot $
     /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.8.sdk $
     -arch i386 -L.
-libs = -framework Foundation -framework ApplicationServices
+libs = -framework Foundation -framework ApplicationServices $
+    /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.8.sdk/usr/lib/libcrypto.dylib $
+    /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.8.sdk/usr/lib/libssl.dylib $
+    -framework Security -framework CoreFoundation -framework CoreServices
 build system_wrappers_unittests: link $
     obj/webrtc/system_wrappers/source/system_wrappers_unittests.aligned_malloc_unittest.o $
     obj/webrtc/system_wrappers/source/system_wrappers_unittests.clock_unittest.o $
@@ -95,11 +124,16 @@ build system_wrappers_unittests: link $
     obj/webrtc/system_wrappers/source/system_wrappers_unittests.data_log_unittest_disabled.o $
     obj/webrtc/system_wrappers/source/system_wrappers_unittests.data_log_helpers_unittest.o $
     obj/webrtc/system_wrappers/source/system_wrappers_unittests.data_log_c_helpers_unittest.o $
+    obj/webrtc/system_wrappers/source/system_wrappers_unittests.rtp_to_ntp_unittest.o $
+    obj/webrtc/system_wrappers/source/system_wrappers_unittests.scoped_vector_unittest.o $
     obj/webrtc/system_wrappers/source/system_wrappers_unittests.stringize_macros_unittest.o $
+    obj/webrtc/system_wrappers/source/system_wrappers_unittests.stl_util_unittest.o $
     obj/webrtc/system_wrappers/source/system_wrappers_unittests.thread_unittest.o $
     obj/webrtc/system_wrappers/source/system_wrappers_unittests.thread_posix_unittest.o $
     obj/webrtc/system_wrappers/source/system_wrappers_unittests.unittest_utilities_unittest.o $
-    libgtest.a libsystem_wrappers.a libtest_support_main.a $
+    libgtest.a libsystem_wrappers.a libtest_support_main.a libwebrtc_base.a $
+    libjsoncpp.a libcrssl.a libcrnspr.a libcrnss.a libnss_static.a $
+    libsqlite3.a libicui18n.a libicuuc.a libicudata.a libfield_trial.a $
     libtest_support.a libgmock.a libgflags.a
   ld = $ldxx
   postbuilds = $ && (export $

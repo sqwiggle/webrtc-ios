@@ -127,10 +127,6 @@ extern const char kForwardDependentConfigsFrom[];
 extern const char kForwardDependentConfigsFrom_HelpShort[];
 extern const char kForwardDependentConfigsFrom_Help[];
 
-extern const char kHardDep[];
-extern const char kHardDep_HelpShort[];
-extern const char kHardDep_Help[];
-
 extern const char kIncludeDirs[];
 extern const char kIncludeDirs_HelpShort[];
 extern const char kIncludeDirs_Help[];
@@ -159,6 +155,10 @@ extern const char kOutputs[];
 extern const char kOutputs_HelpShort[];
 extern const char kOutputs_Help[];
 
+extern const char kPublic[];
+extern const char kPublic_HelpShort[];
+extern const char kPublic_Help[];
+
 extern const char kScript[];
 extern const char kScript_HelpShort[];
 extern const char kScript_Help[];
@@ -170,6 +170,10 @@ extern const char kSourcePrereqs_Help[];
 extern const char kSources[];
 extern const char kSources_HelpShort[];
 extern const char kSources_Help[];
+
+extern const char kVisibility[];
+extern const char kVisibility_HelpShort[];
+extern const char kVisibility_Help[];
 
 // -----------------------------------------------------------------------------
 

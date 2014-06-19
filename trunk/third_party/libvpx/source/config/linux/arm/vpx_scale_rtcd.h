@@ -50,6 +50,7 @@ void vpx_yv12_copy_y_c(const struct yv12_buffer_config *src_ybc, struct yv12_buf
 #define vpx_yv12_copy_y vpx_yv12_copy_y_c
 
 void vpx_scale_rtcd(void);
+
 #include "vpx_config.h"
 
 #ifdef RTCD_C
@@ -59,7 +60,6 @@ static void setup_rtcd_internal(void)
     int flags = arm_cpu_caps();
 
     (void)flags;
-
 
 }
 #endif

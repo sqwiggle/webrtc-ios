@@ -13,6 +13,8 @@
 # f - List of files to extract.
 #
 
+export LC_ALL=C
+
 # Avoid things like -n messing up the grepping below.
 unset GREP_OPTIONS
 

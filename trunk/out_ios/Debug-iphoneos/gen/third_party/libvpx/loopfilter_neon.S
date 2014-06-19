@@ -36,10 +36,12 @@
 _vp8_loop_filter_horizontal_edge_y_neon:
 	vp8_loop_filter_horizontal_edge_y_neon: @
     push        {lr}
+    vpush       {d8-d15}
+
     vdup.u8     q0, r2                      @ duplicate blimit
     vdup.u8     q1, r3                      @ duplicate limit
     sub         r2, r0, r1, lsl #2          @ move src pointer down by 4 lines
-    ldr         r3, [sp, #4]                @ load thresh
+    ldr         r3, [sp, #68]               @ load thresh
     add         r12, r2, r1
     add         r1, r1, r1
 
@@ -64,6 +66,7 @@ _vp8_loop_filter_horizontal_edge_y_neon:
     vst1.u8     {q7}, [r2,:128], r1               @ store oq0
     vst1.u8     {q8}, [r12,:128], r1              @ store oq1
 
+    vpop        {d8-d15}
     pop         {pc}
     @         @ |vp8_loop_filter_horizontal_edge_y_neon|
 
@@ -77,10 +80,12 @@ _vp8_loop_filter_horizontal_edge_y_neon:
 _vp8_loop_filter_horizontal_edge_uv_neon:
 	vp8_loop_filter_horizontal_edge_uv_neon: @
     push        {lr}
+    vpush       {d8-d15}
+
     vdup.u8     q0, r2                       @ duplicate blimit
     vdup.u8     q1, r3                       @ duplicate limit
-    ldr         r12, [sp, #4]                @ load thresh
-    ldr         r2, [sp, #8]                 @ load v ptr
+    ldr         r12, [sp, #68]               @ load thresh
+    ldr         r2, [sp, #72]                @ load v ptr
     vdup.u8     q2, r12                      @ duplicate thresh
 
     sub         r3, r0, r1, lsl #2           @ move u pointer down by 4 lines
@@ -117,6 +122,7 @@ _vp8_loop_filter_horizontal_edge_uv_neon:
     vst1.u8     {d16}, [r0,:64]                  @ store u oq1
     vst1.u8     {d17}, [r2,:64]                  @ store v oq1
 
+    vpop        {d8-d15}
     pop         {pc}
     @         @ |vp8_loop_filter_horizontal_edge_uv_neon|
 
@@ -134,11 +140,13 @@ _vp8_loop_filter_horizontal_edge_uv_neon:
 _vp8_loop_filter_vertical_edge_y_neon:
 	vp8_loop_filter_vertical_edge_y_neon: @
     push        {lr}
+    vpush       {d8-d15}
+
     vdup.u8     q0, r2                      @ duplicate blimit
     vdup.u8     q1, r3                      @ duplicate limit
     sub         r2, r0, #4                  @ src ptr down by 4 columns
     add         r1, r1, r1
-    ldr         r3, [sp, #4]                @ load thresh
+    ldr         r3, [sp, #68]               @ load thresh
     add         r12, r2, r1, asr #1
 
     vld1.u8     {d6}, [r2], r1
@@ -208,6 +216,7 @@ _vp8_loop_filter_vertical_edge_y_neon:
     vst4.8      {d14[6], d15[6], d16[6], d17[6]}, [r0]
     vst4.8      {d14[7], d15[7], d16[7], d17[7]}, [r12]
 
+    vpop        {d8-d15}
     pop         {pc}
     @         @ |vp8_loop_filter_vertical_edge_y_neon|
 
@@ -225,9 +234,11 @@ _vp8_loop_filter_vertical_edge_y_neon:
 _vp8_loop_filter_vertical_edge_uv_neon:
 	vp8_loop_filter_vertical_edge_uv_neon: @
     push        {lr}
+    vpush       {d8-d15}
+
     vdup.u8     q0, r2                       @ duplicate blimit
     sub         r12, r0, #4                  @ move u pointer down by 4 columns
-    ldr         r2, [sp, #8]                 @ load v ptr
+    ldr         r2, [sp, #72]                @ load v ptr
     vdup.u8     q1, r3                       @ duplicate limit
     sub         r3, r2, #4                   @ move v pointer down by 4 columns
 
@@ -248,7 +259,7 @@ _vp8_loop_filter_vertical_edge_uv_neon:
     vld1.u8     {d20}, [r12]
     vld1.u8     {d21}, [r3]
 
-    ldr        r12, [sp, #4]                @ load thresh
+    ldr        r12, [sp, #68]               @ load thresh
 
      @transpose to 8x16 matrix
     vtrn.32     q3, q7
@@ -296,6 +307,7 @@ _vp8_loop_filter_vertical_edge_uv_neon:
     vst4.8      {d10[7], d11[7], d12[7], d13[7]}, [r0]
     vst4.8      {d14[7], d15[7], d16[7], d17[7]}, [r2]
 
+    vpop        {d8-d15}
     pop         {pc}
     @         @ |vp8_loop_filter_vertical_edge_uv_neon|
 

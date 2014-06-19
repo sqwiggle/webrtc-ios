@@ -40,8 +40,10 @@
 _vp8_mbloop_filter_horizontal_edge_y_neon:
 	vp8_mbloop_filter_horizontal_edge_y_neon: @
     push        {lr}
+    vpush       {d8-d15}
+
     add         r1, r1, r1                   @ double stride
-    ldr         r12, [sp, #4]                @ load thresh
+    ldr         r12, [sp, #68]               @ load thresh
     sub         r0, r0, r1, lsl #1           @ move src pointer down by 4 lines
     vdup.u8     q2, r12                      @ thresh
     add         r12, r0, r1,  lsr #1         @ move src pointer up by 1 line
@@ -67,6 +69,7 @@ _vp8_mbloop_filter_horizontal_edge_y_neon:
     vst1.u8     {q8}, [r12,:128]             @ store oq1
     vst1.u8     {q9}, [r0,:128]              @ store oq2
 
+    vpop        {d8-d15}
     pop         {pc}
     @         @ |vp8_mbloop_filter_horizontal_edge_y_neon|
 
@@ -85,10 +88,12 @@ _vp8_mbloop_filter_horizontal_edge_y_neon:
 _vp8_mbloop_filter_horizontal_edge_uv_neon:
 	vp8_mbloop_filter_horizontal_edge_uv_neon: @
     push        {lr}
-    ldr         r12, [sp, #4]                  @ load thresh
+    vpush       {d8-d15}
+
+    ldr         r12, [sp, #68]                 @ load thresh
     sub         r0, r0, r1, lsl #2             @ move u pointer down by 4 lines
     vdup.u8     q2, r12                        @ thresh
-    ldr         r12, [sp, #8]                  @ load v ptr
+    ldr         r12, [sp, #72]                 @ load v ptr
     sub         r12, r12, r1, lsl #2           @ move v pointer down by 4 lines
 
     vld1.u8     {d6}, [r0,:64], r1               @ p3
@@ -129,6 +134,7 @@ _vp8_mbloop_filter_horizontal_edge_uv_neon:
     vst1.u8     {d18}, [r0,:64], r1              @ store u oq2
     vst1.u8     {d19}, [r12,:64], r1              @ store v oq2
 
+    vpop        {d8-d15}
     pop         {pc}
     @         @ |vp8_mbloop_filter_horizontal_edge_uv_neon|
 
@@ -144,7 +150,9 @@ _vp8_mbloop_filter_horizontal_edge_uv_neon:
 _vp8_mbloop_filter_vertical_edge_y_neon:
 	vp8_mbloop_filter_vertical_edge_y_neon: @
     push        {lr}
-    ldr         r12, [sp, #4]                @ load thresh
+    vpush       {d8-d15}
+
+    ldr         r12, [sp, #68]               @ load thresh
     sub         r0, r0, #4                   @ move src pointer down by 4 columns
     vdup.s8     q2, r12                      @ thresh
     add         r12, r0, r1, lsl #3          @ move src pointer down by 8 lines
@@ -222,6 +230,7 @@ _vp8_mbloop_filter_vertical_edge_y_neon:
     vst1.8      {d20}, [r0]
     vst1.8      {d21}, [r12]
 
+    vpop        {d8-d15}
     pop         {pc}
     @         @ |vp8_mbloop_filter_vertical_edge_y_neon|
 
@@ -239,10 +248,12 @@ _vp8_mbloop_filter_vertical_edge_y_neon:
 _vp8_mbloop_filter_vertical_edge_uv_neon:
 	vp8_mbloop_filter_vertical_edge_uv_neon: @
     push        {lr}
-    ldr         r12, [sp, #4]                @ load thresh
+    vpush       {d8-d15}
+
+    ldr         r12, [sp, #68]               @ load thresh
     sub         r0, r0, #4                   @ move u pointer down by 4 columns
     vdup.u8     q2, r12                      @ thresh
-    ldr         r12, [sp, #8]                @ load v ptr
+    ldr         r12, [sp, #72]               @ load v ptr
     sub         r12, r12, #4                 @ move v pointer down by 4 columns
 
     vld1.u8     {d6}, [r0], r1               @load u data
@@ -318,6 +329,7 @@ _vp8_mbloop_filter_vertical_edge_uv_neon:
     vst1.8      {d20}, [r0]
     vst1.8      {d21}, [r12]
 
+    vpop        {d8-d15}
     pop         {pc}
     @         @ |vp8_mbloop_filter_vertical_edge_uv_neon|
 

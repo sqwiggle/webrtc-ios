@@ -1,4 +1,4 @@
-build obj/All.actions_depends.stamp: stamp $
+build obj/All.actions_depends.stamp: stamp libopenmax_dl.a $
     obj/webrtc/webrtc_all.actions_depends.stamp libwebrtc.a $
     obj/webrtc/webrtc_tests.actions_depends.stamp video_loopback $
     video_engine_tests webrtc_perf_tests video_engine_tests.isolated $

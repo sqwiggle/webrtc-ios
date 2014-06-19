@@ -33,7 +33,9 @@
 #include "./md5_utils.h"
 
 #include "./tools_common.h"
+#if CONFIG_WEBM_IO
 #include "./webmdec.h"
+#endif
 #include "./y4menc.h"
 
 static const char *exec_name;
@@ -119,7 +121,7 @@ static const arg_def_t *vp8_pp_args[] = {
 #endif
 
 static int vpx_image_scale(vpx_image_t *src, vpx_image_t *dst,
-                           FilterMode mode) {
+                           FilterModeEnum mode) {
   assert(src->fmt == VPX_IMG_FMT_I420);
   assert(dst->fmt == VPX_IMG_FMT_I420);
   return I420Scale(src->planes[VPX_PLANE_Y], src->stride[VPX_PLANE_Y],
@@ -218,9 +220,11 @@ static int raw_read_frame(FILE *infile, uint8_t **buffer,
 static int read_frame(struct VpxDecInputContext *input, uint8_t **buf,
                       size_t *bytes_in_buffer, size_t *buffer_size) {
   switch (input->vpx_input_ctx->file_type) {
+#if CONFIG_WEBM_IO
     case FILE_TYPE_WEBM:
       return webm_read_frame(input->webm_ctx,
                              buf, bytes_in_buffer, buffer_size);
+#endif
     case FILE_TYPE_RAW:
       return raw_read_frame(input->vpx_input_ctx->file,
                             buf, bytes_in_buffer, buffer_size);
@@ -526,9 +530,11 @@ int main_loop(int argc, const char **argv_) {
 
   struct VpxDecInputContext input = {0};
   struct VpxInputContext vpx_input_ctx = {0};
+#if CONFIG_WEBM_IO
   struct WebmInputContext webm_ctx = {0};
-  input.vpx_input_ctx = &vpx_input_ctx;
   input.webm_ctx = &webm_ctx;
+#endif
+  input.vpx_input_ctx = &vpx_input_ctx;
 
   /* Parse command line */
   exec_name = argv_[0];
@@ -663,12 +669,17 @@ int main_loop(int argc, const char **argv_) {
   input.vpx_input_ctx->file = infile;
   if (file_is_ivf(input.vpx_input_ctx))
     input.vpx_input_ctx->file_type = FILE_TYPE_IVF;
+#if CONFIG_WEBM_IO
   else if (file_is_webm(input.webm_ctx, input.vpx_input_ctx))
     input.vpx_input_ctx->file_type = FILE_TYPE_WEBM;
+#endif
   else if (file_is_raw(input.vpx_input_ctx))
     input.vpx_input_ctx->file_type = FILE_TYPE_RAW;
   else {
     fprintf(stderr, "Unrecognized input file type.\n");
+#if !CONFIG_WEBM_IO
+    fprintf(stderr, "vpxdec was built without WebM container support.\n");
+#endif
     return EXIT_FAILURE;
   }
 
@@ -691,6 +702,7 @@ int main_loop(int argc, const char **argv_) {
       return EXIT_FAILURE;
     }
 
+#if CONFIG_WEBM_IO
     if (vpx_input_ctx.file_type == FILE_TYPE_WEBM) {
       if (webm_guess_framerate(input.webm_ctx, input.vpx_input_ctx)) {
         fprintf(stderr, "Failed to guess framerate -- error parsing "
@@ -698,6 +710,7 @@ int main_loop(int argc, const char **argv_) {
         return EXIT_FAILURE;
       }
     }
+#endif
   }
 
   fourcc_interface = get_vpx_decoder_by_fourcc(vpx_input_ctx.fourcc);
@@ -941,9 +954,12 @@ fail:
     }
   }
 
+#if CONFIG_WEBM_IO
   if (input.vpx_input_ctx->file_type == FILE_TYPE_WEBM)
     webm_free(input.webm_ctx);
-  else
+#endif
+
+  if (input.vpx_input_ctx->file_type != FILE_TYPE_WEBM)
     free(buf);
 
   if (scaled_img) vpx_img_free(scaled_img);

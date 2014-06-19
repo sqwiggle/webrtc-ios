@@ -1,6 +1,6 @@
 defines = -DV8_DEPRECATION_WARNINGS -DBLINK_SCALE_FILTERS_AT_RECORD_TIME $
-    -DDISABLE_NACL -DCHROMIUM_BUILD -DUSE_LIBJPEG_TURBO=1 $
-    -DENABLE_CONFIGURATION_POLICY $
+    -DDISABLE_NACL -DCHROMIUM_BUILD -DCR_CLANG_REVISION=206824 $
+    -DUSE_LIBJPEG_TURBO=1 -DENABLE_CONFIGURATION_POLICY $
     -DDISCARDABLE_MEMORY_ALWAYS_SUPPORTED_NATIVELY $
     -DSYSTEM_NATIVELY_SIGNALS_MEMORY_PRESSURE -DENABLE_EGLIMAGE=1 $
     -DCLD_VERSION=1 -DENABLE_SPELLCHECK=1 -DDISABLE_FTP_SUPPORT=1 $
@@ -8,7 +8,7 @@ defines = -DV8_DEPRECATION_WARNINGS -DBLINK_SCALE_FILTERS_AT_RECORD_TIME $
     -DWEBRTC_ARCH_ARM_NEON -DWEBRTC_POSIX -DWEBRTC_MAC -DWEBRTC_IOS $
     -D__STDC_CONSTANT_MACROS -D__STDC_FORMAT_MACROS $
     -DDYNAMIC_ANNOTATIONS_ENABLED=1 -DWTF_USE_DYNAMIC_ANNOTATIONS=1
-includes = -I../.. -I../.. -I../../webrtc/modules/audio_device $
+includes = -I../.. -I../../webrtc/modules/audio_device $
     -I../../webrtc/modules/interface $
     -I../../webrtc/modules/audio_device/include $
     -I../../webrtc/modules/audio_device/dummy $
@@ -24,7 +24,7 @@ cflags = -isysroot $
     -Wno-unused-parameter -Wno-missing-field-initializers -Wheader-hygiene $
     -Wno-c++11-narrowing -Wno-char-subscripts $
     -Wno-unneeded-internal-declaration -Wno-covered-switch-default $
-    -Wstring-conversion -Wno-deprecated-register -Wno-absolute-value
+    -Wstring-conversion -Wno-deprecated-register -Wno-selector-type-mismatch
 cflags_c = -std=c99 -fcolor-diagnostics -fstack-protector-all
 cflags_cc = -std=gnu++0x -fno-rtti -fno-exceptions $
     -fvisibility-inlines-hidden -fno-threadsafe-statics -fcolor-diagnostics $
@@ -47,6 +47,12 @@ build $
 build $
     obj/webrtc/modules/audio_device/dummy/audio_device.audio_device_utility_dummy.o: $
     cxx ../../webrtc/modules/audio_device/dummy/audio_device_utility_dummy.cc
+build $
+    obj/webrtc/modules/audio_device/dummy/audio_device.file_audio_device.o: $
+    cxx ../../webrtc/modules/audio_device/dummy/file_audio_device.cc
+build $
+    obj/webrtc/modules/audio_device/dummy/audio_device.file_audio_device_factory.o: $
+    cxx ../../webrtc/modules/audio_device/dummy/file_audio_device_factory.cc
 build obj/webrtc/modules/audio_device/ios/audio_device.audio_device_ios.o: $
     cxx ../../webrtc/modules/audio_device/ios/audio_device_ios.cc
 build $
@@ -60,5 +66,9 @@ build libaudio_device.a: alink $
     obj/webrtc/modules/audio_device/audio_device.audio_device_impl.o $
     obj/webrtc/modules/audio_device/dummy/audio_device.audio_device_dummy.o $
     obj/webrtc/modules/audio_device/dummy/audio_device.audio_device_utility_dummy.o $
+    obj/webrtc/modules/audio_device/dummy/audio_device.file_audio_device.o $
+    obj/webrtc/modules/audio_device/dummy/audio_device.file_audio_device_factory.o $
     obj/webrtc/modules/audio_device/ios/audio_device.audio_device_ios.o $
     obj/webrtc/modules/audio_device/ios/audio_device.audio_device_utility_ios.o
+  libtool_flags = -framework Foundation -framework Security -framework $
+      SystemConfiguration -framework UIKit

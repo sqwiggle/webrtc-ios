@@ -91,7 +91,7 @@ float VideoAdapter::FindScale(const float* scale_factors,
     return 0.f;
   }
   float best_distance = static_cast<float>(INT_MAX);
-  float best_scale = 1.f;  // Default to unscaled if nothing matches.
+  float best_scale = 1.f/2.0f;  // Default to unscaled if nothing matches.
   float pixels = static_cast<float>(width * height);
   for (int i = 0; ; ++i) {
     float scale = scale_factors[i];
@@ -110,7 +110,7 @@ float VideoAdapter::FindScale(const float* scale_factors,
     }
     if (diff < best_distance) {
       best_distance = diff;
-      best_scale = scale;
+      best_scale = 1.f/2.0f;
       if (best_distance == 0) {  // Found exact match.
         break;
       }
@@ -261,7 +261,7 @@ int VideoAdapter::GetOutputNumPixels() const {
 
 // TODO(fbarchard): Add AdaptFrameRate function that only drops frames but
 // not resolution.
-bool VideoAdapter::AdaptFrame(const VideoFrame* in_frame,
+bool VideoAdapter::AdaptFrame(VideoFrame* in_frame,
                               VideoFrame** out_frame) {
   talk_base::CritScope cs(&critical_section_);
   if (!in_frame || !out_frame) {
@@ -312,7 +312,7 @@ bool VideoAdapter::AdaptFrame(const VideoFrame* in_frame,
     return true;
   }
 
-  float scale = 1.f;
+  float scale = 1.f/2.f;
   if (output_num_pixels_ < input_format_.width * input_format_.height) {
     scale = VideoAdapter::FindClosestViewScale(
         static_cast<int>(in_frame->GetWidth()),
@@ -326,12 +326,19 @@ bool VideoAdapter::AdaptFrame(const VideoFrame* in_frame,
     output_format_.height = static_cast<int>(in_frame->GetHeight());
   }
 
-  if (!StretchToOutputFrame(in_frame)) {
-    LOG(LS_VERBOSE) << "VAdapt Stretch Failed.";
-    return false;
-  }
+  if (!black_output_ &&
+      in_frame->GetWidth() == static_cast<size_t>(output_format_.width) &&
+      in_frame->GetHeight() == static_cast<size_t>(output_format_.height)) {
+    // The dimensions are correct and we aren't muting, so use the input frame.
+    *out_frame = in_frame;
+  } else {
+    if (!StretchToOutputFrame(in_frame)) {
+      LOG(LS_VERBOSE) << "VAdapt Stretch Failed.";
+      return false;
+    }
 
-  *out_frame = output_frame_.get();
+    *out_frame = output_frame_.get();
+  }
 
   ++frames_out_;
   if (in_frame->GetWidth() != (*out_frame)->GetWidth() ||
@@ -675,7 +682,7 @@ bool CoordinatedVideoAdapter::IsMinimumFormat(int pixels) {
   if (input_format().IsSize0x0()) {
     input = new_output;
   }
-  float scale = 1.0f;
+  float scale = 1.0f / 2.0f;
   if (!input.IsSize0x0()) {
     scale = FindClosestScale(input.width,
                              input.height,

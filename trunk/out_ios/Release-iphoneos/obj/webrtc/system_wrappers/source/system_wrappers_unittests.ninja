@@ -1,14 +1,21 @@
 build $
     obj/webrtc/system_wrappers/source/system_wrappers_unittests.actions_depends.stamp: $
     stamp libgtest.a libsystem_wrappers.a libtest_support_main.a $
+    libwebrtc_base.a libjsoncpp.a libcrssl.a libcrnspr.a libcrnss.a $
+    libnss_static.a libsqlite_regexp.a libsqlite_regexp.a libicui18n.a $
+    libicuuc.a libicudata.a libcrnssckbi.a libfield_trial.a $
     libtest_support.a libgmock.a libgflags.a
 
+build system_wrappers_unittests.app/icudtl.dat: mac_tool $
+    ../../third_party/icu/source/data/in/icudtl.dat
+  mactool_cmd = copy-bundle-resource
 build system_wrappers_unittests.app/Default-568h@2x.png: mac_tool $
     ../../testing/gtest_ios/Default-568h@2x.png
   mactool_cmd = copy-bundle-resource
 build system_wrappers_unittests.app/Info.plist: copy_infoplist $
     ../../testing/gtest_ios/unittest-Info.plist
   env = export ALWAYS_SEARCH_USER_PATHS=NO; export $
+      ARCHS="$${ARCHS_STANDARD_INCLUDING_64_BIT}"; export $
       BUILT_PRODUCTS_DIR=/Users/cwebb/Sqwiggle/webrtc/trunk/out_ios/Release-iphoneos; $
       export BUNDLE_ID_TEST_NAME=systemwrappersunittests; export $
       SRCROOT=/Users/cwebb/Sqwiggle/webrtc/trunk/out_ios/Release-iphoneos/../../webrtc/system_wrappers/source; $
@@ -37,8 +44,9 @@ build system_wrappers_unittests.app/Info.plist: copy_infoplist $
       INFOPLIST_PATH=system_wrappers_unittests.app/Info.plist; export $
       IPHONEOS_DEPLOYMENT_TARGET=6.0; export $
       LDPLUSPLUS="$${SOURCE_ROOT}/../../../third_party/llvm-build/Release+Asserts/bin/clang++"; $
-      export MACH_O_TYPE=mh_execute; export $
-      OTHER_LDFLAGS=-Wl,-search_paths_first; export $
+      export MACH_O_TYPE=mh_execute; export OTHER_LDFLAGS="-framework $
+      Foundation -framework Security -framework SystemConfiguration $
+      -framework UIKit -Wl,-search_paths_first"; export $
       PRODUCT_NAME=system_wrappers_unittests; export $
       PRODUCT_TYPE=com.apple.product-type.application; export $
       SDKROOT=/Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS7.1.sdk; $
@@ -52,16 +60,16 @@ build system_wrappers_unittests.app/Info.plist: copy_infoplist $
       -Wno-missing-field-initializers -Wheader-hygiene -Wno-c++11-narrowing $
       -Wno-char-subscripts -Wno-unneeded-internal-declaration $
       -Wno-covered-switch-default -Wstring-conversion $
-      -Wno-deprecated-register -Wno-absolute-value"; export $
+      -Wno-deprecated-register -Wno-selector-type-mismatch"; export $
       WRAPPER_NAME=system_wrappers_unittests.app;
-  keys = '{"UIDeviceFamily": [1, 2], "BuildMachineOSBuild": "13C64", $
-      "DTXcodeBuild": "5B130a", "DTSDKBuild": "11D167", $
-      "CFBundleSupportedPlatforms": ["iPhoneOS"], "DTXcode": "0510", $
+  keys = '{"UIDeviceFamily": [1, 2], "BuildMachineOSBuild": "13D65", $
+      "DTXcodeBuild": "5B1008", "DTSDKBuild": "11D167", $
+      "CFBundleSupportedPlatforms": ["iPhoneOS"], "DTXcode": "0511", $
       "DTSDKName": "iphoneos", "DTPlatformVersion": "7.1", $
       "DTPlatformName": "iphoneos"}'
 defines = -DV8_DEPRECATION_WARNINGS -DBLINK_SCALE_FILTERS_AT_RECORD_TIME $
-    -DDISABLE_NACL -DCHROMIUM_BUILD -DUSE_LIBJPEG_TURBO=1 $
-    -DENABLE_CONFIGURATION_POLICY $
+    -DDISABLE_NACL -DCHROMIUM_BUILD -DCR_CLANG_REVISION=206824 $
+    -DUSE_LIBJPEG_TURBO=1 -DENABLE_CONFIGURATION_POLICY $
     -DDISCARDABLE_MEMORY_ALWAYS_SUPPORTED_NATIVELY $
     -DSYSTEM_NATIVELY_SIGNALS_MEMORY_PRESSURE -DENABLE_EGLIMAGE=1 $
     -DCLD_VERSION=1 -DENABLE_SPELLCHECK=1 -DDISABLE_FTP_SUPPORT=1 $
@@ -71,7 +79,7 @@ defines = -DV8_DEPRECATION_WARNINGS -DBLINK_SCALE_FILTERS_AT_RECORD_TIME $
     -D__STDC_CONSTANT_MACROS -D__STDC_FORMAT_MACROS -DNDEBUG -DNVALGRIND $
     -DDYNAMIC_ANNOTATIONS_ENABLED=0 -DNS_BLOCK_ASSERTIONS=1 $
     -D_FORTIFY_SOURCE=2
-includes = -I../.. -I../.. -I../../testing/gtest/include $
+includes = -I../.. -I../../testing/gtest/include $
     -I../../webrtc/system_wrappers/interface
 cflags = -isysroot $
     /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS7.1.sdk $
@@ -80,7 +88,7 @@ cflags = -isysroot $
     -Wno-unused-parameter -Wno-missing-field-initializers -Wheader-hygiene $
     -Wno-c++11-narrowing -Wno-char-subscripts $
     -Wno-unneeded-internal-declaration -Wno-covered-switch-default $
-    -Wstring-conversion -Wno-deprecated-register -Wno-absolute-value
+    -Wstring-conversion -Wno-deprecated-register -Wno-selector-type-mismatch
 cflags_c = -std=c99 -fcolor-diagnostics
 cflags_cc = -std=gnu++0x -fno-rtti -fno-exceptions $
     -fvisibility-inlines-hidden -fno-threadsafe-statics -fcolor-diagnostics
@@ -127,8 +135,20 @@ build $
     cc ../../webrtc/system_wrappers/source/data_log_c_helpers_unittest.c || $
     obj.host/testing/iossim/iossim.gen/iossim/DVTiPhoneSimulatorRemoteClient.h
 build $
+    obj/webrtc/system_wrappers/source/system_wrappers_unittests.rtp_to_ntp_unittest.o: $
+    cxx ../../webrtc/system_wrappers/source/rtp_to_ntp_unittest.cc || $
+    obj.host/testing/iossim/iossim.gen/iossim/DVTiPhoneSimulatorRemoteClient.h
+build $
+    obj/webrtc/system_wrappers/source/system_wrappers_unittests.scoped_vector_unittest.o: $
+    cxx ../../webrtc/system_wrappers/source/scoped_vector_unittest.cc || $
+    obj.host/testing/iossim/iossim.gen/iossim/DVTiPhoneSimulatorRemoteClient.h
+build $
     obj/webrtc/system_wrappers/source/system_wrappers_unittests.stringize_macros_unittest.o: $
     cxx ../../webrtc/system_wrappers/source/stringize_macros_unittest.cc || $
+    obj.host/testing/iossim/iossim.gen/iossim/DVTiPhoneSimulatorRemoteClient.h
+build $
+    obj/webrtc/system_wrappers/source/system_wrappers_unittests.stl_util_unittest.o: $
+    cxx ../../webrtc/system_wrappers/source/stl_util_unittest.cc || $
     obj.host/testing/iossim/iossim.gen/iossim/DVTiPhoneSimulatorRemoteClient.h
 build $
     obj/webrtc/system_wrappers/source/system_wrappers_unittests.thread_unittest.o: $
@@ -144,11 +164,13 @@ build $
     || $
     obj.host/testing/iossim/iossim.gen/iossim/DVTiPhoneSimulatorRemoteClient.h
 
-ldflags = -Wl,-search_paths_first -Wl,-dead_strip $
-    -miphoneos-version-min=6.0 -isysroot $
+ldflags = -framework Foundation -framework Security -framework $
+    SystemConfiguration -framework UIKit -Wl,-search_paths_first $
+    -Wl,-dead_strip -miphoneos-version-min=6.0 -isysroot $
     /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS7.1.sdk $
     -arch armv7 -L.
-libs = -framework Foundation
+libs = -framework Foundation $
+    /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS7.1.sdk/usr/lib/libsqlite3.dylib
 build system_wrappers_unittests.app/system_wrappers_unittests: link $
     obj/webrtc/system_wrappers/source/system_wrappers_unittests.aligned_malloc_unittest.o $
     obj/webrtc/system_wrappers/source/system_wrappers_unittests.clock_unittest.o $
@@ -159,14 +181,21 @@ build system_wrappers_unittests.app/system_wrappers_unittests: link $
     obj/webrtc/system_wrappers/source/system_wrappers_unittests.data_log_unittest_disabled.o $
     obj/webrtc/system_wrappers/source/system_wrappers_unittests.data_log_helpers_unittest.o $
     obj/webrtc/system_wrappers/source/system_wrappers_unittests.data_log_c_helpers_unittest.o $
+    obj/webrtc/system_wrappers/source/system_wrappers_unittests.rtp_to_ntp_unittest.o $
+    obj/webrtc/system_wrappers/source/system_wrappers_unittests.scoped_vector_unittest.o $
     obj/webrtc/system_wrappers/source/system_wrappers_unittests.stringize_macros_unittest.o $
+    obj/webrtc/system_wrappers/source/system_wrappers_unittests.stl_util_unittest.o $
     obj/webrtc/system_wrappers/source/system_wrappers_unittests.thread_unittest.o $
     obj/webrtc/system_wrappers/source/system_wrappers_unittests.thread_posix_unittest.o $
     obj/webrtc/system_wrappers/source/system_wrappers_unittests.unittest_utilities_unittest.o $
-    libgtest.a libsystem_wrappers.a libtest_support_main.a $
-    libtest_support.a libgmock.a libgflags.a
+    libgtest.a libsystem_wrappers.a libtest_support_main.a libwebrtc_base.a $
+    libjsoncpp.a libcrssl.a libcrnspr.a libcrnss.a libnss_static.a $
+    libsqlite_regexp.a libicui18n.a libicuuc.a libicudata.a libcrnssckbi.a $
+    libfield_trial.a libtest_support.a libgmock.a libgflags.a | $
+    libsqlite_regexp.a
   ld = $ldxx
 build system_wrappers_unittests.app: stamp $
+    system_wrappers_unittests.app/icudtl.dat $
     system_wrappers_unittests.app/Default-568h@2x.png $
     system_wrappers_unittests.app/Info.plist $
     system_wrappers_unittests.app/system_wrappers_unittests

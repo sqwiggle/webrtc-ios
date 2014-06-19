@@ -1,24 +1,25 @@
 defines = -DV8_DEPRECATION_WARNINGS -DBLINK_SCALE_FILTERS_AT_RECORD_TIME $
-    -DCHROMIUM_BUILD -DUSE_LIBJPEG_TURBO=1 -DENABLE_ONE_CLICK_SIGNIN $
-    -DENABLE_REMOTING=1 -DENABLE_WEBRTC=1 -DENABLE_PEPPER_CDMS $
-    -DENABLE_CONFIGURATION_POLICY -DENABLE_INPUT_SPEECH $
+    -D__ASSERT_MACROS_DEFINE_VERSIONS_WITHOUT_UNDERSCORE=0 -DCHROMIUM_BUILD $
+    -DCR_CLANG_REVISION=206824 -DUSE_LIBJPEG_TURBO=1 $
+    -DENABLE_ONE_CLICK_SIGNIN -DENABLE_REMOTING=1 -DENABLE_WEBRTC=1 $
+    -DENABLE_PEPPER_CDMS -DENABLE_CONFIGURATION_POLICY $
     -DENABLE_NOTIFICATIONS -DENABLE_HIDPI=1 $
     -DDISCARDABLE_MEMORY_ALWAYS_SUPPORTED_NATIVELY $
     -DSYSTEM_NATIVELY_SIGNALS_MEMORY_PRESSURE -DENABLE_EGLIMAGE=1 $
     -DENABLE_TASK_MANAGER=1 -DENABLE_EXTENSIONS=1 $
     -DENABLE_PLUGIN_INSTALLATION=1 -DENABLE_PLUGINS=1 $
     -DENABLE_SESSION_SERVICE=1 -DENABLE_THEMES=1 -DENABLE_AUTOFILL_DIALOG=1 $
-    -DENABLE_BACKGROUND=1 -DENABLE_AUTOMATION=1 -DENABLE_GOOGLE_NOW=1 $
-    -DCLD_VERSION=2 -DENABLE_FULL_PRINTING=1 -DENABLE_PRINTING=1 $
-    -DENABLE_SPELLCHECK=1 -DENABLE_CAPTIVE_PORTAL_DETECTION=1 $
-    -DENABLE_APP_LIST=1 -DENABLE_SETTINGS_APP=1 -DENABLE_MANAGED_USERS=1 $
-    -DENABLE_SERVICE_DISCOVERY=1 -DWEBRTC_MODULE_UTILITY_VIDEO $
-    -DWEBRTC_POSIX -DWEBRTC_MAC -DGTEST_HAS_POSIX_RE=0 -DUNIT_TEST $
-    -DGTEST_HAS_RTTI=0 -DGFLAGS_DLL_DECL= -DGFLAGS_DLL_DECLARE_FLAG= $
-    -DGFLAGS_DLL_DEFINE_FLAG= -D__STDC_CONSTANT_MACROS $
-    -D__STDC_FORMAT_MACROS -DDYNAMIC_ANNOTATIONS_ENABLED=1 $
-    -DWTF_USE_DYNAMIC_ANNOTATIONS=1
-includes = -I../.. -I../.. -I../../testing/gtest/include $
+    -DENABLE_BACKGROUND=1 -DENABLE_GOOGLE_NOW=1 -DCLD_VERSION=2 $
+    -DENABLE_FULL_PRINTING=1 -DENABLE_PRINTING=1 -DENABLE_SPELLCHECK=1 $
+    -DENABLE_CAPTIVE_PORTAL_DETECTION=1 -DENABLE_APP_LIST=1 $
+    -DENABLE_SETTINGS_APP=1 -DENABLE_MANAGED_USERS=1 $
+    -DENABLE_SERVICE_DISCOVERY=1 -DENABLE_WIFI_BOOTSTRAPPING=1 $
+    -DWEBRTC_MODULE_UTILITY_VIDEO -DWEBRTC_POSIX -DWEBRTC_MAC $
+    -DGTEST_HAS_POSIX_RE=0 -DUNIT_TEST -DGTEST_HAS_RTTI=0 $
+    -DGFLAGS_DLL_DECL= -DGFLAGS_DLL_DECLARE_FLAG= -DGFLAGS_DLL_DEFINE_FLAG= $
+    -D__STDC_CONSTANT_MACROS -D__STDC_FORMAT_MACROS $
+    -DDYNAMIC_ANNOTATIONS_ENABLED=1 -DWTF_USE_DYNAMIC_ANNOTATIONS=1
+includes = -I../.. -I../../testing/gtest/include $
     -I../../third_party/gflags/gen/posix/include $
     -I../../third_party/gflags/src $
     -I../../webrtc/modules/media_file/interface $
@@ -30,7 +31,7 @@ cflags = -isysroot $
     -Wno-unused-parameter -Wno-missing-field-initializers -Wheader-hygiene $
     -Wno-c++11-narrowing -Wno-char-subscripts $
     -Wno-unneeded-internal-declaration -Wno-covered-switch-default $
-    -Wstring-conversion -Wno-deprecated-register -Wno-absolute-value
+    -Wstring-conversion -Wno-deprecated-register -Wno-selector-type-mismatch
 cflags_c = -std=c99 -fcolor-diagnostics -fno-strict-aliasing $
     -fstack-protector-all
 cflags_cc = -std=gnu++11 -fno-rtti -fno-exceptions $
@@ -54,16 +55,10 @@ build obj/webrtc/test/webrtc_test_common.fake_encoder.o: cxx $
     ../../webrtc/test/fake_encoder.cc
 build obj/webrtc/test/webrtc_test_common.fake_network_pipe.o: cxx $
     ../../webrtc/test/fake_network_pipe.cc
-build obj/webrtc/test/webrtc_test_common.flags.o: cxx $
-    ../../webrtc/test/flags.cc
 build obj/webrtc/test/webrtc_test_common.frame_generator_capturer.o: cxx $
     ../../webrtc/test/frame_generator_capturer.cc
-build obj/webrtc/test/webrtc_test_common.null_platform_renderer.o: cxx $
-    ../../webrtc/test/null_platform_renderer.cc
 build obj/webrtc/test/webrtc_test_common.null_transport.o: cxx $
     ../../webrtc/test/null_transport.cc
-build obj/webrtc/test/webrtc_test_common.run_tests.o: cxx $
-    ../../webrtc/test/run_tests.cc
 build obj/webrtc/test/webrtc_test_common.run_loop.o: cxx $
     ../../webrtc/test/run_loop.cc
 build obj/webrtc/test/webrtc_test_common.statistics.o: cxx $
@@ -72,8 +67,6 @@ build obj/webrtc/test/webrtc_test_common.vcm_capturer.o: cxx $
     ../../webrtc/test/vcm_capturer.cc
 build obj/webrtc/test/webrtc_test_common.video_capturer.o: cxx $
     ../../webrtc/test/video_capturer.cc
-build obj/webrtc/test/webrtc_test_common.video_renderer.o: cxx $
-    ../../webrtc/test/video_renderer.cc
 
 build libwebrtc_test_common.a: alink $
     obj/webrtc/test/webrtc_test_common.configurable_frame_size_encoder.o $
@@ -83,13 +76,9 @@ build libwebrtc_test_common.a: alink $
     obj/webrtc/test/webrtc_test_common.fake_decoder.o $
     obj/webrtc/test/webrtc_test_common.fake_encoder.o $
     obj/webrtc/test/webrtc_test_common.fake_network_pipe.o $
-    obj/webrtc/test/webrtc_test_common.flags.o $
     obj/webrtc/test/webrtc_test_common.frame_generator_capturer.o $
-    obj/webrtc/test/webrtc_test_common.null_platform_renderer.o $
     obj/webrtc/test/webrtc_test_common.null_transport.o $
-    obj/webrtc/test/webrtc_test_common.run_tests.o $
     obj/webrtc/test/webrtc_test_common.run_loop.o $
     obj/webrtc/test/webrtc_test_common.statistics.o $
     obj/webrtc/test/webrtc_test_common.vcm_capturer.o $
-    obj/webrtc/test/webrtc_test_common.video_capturer.o $
-    obj/webrtc/test/webrtc_test_common.video_renderer.o
+    obj/webrtc/test/webrtc_test_common.video_capturer.o

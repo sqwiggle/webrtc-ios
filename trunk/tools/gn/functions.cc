@@ -61,8 +61,10 @@ bool FillTargetBlockScope(const Scope* scope,
   // the block in.
   const Scope* default_scope = scope->GetTargetDefaults(target_type);
   if (default_scope) {
-    if (!default_scope->NonRecursiveMergeTo(block_scope, false, function,
-                                            "target defaults", err))
+    Scope::MergeOptions merge_options;
+    merge_options.skip_private_vars = true;
+    if (!default_scope->NonRecursiveMergeTo(block_scope, merge_options,
+                                            function, "target defaults", err))
       return false;
   }
 
@@ -113,6 +115,8 @@ namespace functions {
 // assert ----------------------------------------------------------------------
 
 const char kAssert[] = "assert";
+const char kAssert_HelpShort[] =
+    "assert: Assert an expression is true at generation time.";
 const char kAssert_Help[] =
     "assert: Assert an expression is true at generation time.\n"
     "\n"
@@ -175,6 +179,8 @@ Value RunAssert(Scope* scope,
 // config ----------------------------------------------------------------------
 
 const char kConfig[] = "config";
+const char kConfig_HelpShort[] =
+    "config: Defines a configuration object.";
 const char kConfig_Help[] =
     "config: Defines a configuration object.\n"
     "\n"
@@ -229,6 +235,8 @@ Value RunConfig(const FunctionCallNode* function,
   // Create the new config.
   scoped_ptr<Config> config(new Config(scope->settings(), label));
   config->set_defined_from(function);
+  if (!Visibility::FillItemVisibility(config.get(), scope, err))
+    return Value();
 
   // Fill it.
   const SourceDir& input_dir = scope->GetSourceDir();
@@ -237,16 +245,24 @@ Value RunConfig(const FunctionCallNode* function,
   if (err->has_error())
     return Value();
 
-  // Mark as complete.
-  scope->settings()->build_settings()->ItemDefined(config.PassAs<Item>());
+  // Save the generated item.
+  Scope::ItemVector* collector = scope->GetItemCollector();
+  if (!collector) {
+    *err = Err(function, "Can't define a config in this context.");
+    return Value();
+  }
+  collector->push_back(new scoped_ptr<Item>(config.PassAs<Item>()));
+
   return Value();
 }
 
 // declare_args ----------------------------------------------------------------
 
 const char kDeclareArgs[] = "declare_args";
+const char kDeclareArgs_HelpShort[] =
+    "declare_args: Declare build arguments.";
 const char kDeclareArgs_Help[] =
-    "declare_args: Declare build arguments used by this file.\n"
+    "declare_args: Declare build arguments.\n"
     "\n"
     "  Introduces the given arguments into the current scope. If they are\n"
     "  not specified on the command line or in a toolchain's arguments,\n"
@@ -289,6 +305,8 @@ Value RunDeclareArgs(Scope* scope,
 // defined ---------------------------------------------------------------------
 
 const char kDefined[] = "defined";
+const char kDefined_HelpShort[] =
+    "defined: Returns whether an identifier is defined.";
 const char kDefined_Help[] =
     "defined: Returns whether an identifier is defined.\n"
     "\n"
@@ -367,6 +385,8 @@ Value RunDefined(Scope* scope,
 // getenv ----------------------------------------------------------------------
 
 const char kGetEnv[] = "getenv";
+const char kGetEnv_HelpShort[] =
+    "getenv: Get an environment variable.";
 const char kGetEnv_Help[] =
     "getenv: Get an environment variable.\n"
     "\n"
@@ -403,6 +423,8 @@ Value RunGetEnv(Scope* scope,
 // import ----------------------------------------------------------------------
 
 const char kImport[] = "import";
+const char kImport_HelpShort[] =
+    "import: Import a file into the current scope.";
 const char kImport_Help[] =
     "import: Import a file into the current scope.\n"
     "\n"
@@ -425,6 +447,10 @@ const char kImport_Help[] =
     "  the imported file define some variable or rule with the same name but\n"
     "  different value), a runtime error will be thrown. Therefore, it's good\n"
     "  practice to minimize the stuff that an imported file defines.\n"
+    "\n"
+    "  Variables and templates beginning with an underscore '_' are\n"
+    "  considered private and will not be imported. Imported files can use\n"
+    "  such variables for internal computation without affecting other files.\n"
     "\n"
     "Examples:\n"
     "\n"
@@ -451,6 +477,8 @@ Value RunImport(Scope* scope,
 // set_sources_assignment_filter -----------------------------------------------
 
 const char kSetSourcesAssignmentFilter[] = "set_sources_assignment_filter";
+const char kSetSourcesAssignmentFilter_HelpShort[] =
+    "set_sources_assignment_filter: Set a pattern to filter source files.";
 const char kSetSourcesAssignmentFilter_Help[] =
     "set_sources_assignment_filter: Set a pattern to filter source files.\n"
     "\n"
@@ -493,8 +521,11 @@ Value RunSetSourcesAssignmentFilter(Scope* scope,
 // print -----------------------------------------------------------------------
 
 const char kPrint[] = "print";
+const char kPrint_HelpShort[] =
+    "print: Prints to the console.";
 const char kPrint_Help[] =
-    "print(...)\n"
+    "print: Prints to the console.\n"
+    "\n"
     "  Prints all arguments to the console separated by spaces. A newline is\n"
     "  automatically appended to the end.\n"
     "\n"
@@ -513,12 +544,21 @@ Value RunPrint(Scope* scope,
                const FunctionCallNode* function,
                const std::vector<Value>& args,
                Err* err) {
+  std::string output;
   for (size_t i = 0; i < args.size(); i++) {
     if (i != 0)
-      std::cout << " ";
-    std::cout << args[i].ToString(false);
+      output.push_back(' ');
+    output.append(args[i].ToString(false));
   }
-  std::cout << std::endl;
+  output.push_back('\n');
+
+  const BuildSettings::PrintCallback& cb =
+      scope->settings()->build_settings()->print_callback();
+  if (cb.is_null())
+    printf("%s", output.c_str());
+  else
+    cb.Run(output);
+
   return Value();
 }
 
@@ -529,39 +569,61 @@ FunctionInfo::FunctionInfo()
       generic_block_runner(NULL),
       executed_block_runner(NULL),
       no_block_runner(NULL),
-      help(NULL) {
+      help_short(NULL),
+      help(NULL),
+      is_target(false) {
 }
 
-FunctionInfo::FunctionInfo(SelfEvaluatingArgsFunction seaf, const char* in_help)
+FunctionInfo::FunctionInfo(SelfEvaluatingArgsFunction seaf,
+                           const char* in_help_short,
+                           const char* in_help,
+                           bool in_is_target)
     : self_evaluating_args_runner(seaf),
       generic_block_runner(NULL),
       executed_block_runner(NULL),
       no_block_runner(NULL),
-      help(in_help) {
+      help_short(in_help_short),
+      help(in_help),
+      is_target(in_is_target) {
 }
 
-FunctionInfo::FunctionInfo(GenericBlockFunction gbf, const char* in_help)
+FunctionInfo::FunctionInfo(GenericBlockFunction gbf,
+                           const char* in_help_short,
+                           const char* in_help,
+                           bool in_is_target)
     : self_evaluating_args_runner(NULL),
       generic_block_runner(gbf),
       executed_block_runner(NULL),
       no_block_runner(NULL),
-      help(in_help) {
+      help_short(in_help_short),
+      help(in_help),
+      is_target(in_is_target) {
 }
 
-FunctionInfo::FunctionInfo(ExecutedBlockFunction ebf, const char* in_help)
+FunctionInfo::FunctionInfo(ExecutedBlockFunction ebf,
+                           const char* in_help_short,
+                           const char* in_help,
+                           bool in_is_target)
     : self_evaluating_args_runner(NULL),
       generic_block_runner(NULL),
       executed_block_runner(ebf),
       no_block_runner(NULL),
-      help(in_help) {
+      help_short(in_help_short),
+      help(in_help),
+      is_target(in_is_target) {
 }
 
-FunctionInfo::FunctionInfo(NoBlockFunction nbf, const char* in_help)
+FunctionInfo::FunctionInfo(NoBlockFunction nbf,
+                           const char* in_help_short,
+                           const char* in_help,
+                           bool in_is_target)
     : self_evaluating_args_runner(NULL),
       generic_block_runner(NULL),
       executed_block_runner(NULL),
       no_block_runner(nbf),
-      help(in_help) {
+      help_short(in_help_short),
+      help(in_help),
+      is_target(in_is_target) {
 }
 
 // Setup the function map via a static initializer. We use this because it
@@ -573,38 +635,45 @@ struct FunctionInfoInitializer {
   FunctionInfoMap map;
 
   FunctionInfoInitializer() {
-    #define INSERT_FUNCTION(command) \
-        map[k##command] = FunctionInfo(&Run##command, k##command##_Help);
+    #define INSERT_FUNCTION(command, is_target) \
+        map[k##command] = FunctionInfo(&Run##command, \
+                                       k##command##_HelpShort, \
+                                       k##command##_Help, \
+                                       is_target);
 
-    INSERT_FUNCTION(Action)
-    INSERT_FUNCTION(ActionForEach)
-    INSERT_FUNCTION(Assert)
-    INSERT_FUNCTION(Component)
-    INSERT_FUNCTION(Config)
-    INSERT_FUNCTION(Copy)
-    INSERT_FUNCTION(DeclareArgs)
-    INSERT_FUNCTION(Defined)
-    INSERT_FUNCTION(ExecScript)
-    INSERT_FUNCTION(Executable)
-    INSERT_FUNCTION(GetEnv)
-    INSERT_FUNCTION(Group)
-    INSERT_FUNCTION(Import)
-    INSERT_FUNCTION(Print)
-    INSERT_FUNCTION(ProcessFileTemplate)
-    INSERT_FUNCTION(ReadFile)
-    INSERT_FUNCTION(RebasePath)
-    INSERT_FUNCTION(SetDefaults)
-    INSERT_FUNCTION(SetDefaultToolchain)
-    INSERT_FUNCTION(SetSourcesAssignmentFilter)
-    INSERT_FUNCTION(SharedLibrary)
-    INSERT_FUNCTION(SourceSet)
-    INSERT_FUNCTION(StaticLibrary)
-    INSERT_FUNCTION(Template)
-    INSERT_FUNCTION(Test)
-    INSERT_FUNCTION(Tool)
-    INSERT_FUNCTION(Toolchain)
-    INSERT_FUNCTION(ToolchainArgs)
-    INSERT_FUNCTION(WriteFile)
+    INSERT_FUNCTION(Action, true)
+    INSERT_FUNCTION(ActionForEach, true)
+    INSERT_FUNCTION(Component, true)
+    INSERT_FUNCTION(Copy, true)
+    INSERT_FUNCTION(Executable, true)
+    INSERT_FUNCTION(Group, true)
+    INSERT_FUNCTION(SharedLibrary, true)
+    INSERT_FUNCTION(SourceSet, true)
+    INSERT_FUNCTION(StaticLibrary, true)
+    INSERT_FUNCTION(Test, true)
+
+    INSERT_FUNCTION(Assert, false)
+    INSERT_FUNCTION(Config, false)
+    INSERT_FUNCTION(DeclareArgs, false)
+    INSERT_FUNCTION(Defined, false)
+    INSERT_FUNCTION(ExecScript, false)
+    INSERT_FUNCTION(ForEach, false)
+    INSERT_FUNCTION(GetEnv, false)
+    INSERT_FUNCTION(GetLabelInfo, false)
+    INSERT_FUNCTION(GetTargetOutputs, false)
+    INSERT_FUNCTION(Import, false)
+    INSERT_FUNCTION(Print, false)
+    INSERT_FUNCTION(ProcessFileTemplate, false)
+    INSERT_FUNCTION(ReadFile, false)
+    INSERT_FUNCTION(RebasePath, false)
+    INSERT_FUNCTION(SetDefaults, false)
+    INSERT_FUNCTION(SetDefaultToolchain, false)
+    INSERT_FUNCTION(SetSourcesAssignmentFilter, false)
+    INSERT_FUNCTION(Template, false)
+    INSERT_FUNCTION(Tool, false)
+    INSERT_FUNCTION(Toolchain, false)
+    INSERT_FUNCTION(ToolchainArgs, false)
+    INSERT_FUNCTION(WriteFile, false)
 
     #undef INSERT_FUNCTION
   }

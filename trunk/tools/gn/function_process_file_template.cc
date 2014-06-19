@@ -9,6 +9,8 @@
 namespace functions {
 
 const char kProcessFileTemplate[] = "process_file_template";
+const char kProcessFileTemplate_HelpShort[] =
+    "process_file_template: Do template expansion over a list of files.";
 const char kProcessFileTemplate_Help[] =
     "process_file_template: Do template expansion over a list of files.\n"
     "\n"
@@ -17,6 +19,11 @@ const char kProcessFileTemplate_Help[] =
     "  process_file_template applies a template list to a source file list,\n"
     "  returning the result of applying each template to each source. This is\n"
     "  typically used for computing output file names from input files.\n"
+    "\n"
+    "  In most cases, get_target_outputs() will give the same result with\n"
+    "  shorter, more maintainable code. This function should only be used\n"
+    "  when that function can't be used (like there's no target or the target\n"
+    "  is defined in another build file).\n"
     "\n"
     "Arguments:\n"
     "\n"

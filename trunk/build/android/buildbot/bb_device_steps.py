@@ -7,7 +7,6 @@ import collections
 import glob
 import hashlib
 import json
-import multiprocessing
 import os
 import random
 import re
@@ -21,19 +20,17 @@ sys.path.append(os.path.join(os.path.dirname(__file__), '..'))
 import provision_devices
 from pylib import android_commands
 from pylib import constants
+from pylib.device import device_utils
 from pylib.gtest import gtest_config
 
 CHROME_SRC_DIR = bb_utils.CHROME_SRC
 DIR_BUILD_ROOT = os.path.dirname(CHROME_SRC_DIR)
 CHROME_OUT_DIR = bb_utils.CHROME_OUT_DIR
-sys.path.append(os.path.join(
-    CHROME_SRC_DIR, 'third_party', 'android_testrunner'))
-import errors
-
 
 SLAVE_SCRIPTS_DIR = os.path.join(bb_utils.BB_BUILD_DIR, 'scripts', 'slave')
 LOGCAT_DIR = os.path.join(bb_utils.CHROME_OUT_DIR, 'logcat')
 GS_URL = 'https://storage.googleapis.com'
+GS_AUTH_URL = 'https://storage.cloud.google.com'
 
 # Describes an instrumation test suite:
 #   test: Name of test we're running.
@@ -77,8 +74,9 @@ INSTRUMENTATION_TESTS = dict((suite.name, suite) for suite in [
       'webview:android_webview/test/data/device_files'),
     ])
 
-VALID_TESTS = set(['chromedriver', 'gpu', 'ui', 'unit', 'webkit',
-                   'webkit_layout', 'webrtc_chromium', 'webrtc_native'])
+VALID_TESTS = set(['chromedriver', 'gpu', 'mojo', 'telemetry_perf_unittests',
+                   'ui', 'unit', 'webkit', 'webkit_layout', 'webrtc_chromium',
+                   'webrtc_native'])
 
 RunCmd = bb_utils.RunCmd
 
@@ -96,37 +94,6 @@ def _GetRevision(options):
   if not revision:
     revision = options.build_properties.get('revision', 'testing')
   return revision
-
-
-# multiprocessing map_async requires a top-level function for pickle library.
-def RebootDeviceSafe(device):
-  """Reboot a device, wait for it to start, and squelch timeout exceptions."""
-  try:
-    android_commands.AndroidCommands(device).Reboot(True)
-  except errors.DeviceUnresponsiveError as e:
-    return e
-
-
-def RebootDevices():
-  """Reboot all attached and online devices."""
-  # Early return here to avoid presubmit dependence on adb,
-  # which might not exist in this checkout.
-  if bb_utils.TESTING:
-    return
-  devices = android_commands.GetAttachedDevices(emulator=False)
-  print 'Rebooting: %s' % devices
-  if devices:
-    pool = multiprocessing.Pool(len(devices))
-    results = pool.map_async(RebootDeviceSafe, devices).get(99999)
-
-    for device, result in zip(devices, results):
-      if result:
-        print '%s failed to startup.' % device
-
-    if any(results):
-      bb_annotations.PrintWarning()
-    else:
-      print 'Reboots complete.'
 
 
 def RunTestSuites(options, suites):
@@ -164,6 +131,35 @@ def RunChromeDriverTests(options):
           '--update-log'])
 
 
+def RunTelemetryPerfUnitTests(options):
+  """Runs the telemetry perf unit tests.
+
+  Args:
+    options: options object.
+  """
+  InstallApk(options, INSTRUMENTATION_TESTS['ChromeShell'], False)
+  args = ['--browser', 'android-chromium-testshell']
+  devices = android_commands.GetAttachedDevices()
+  if devices:
+    args = args + ['--device', devices[0]]
+  bb_annotations.PrintNamedStep('telemetry_perf_unittests')
+  RunCmd(['tools/perf/run_tests'] + args)
+
+
+def RunMojoTests(options):
+  """Runs the mojo unit tests.
+
+  Args:
+    options: options object.
+  """
+  test = I('MojoTest',
+           None,
+           'org.chromium.mojo.tests',
+           'MojoTest',
+           None)
+  RunInstrumentationSuite(options, test)
+
+
 def InstallApk(options, test, print_step=False):
   """Install an apk to all phones.
 
@@ -195,9 +191,11 @@ def RunInstrumentationSuite(options, test, flunk_on_failure=True,
   """
   bb_annotations.PrintNamedStep('%s_instrumentation_tests' % test.name.lower())
 
-  InstallApk(options, test)
-  args = ['--test-apk', test.test_apk, '--test_data', test.test_data,
-          '--verbose']
+  if test.apk:
+    InstallApk(options, test)
+  args = ['--test-apk', test.test_apk, '--verbose']
+  if test.test_data:
+    args.extend(['--test_data', test.test_data])
   if options.target == 'Release':
     args.append('--release')
   if options.asan:
@@ -398,12 +396,8 @@ def ProvisionDevices(options):
 
   if not bb_utils.TESTING:
     # Restart adb to work around bugs, sleep to wait for usb discovery.
-    adb = android_commands.AndroidCommands()
-    adb.RestartAdbServer()
+    device_utils.RestartServer()
     RunCmd(['sleep', '1'])
-
-  if not options.no_reboot:
-    RebootDevices()
   provision_cmd = ['build/android/provision_devices.py', '-t', options.target]
   if options.auto_reconnect:
     provision_cmd.append('--auto-reconnect')
@@ -481,6 +475,8 @@ def GetTestStepCmds():
   return [
       ('chromedriver', RunChromeDriverTests),
       ('gpu', RunGPUTests),
+      ('mojo', RunMojoTests),
+      ('telemetry_perf_unittests', RunTelemetryPerfUnitTests),
       ('unit', RunUnitTests),
       ('ui', RunInstrumentationTests),
       ('webkit', RunWebkitTests),
@@ -489,6 +485,15 @@ def GetTestStepCmds():
       ('webrtc_native', RunWebRTCNativeTests),
   ]
 
+
+def MakeGSPath(options, gs_base_dir):
+  revision = _GetRevision(options)
+  bot_id = options.build_properties.get('buildername', 'testing')
+  randhash = hashlib.sha1(str(random.random())).hexdigest()
+  gs_path = '%s/%s/%s/%s' % (gs_base_dir, bot_id, revision, randhash)
+  # remove double slashes, happens with blank revisions and confuses gsutil
+  gs_path = re.sub('/+', '/', gs_path)
+  return gs_path
 
 def UploadHTML(options, gs_base_dir, dir_to_upload, link_text,
                link_rel_path='index.html', gs_url=GS_URL):
@@ -503,10 +508,7 @@ def UploadHTML(options, gs_base_dir, dir_to_upload, link_text,
     link_rel_path: Link path relative to |dir_to_upload|.
     gs_url: Google storage URL.
   """
-  revision = _GetRevision(options)
-  bot_id = options.build_properties.get('buildername', 'testing')
-  randhash = hashlib.sha1(str(random.random())).hexdigest()
-  gs_path = '%s/%s/%s/%s' % (gs_base_dir, bot_id, revision, randhash)
+  gs_path = MakeGSPath(options, gs_base_dir)
   RunCmd([bb_utils.GSUTIL_PATH, 'cp', '-R', dir_to_upload, 'gs://%s' % gs_path])
   bb_annotations.PrintLink(link_text,
                            '%s/%s/%s' % (gs_url, gs_path, link_rel_path))
@@ -528,10 +530,13 @@ def GenerateJavaCoverageReport(options):
 def LogcatDump(options):
   # Print logcat, kill logcat monitor
   bb_annotations.PrintNamedStep('logcat_dump')
-  logcat_file = os.path.join(CHROME_OUT_DIR, options.target, 'full_log')
+  logcat_file = os.path.join(CHROME_OUT_DIR, options.target, 'full_log.txt')
   RunCmd([SrcPath('build' , 'android', 'adb_logcat_printer.py'),
           '--output-path', logcat_file, LOGCAT_DIR])
-  RunCmd(['cat', logcat_file])
+  gs_path = MakeGSPath(options, 'chromium-android/logcat_dumps')
+  RunCmd([bb_utils.GSUTIL_PATH, 'cp', '-z', 'txt', logcat_file,
+          'gs://%s' % gs_path])
+  bb_annotations.PrintLink('logcat dump', '%s/%s' % (GS_AUTH_URL, gs_path))
 
 
 def RunStackToolSteps(options):
@@ -540,7 +545,7 @@ def RunStackToolSteps(options):
   Stack tool is run for logcat dump, optionally for ASAN.
   """
   bb_annotations.PrintNamedStep('Run stack tool with logcat dump')
-  logcat_file = os.path.join(CHROME_OUT_DIR, options.target, 'full_log')
+  logcat_file = os.path.join(CHROME_OUT_DIR, options.target, 'full_log.txt')
   RunCmd([os.path.join(CHROME_SRC_DIR, 'third_party', 'android_platform',
           'development', 'scripts', 'stack'),
           '--more-info', logcat_file])
