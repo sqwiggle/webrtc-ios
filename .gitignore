@@ -1,3 +1,5 @@
 *.DS_Store
 *.a
 *.o
+*.stamp
+*.ninja_log
