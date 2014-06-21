@@ -100,65 +100,65 @@ rule copy
   command = ln -f $in $out 2>/dev/null || (rm -rf $out && cp -af $in $out)
   description = COPY $in $out
 
-subninja obj.host/third_party/libvpx/libvpx_obj_int_extract.ninja
-subninja obj/webrtc/modules/PCM16B.ninja
-subninja obj/webrtc/webrtc_common.ninja
-subninja obj/testing/gtest_prod.ninja
 subninja obj/third_party/libyuv/libyuv_neon.ninja
-subninja obj/third_party/openmax_dl/dl/openmax_dl.ninja
+subninja obj/webrtc/modules/PCM16B.ninja
+subninja obj/testing/gtest_prod.ninja
+subninja obj.host/testing/gtest_prod.ninja
+subninja obj/webrtc/modules/G711.ninja
 subninja obj/third_party/opus/opus.ninja
 subninja obj/third_party/expat/expat.ninja
 subninja obj.host/testing/iossim/third_party/class-dump/class-dump.ninja
-subninja obj.host/testing/iossim/iossim.ninja
-subninja obj/webrtc/common_audio/common_audio_neon.ninja
+subninja obj/webrtc/modules/g711_test.ninja
+subninja obj/third_party/nss/nspr.ninja
 subninja obj/third_party/gflags/gflags.ninja
+subninja obj/third_party/libyuv/libyuv.ninja
 subninja obj/webrtc/tools/command_line_parser.ninja
-subninja obj/webrtc/modules/remote_bitrate_estimator/rbe_components.ninja
+subninja obj.host/third_party/libvpx/libvpx_obj_int_extract.ninja
+subninja obj/third_party/libvpx/libvpx_asm_offsets_vp8.ninja
 subninja obj/webrtc/test/buildbot_tests_scripts.ninja
 subninja obj/third_party/libvpx/libvpx_asm_offsets_vpx_scale.ninja
-subninja obj/third_party/nss/nspr.ninja
 subninja obj/third_party/icu/icudata.ninja
-subninja obj/third_party/libyuv/libyuv.ninja
-subninja obj/third_party/libvpx/libvpx_asm_offsets_vp8.ninja
+subninja obj.host/testing/iossim/iossim.ninja
+subninja obj/webrtc/modules/remote_bitrate_estimator/rbe_components.ninja
 subninja obj/webrtc/tools/video_quality_analysis.ninja
 subninja obj/testing/gtest.ninja
+subninja obj/webrtc/webrtc_common.ninja
 subninja obj.host/third_party/icu/icudata.ninja
-subninja obj/webrtc/modules/webrtc_opus.ninja
-subninja obj/webrtc/modules/G711.ninja
+subninja obj/third_party/libvpx/gen_asm_offsets_vpx_scale.ninja
+subninja obj/third_party/openmax_dl/dl/openmax_dl.ninja
 subninja obj/third_party/jsoncpp/jsoncpp.ninja
-subninja obj/webrtc/tools/frame_analyzer.ninja
+subninja obj/webrtc/common_audio/common_audio_neon.ninja
 subninja obj/webrtc/modules/G722.ninja
 subninja obj/third_party/libsrtp/libsrtp.ninja
-subninja obj/third_party/libsrtp/replay_driver.ninja
 subninja obj/third_party/libsrtp/srtp_test_cipher_driver.ninja
-subninja obj/webrtc/modules/audio_processing/lib_core_neon_offsets.ninja
-subninja obj.host/testing/gtest_prod.ninja
-subninja obj/third_party/libsrtp/srtp_test_stat_driver.ninja
-subninja obj/third_party/libsrtp/srtp_test_sha1_driver.ninja
-subninja obj/webrtc/modules/audio_processing/gen_nsx_core_neon_offsets_h.ninja
-subninja obj/webrtc/tools/rgba_to_i420_converter.ninja
 subninja obj/third_party/icu/icuuc.ninja
-subninja obj/third_party/libsrtp/srtp_test_kernel_driver.ninja
-subninja obj/third_party/libsrtp/rdbx_driver.ninja
-subninja obj/third_party/opus/opus_demo.ninja
-subninja obj/webrtc/modules/G722Test.ninja
+subninja obj/webrtc/modules/audio_processing/lib_core_neon_offsets.ninja
 subninja obj/third_party/libsrtp/srtp_test_env.ninja
 subninja obj/third_party/libsrtp/srtp_test_datatypes_driver.ninja
-subninja obj/third_party/libsrtp/srtp_test_aes_calc.ninja
+subninja obj/webrtc/tools/rgba_to_i420_converter.ninja
+subninja obj/third_party/libsrtp/srtp_test_stat_driver.ninja
+subninja obj/third_party/opus/opus_demo.ninja
+subninja obj/third_party/libsrtp/rdbx_driver.ninja
+subninja obj/webrtc/modules/audio_processing/gen_nsx_core_neon_offsets_h.ninja
+subninja obj/webrtc/modules/G722Test.ninja
 subninja obj/webrtc/tools/psnr_ssim_analyzer.ninja
+subninja obj/webrtc/modules/webrtc_opus.ninja
+subninja obj/third_party/libsrtp/srtp_driver.ninja
+subninja obj/third_party/libsrtp/replay_driver.ninja
 subninja obj/third_party/libsrtp/roc_driver.ninja
 subninja obj/webrtc/modules/RTPjitter.ninja
 subninja obj/third_party/icu/icui18n.ninja
 subninja obj/third_party/libvpx/gen_asm_offsets_vp8.ninja
-subninja obj/third_party/libvpx/gen_asm_offsets_vpx_scale.ninja
+subninja obj.host/third_party/icu/icuuc.ninja
 subninja obj/third_party/libsrtp/rtpw.ninja
 subninja obj/testing/gmock.ninja
-subninja obj/webrtc/modules/g711_test.ninja
-subninja obj.host/third_party/icu/icuuc.ninja
-subninja obj/third_party/libsrtp/srtp_test_rand_gen.ninja
+subninja obj/third_party/libsrtp/srtp_test_kernel_driver.ninja
+subninja obj/third_party/libsrtp/srtp_test_aes_calc.ninja
+subninja obj/webrtc/tools/frame_analyzer.ninja
 subninja obj/testing/gtest_main.ninja
+subninja obj/third_party/libsrtp/srtp_test_rand_gen.ninja
 subninja obj/webrtc/modules/audio_processing/gen_aecm_core_neon_offsets_h.ninja
-subninja obj/third_party/libsrtp/srtp_driver.ninja
+subninja obj/third_party/libsrtp/srtp_test_sha1_driver.ninja
 subninja obj/testing/gmock_main.ninja
 subninja obj.host/third_party/icu/icui18n.ninja
 subninja obj/third_party/libsrtp/srtp_runtest.ninja
@@ -173,104 +173,104 @@ subninja obj/talk/libjingle.ninja
 subninja obj/talk/peerconnection_server.ninja
 subninja obj/talk/gunit.ninja
 subninja obj/webrtc/base/webrtc_base.ninja
-subninja obj/webrtc/base/webrtc_base_tests_utils.ninja
+subninja obj/talk/libjingle_unittest_main.ninja
 subninja obj/webrtc/system_wrappers/source/system_wrappers.ninja
+subninja obj/webrtc/modules/webrtc_i420.ninja
+subninja obj/webrtc/test/field_trial.ninja
 subninja obj/talk/libjingle_sound.ninja
 subninja obj/webrtc/modules/paced_sender.ninja
 subninja obj/webrtc/modules/bitrate_controller.ninja
+subninja obj/talk/libjingle_unittest.ninja
+subninja obj/webrtc/base/webrtc_base_tests_utils.ninja
 subninja obj/webrtc/system_wrappers/source/field_trial_default.ninja
-subninja obj/webrtc/base/webrtc_base_tests.ninja
-subninja obj/webrtc/common_audio/common_audio.ninja
-subninja obj/talk/libjingle_unittest_main.ninja
-subninja obj/webrtc/modules/desktop_capture.ninja
 subninja obj/webrtc/test/test_support.ninja
-subninja obj/webrtc/modules/iLBC.ninja
-subninja obj/webrtc/test/channel_transport.ninja
-subninja obj/webrtc/common_video/common_video.ninja
-subninja obj/webrtc/modules/remote_bitrate_estimator.ninja
-subninja obj/webrtc/modules/isac_neon.ninja
-subninja obj/webrtc/modules/video_coding/utility/video_coding_utility.ninja
-subninja obj/webrtc/modules/webrtc_i420.ninja
-subninja obj/webrtc/modules/rtp_rtcp.ninja
+subninja obj/webrtc/test/test_main.ninja
+subninja obj/webrtc/modules/video_codecs_test_framework.ninja
+subninja obj/webrtc/modules/desktop_capture.ninja
+subninja obj/webrtc/test/test_support_main.ninja
 subninja obj/webrtc/modules/media_file.ninja
+subninja obj/webrtc/test/channel_transport.ninja
+subninja obj/webrtc/common_audio/common_audio.ninja
+subninja obj/webrtc/common_video/common_video.ninja
+subninja obj/webrtc/modules/audio_processing_neon.ninja
+subninja obj/webrtc/modules/remote_bitrate_estimator.ninja
+subninja obj/webrtc/base/webrtc_base_tests.ninja
+subninja obj/webrtc/modules/video_coding/utility/video_coding_utility.ninja
 subninja obj/webrtc/modules/CNG.ninja
 subninja obj/talk/libjingle_sound_unittest.ninja
-subninja obj/webrtc/test/field_trial.ninja
-subninja obj/webrtc/modules/video_codecs_test_framework.ninja
-subninja obj/webrtc/modules/iLBCtest.ninja
 subninja obj/webrtc/test/frame_generator.ninja
-subninja obj/talk/libjingle_unittest.ninja
-subninja obj/webrtc/modules/audio_processing_neon.ninja
-subninja obj/webrtc/modules/iSAC.ninja
-subninja obj/webrtc/modules/audio_processing.ninja
-subninja obj/webrtc/test/metrics.ninja
-subninja obj/webrtc/modules/neteq_unittest_tools.ninja
-subninja obj/webrtc/modules/iSACtest.ninja
-subninja obj/webrtc/modules/iSACAPITest.ninja
-subninja obj/webrtc/test/test_main.ninja
-subninja obj/webrtc/modules/iSACFix.ninja
-subninja obj/webrtc/modules/iSACFixtest.ninja
-subninja obj/webrtc/tools/frame_editing_lib.ninja
-subninja obj/webrtc/test/test_support_main.ninja
-subninja obj/webrtc/modules/bwe_tools_util.ninja
-subninja obj/webrtc/modules/video_coding/codecs/vp8/webrtc_vp8.ninja
-subninja obj/webrtc/modules/webrtc_video_coding.ninja
-subninja obj/webrtc/modules/iSACSwitchSampRateTest.ninja
-subninja obj/webrtc/test/rtcp_packet_parser.ninja
-subninja obj/webrtc/modules/video_coding/codecs/vp8/vp8_coder.ninja
-subninja obj/webrtc/modules/rtp_analyze.ninja
-subninja obj/webrtc/tools/tools_unittests.ninja
-subninja obj/webrtc/modules/bwe_rtp_play.ninja
-subninja obj/webrtc/modules/test_framework.ninja
-subninja obj/webrtc/modules/neteq_test_tools.ninja
-subninja obj/webrtc/tools/frame_editor.ninja
-subninja obj/webrtc/modules/test_packet_masks_metrics.ninja
-subninja obj/webrtc/modules/bwe_rtp_to_text.ninja
-subninja obj/webrtc/modules/webrtc_opus_fec_test.ninja
-subninja obj/webrtc/modules/RTPchange.ninja
-subninja obj/webrtc/modules/RTPencode.ninja
-subninja obj/webrtc/test/test_support_unittests.ninja
-subninja obj/webrtc/modules/audio_codec_speed_tests.ninja
-subninja obj/webrtc/modules/audio_decoder_unittests.ninja
-subninja obj/webrtc/modules/neteq.ninja
-subninja obj/webrtc/common_audio/common_audio_unittests.ninja
-subninja obj/webrtc/common_video/common_video_unittests.ninja
+subninja obj/webrtc/modules/iLBC.ninja
 subninja obj/webrtc/system_wrappers/source/system_wrappers_unittests.ninja
-subninja obj/webrtc/modules/RTPtimeshift.ninja
-subninja obj/webrtc/modules/audio_coding_module.ninja
-subninja obj/webrtc/modules/video_quality_measurement.ninja
-subninja obj/webrtc/modules/neteq_test_support.ninja
-subninja obj/webrtc/modules/neteq_rtpplay.ninja
+subninja obj/webrtc/common_video/common_video_unittests.ninja
+subninja obj/webrtc/modules/iSAC.ninja
+subninja obj/webrtc/test/metrics.ninja
+subninja obj/webrtc/modules/audio_processing.ninja
+subninja obj/webrtc/modules/video_coding/codecs/vp8/webrtc_vp8.ninja
+subninja obj/webrtc/test/test_support_unittests.ninja
+subninja obj/webrtc/modules/isac_neon.ninja
+subninja obj/webrtc/modules/iSACAPITest.ninja
+subninja obj/webrtc/modules/webrtc_opus_fec_test.ninja
+subninja obj/webrtc/modules/iSACFix.ninja
+subninja obj/webrtc/modules/rtp_rtcp.ninja
+subninja obj/webrtc/common_audio/common_audio_unittests.ninja
+subninja obj/webrtc/tools/frame_editing_lib.ninja
+subninja obj/webrtc/modules/bwe_tools_util.ninja
+subninja obj/webrtc/modules/iSACFixtest.ninja
+subninja obj/webrtc/modules/audio_decoder_unittests.ninja
+subninja obj/webrtc/modules/iSACSwitchSampRateTest.ninja
+subninja obj/webrtc/modules/neteq_unittest_tools.ninja
+subninja obj/webrtc/modules/webrtc_video_coding.ninja
+subninja obj/webrtc/modules/neteq_test_tools.ninja
+subninja obj/webrtc/modules/iSACtest.ninja
+subninja obj/webrtc/modules/rtp_analyze.ninja
+subninja obj/webrtc/modules/bwe_rtp_to_text.ninja
+subninja obj/webrtc/modules/iLBCtest.ninja
+subninja obj/webrtc/modules/audio_codec_speed_tests.ninja
+subninja obj/webrtc/tools/frame_editor.ninja
+subninja obj/webrtc/modules/video_coding/codecs/vp8/vp8_coder.ninja
+subninja obj/webrtc/modules/test_framework.ninja
+subninja obj/webrtc/test/rtcp_packet_parser.ninja
 subninja obj/webrtc/modules/RTPcat.ninja
-subninja obj/webrtc/modules/delay_test.ninja
+subninja obj/webrtc/tools/tools_unittests.ninja
+subninja obj/webrtc/modules/test_packet_masks_metrics.ninja
+subninja obj/webrtc/modules/neteq.ninja
+subninja obj/webrtc/modules/bwe_rtp_play.ninja
 subninja obj/webrtc/modules/rtp_to_text.ninja
-subninja obj/webrtc/modules/neteq_opus_fec_quality_test.ninja
-subninja obj/webrtc/modules/webrtc_utility.ninja
-subninja obj/webrtc/modules/insert_packet_with_timing.ninja
-subninja obj/webrtc/modules/video_processing.ninja
+subninja obj/webrtc/modules/RTPencode.ninja
+subninja obj/webrtc/modules/RTPtimeshift.ninja
+subninja obj/webrtc/modules/neteq_test_support.ninja
+subninja obj/webrtc/modules/video_quality_measurement.ninja
+subninja obj/webrtc/modules/RTPchange.ninja
 subninja obj/webrtc/modules/audio_classifier_test.ninja
+subninja obj/webrtc/modules/neteq_rtpplay.ninja
+subninja obj/webrtc/modules/neteq_opus_fec_quality_test.ninja
+subninja obj/webrtc/modules/audio_coding_module.ninja
 subninja obj/webrtc/modules/neteq_speed_test.ninja
+subninja obj/webrtc/modules/webrtc_utility.ninja
+subninja obj/webrtc/modules/video_render_module.ninja
+subninja obj/webrtc/modules/delay_test.ninja
+subninja obj/webrtc/modules/audio_conference_mixer.ninja
+subninja obj/webrtc/modules/insert_packet_with_timing.ninja
 subninja obj/webrtc/modules/video_capture_module.ninja
 subninja obj/webrtc/test/webrtc_test_renderer.ninja
-subninja obj/webrtc/modules/video_coding_test.ninja
-subninja obj/webrtc/modules/audio_device.ninja
-subninja obj/webrtc/modules/video_render_module.ninja
-subninja obj/webrtc/modules/video_capture_tests.ninja
-subninja obj/webrtc/test/webrtc_test_common.ninja
-subninja obj/webrtc/modules/audio_conference_mixer.ninja
-subninja obj/webrtc/modules/modules_unittests.ninja
-subninja obj/webrtc/modules/modules_tests.ninja
+subninja obj/webrtc/modules/video_processing.ninja
 subninja obj/webrtc/modules/video_render_tests.ninja
-subninja obj/webrtc/modules/audio_device_tests.ninja
-subninja obj/webrtc/test/webrtc_test_common_unittests.ninja
-subninja obj/webrtc/modules/audio_device_test_func.ninja
+subninja obj/webrtc/modules/audio_device.ninja
+subninja obj/webrtc/modules/modules_tests.ninja
+subninja obj/webrtc/modules/video_capture_tests.ninja
+subninja obj/webrtc/modules/video_coding_test.ninja
+subninja obj/webrtc/modules/modules_unittests.ninja
+subninja obj/webrtc/test/webrtc_test_common.ninja
 subninja obj/webrtc/voice_engine/voice_engine.ninja
-subninja obj/webrtc/voice_engine/voe_cmd_test.ninja
+subninja obj/webrtc/modules/audio_device_test_func.ninja
 subninja obj/webrtc/voice_engine/voe_auto_test.ninja
+subninja obj/webrtc/modules/audio_device_tests.ninja
+subninja obj/webrtc/voice_engine/voe_cmd_test.ninja
 subninja obj/webrtc/video_engine/video_engine_core.ninja
-subninja obj/webrtc/tools/audio_e2e_harness.ninja
-subninja obj/webrtc/voice_engine/voice_engine_unittests.ninja
 subninja obj/webrtc/tools/force_mic_volume_max.ninja
+subninja obj/webrtc/voice_engine/voice_engine_unittests.ninja
+subninja obj/webrtc/tools/audio_e2e_harness.ninja
+subninja obj/webrtc/test/webrtc_test_common_unittests.ninja
 subninja obj/webrtc/video_engine/libvietest.ninja
 subninja obj/webrtc/webrtc.ninja
 subninja obj/webrtc/video_engine/vie_auto_test.ninja
@@ -278,22 +278,22 @@ subninja obj/webrtc/video_engine/video_engine_core_unittests.ninja
 subninja obj/webrtc/video_loopback.ninja
 subninja obj/webrtc/webrtc_perf_tests.ninja
 subninja obj/talk/libjingle_media.ninja
+subninja obj/talk/libjingle_p2p.ninja
+subninja obj/talk/libjingle_peerconnection.ninja
+subninja obj/talk/libjingle_media_unittest.ninja
 subninja obj/webrtc/video_engine_tests.ninja
 subninja obj/webrtc/webrtc_tests.ninja
-subninja obj/talk/libjingle_media_unittest.ninja
-subninja obj/webrtc/webrtc_all.ninja
-subninja obj/talk/libjingle_p2p.ninja
-subninja obj/talk/libjingle_p2p_unittest.ninja
-subninja obj/talk/stunserver.ninja
 subninja obj/talk/relayserver.ninja
-subninja obj/talk/libjingle_peerconnection.ninja
-subninja obj/talk/libjingle_peerconnection_objc.ninja
-subninja obj/talk/libjingle_peerconnection_unittest.ninja
+subninja obj/webrtc/webrtc_all.ninja
 subninja obj/talk/libjingle_xmpphelp.ninja
 subninja obj/talk/login.ninja
+subninja obj/talk/libjingle_p2p_unittest.ninja
+subninja obj/talk/stunserver.ninja
 subninja obj/talk/turnserver.ninja
-subninja obj/talk/AppRTCDemo.ninja
+subninja obj/talk/libjingle_peerconnection_objc.ninja
+subninja obj/talk/libjingle_peerconnection_unittest.ninja
 subninja obj/talk/libjingle_peerconnection_objc_test.ninja
+subninja obj/talk/AppRTCDemo.ninja
 subninja obj/All.ninja
 
 # Short names for targets.
@@ -314,7 +314,7 @@ build webrtc_opus: phony libwebrtc_opus.a
 build webrtc_tests: phony obj/webrtc/webrtc_tests.actions_depends.stamp
 build rbe_components: phony librbe_components.a
 build RTPjitter: phony RTPjitter.app
-build usrsctplib: phony libusrsctplib.a
+build webrtc_opus_fec_test: phony webrtc_opus_fec_test.app
 build RTPcat: phony RTPcat.app
 build webrtc_test_common_unittests: phony webrtc_test_common_unittests.app
 build gtest_main: phony libgtest_main.a
@@ -423,7 +423,7 @@ build delay_test: phony delay_test.app
 build neteq_test_tools: phony libneteq_test_tools.a
 build video_capture_tests: phony video_capture_tests.app
 build system_wrappers: phony libsystem_wrappers.a
-build webrtc_opus_fec_test: phony webrtc_opus_fec_test.app
+build usrsctplib: phony libusrsctplib.a
 build iSACFix: phony libiSACFix.a
 build RTPtimeshift: phony RTPtimeshift.app
 build metrics: phony libmetrics.a
@@ -446,42 +446,42 @@ build command_line_parser: phony libcommand_line_parser.a
 build video_processing: phony libvideo_processing.a
 
 build all: phony libgmock.a libgflags.a rgba_to_i420_converter libframe_editing_lib.a class-dump $
-    libjingle_media_unittest libcommon_audio_neon.a iSACFixtest librbe_components.a libmetrics.a libjingle_media.a $
+    libjingle_peerconnection.a libcommon_audio_neon.a iSACFixtest librbe_components.a libmetrics.a libjingle_media.a $
     gen/audio_processing/asm_offsets/lib_core_neon_offsets.a libopenmax_dl.a frame_analyzer libG722.a $
     libpaced_sender.a turnserver peerconnection_server libvideo_codecs_test_framework.a libwebrtc_test_common.a $
-    libgtest.a libcommand_line_parser.a test_packet_masks_metrics.app libaudio_processing_neon.a libbwe_tools_util.a $
-    test_support_unittests.app libcrnssckbi.a libneteq_test_support.a delay_test.app psnr_ssim_analyzer $
-    gen/third_party/libvpx/libvpx_asm_offsets_vpx_scale.a force_mic_volume_max modules_unittests.app libiSACFix.a $
-    libneteq_unittest_tools.a libvietest.a libchannel_transport.a libjingle_p2p.a libvideo_render_module.a $
-    libbitrate_controller.a libvideo_capture_module.a iSACAPITest libPCM16B.a tools_unittests.app libopus.a $
-    bwe_rtp_to_text libwebrtc_base_tests_utils.a libsystem_wrappers.a video_loopback.app audio_decoder_unittests.app $
-    libaudio_device.a vp8_coder.app libaudio_conference_mixer.a webrtc_opus_fec_test.app libjsoncpp.a $
-    audio_device_test_func.app vie_auto_test.app iLBCtest libcrnspr.a rtp_analyze.app libjingle_sound.a $
-    libsqlite_regexp.a voe_cmd_test.app libiLBC.a libaudio_coding_module.a libicudata.a libtest_support.a $
-    RTPchange.app rtp_to_text audio_codec_speed_tests.app libwebrtc_opus.a libjingle_xmpphelp.a RTPencode $
-    libdesktop_capture.a libcommon_video.a libjingle_unittest.app libcommon_audio.a $
+    libgtest.a libcommand_line_parser.a test_packet_masks_metrics.app libneteq_test_support.a $
+    libaudio_processing_neon.a libbwe_tools_util.a test_support_unittests.app libcrnssckbi.a rtp_to_text $
+    delay_test.app psnr_ssim_analyzer gen/third_party/libvpx/libvpx_asm_offsets_vpx_scale.a force_mic_volume_max $
+    modules_unittests.app libiSACFix.a libneteq_unittest_tools.a libvietest.a libchannel_transport.a libjingle_p2p.a $
+    libvideo_render_module.a libjingle_media_unittest libbitrate_controller.a libvideo_processing.a iSACAPITest $
+    libPCM16B.a libneteq_test_tools.a libopus.a bwe_rtp_to_text libwebrtc_base_tests_utils.a libsystem_wrappers.a $
+    video_loopback.app audio_decoder_unittests.app libaudio_device.a vp8_coder.app libaudio_conference_mixer.a $
+    webrtc_opus_fec_test.app libjsoncpp.a audio_device_test_func.app vie_auto_test.app iLBCtest libcrnspr.a $
+    rtp_analyze.app libjingle_sound.a libsqlite_regexp.a voe_cmd_test.app libiLBC.a libaudio_coding_module.a $
+    libicudata.a libtest_support.a RTPchange.app audio_codec_speed_tests.app libwebrtc_opus.a libjingle_xmpphelp.a $
+    RTPencode libdesktop_capture.a libcommon_video.a libjingle_unittest.app libcommon_audio.a $
     libjingle_peerconnection_objc_test.app libframe_generator.a common_video_unittests.app libcrnss.a $
     libfield_trial.a iossim libnss_static.a libvpx.a webrtc_test_common_unittests.app libwebrtc.a libjingle.a $
     libvpx_obj_int_extract video_capture_tests.app libG711.a libfield_trial_default.a video_render_tests $
     obj/webrtc/webrtc_tests.actions_depends.stamp librtp_rtcp.a libgunit.a libremote_bitrate_estimator.a $
-    libneteq_test_tools.a libwebrtc_test_renderer.a $
+    tools_unittests.app libwebrtc_test_renderer.a $
     obj/webrtc/modules/audio_processing/gen_nsx_core_neon_offsets_h.actions_rules_copies.stamp iSACtest $
     modules_tests.app libwebrtc_base.a neteq_speed_test libwebrtc_common.a libjingle_peerconnection_unittest.app $
     audio_device_tests.app libvideo_coding_utility.a libiSAC.a audio_e2e_harness.app frame_editor g711_test $
     insert_packet_with_timing.app librtcp_packet_parser.a libtest_support_main.a libneteq.a webrtc_perf_tests.app $
     libwebrtc_utility.a stunserver iSACSwitchSampRateTest $
     obj/webrtc/modules/audio_processing/gen_aecm_core_neon_offsets_h.actions_rules_copies.stamp AppRTCDemo.app $
-    libwebrtc_i420.a libvideo_processing.a libyuv.a $
+    libwebrtc_i420.a libvideo_capture_module.a libyuv.a $
     obj/third_party/libvpx/gen_asm_offsets_vpx_scale.actions_rules_copies.stamp $
     obj/third_party/libvpx/gen_asm_offsets_vp8.actions_rules_copies.stamp libjingle_sound_unittest $
     libwebrtc_video_coding.a libcrssl.a libmedia_file.a webrtc_base_tests.app libCNG.a common_audio_unittests.app $
-    system_wrappers_unittests.app libexpat.a video_quality_measurement RTPcat.app audio_classifier_test $
-    video_engine_core_unittests.app RTPjitter.app libjingle_unittest_main.a libsrtp.a voice_engine_unittests.app $
-    voe_auto_test.app libjingle_p2p_unittest libicui18n.a gen/third_party/libvpx/libvpx_asm_offsets_vp8.a $
+    system_wrappers_unittests.app libexpat.a RTPcat.app audio_classifier_test video_engine_core_unittests.app $
+    RTPjitter.app libjingle_unittest_main.a libsrtp.a voice_engine_unittests.app voe_auto_test.app $
+    libjingle_p2p_unittest libicui18n.a gen/third_party/libvpx/libvpx_asm_offsets_vp8.a $
     obj/webrtc/webrtc_all.actions_depends.stamp libisac_neon.a libvoice_engine.a $
     obj/webrtc/test/buildbot_tests_scripts.actions_rules_copies.stamp video_coding_test.app G722Test $
     libaudio_processing.a libyuv_neon.a libicuuc.a neteq_opus_fec_quality_test.app libvideo_engine_core.a $
-    neteq_rtpplay login relayserver libtest_main.a RTPtimeshift.app libjingle_peerconnection.a $
+    neteq_rtpplay login video_quality_measurement relayserver libtest_main.a RTPtimeshift.app $
     libjingle_peerconnection_objc.a libvideo_quality_analysis.a obj/All.actions_depends.stamp bwe_rtp_play $
     video_engine_tests.app libtest_framework.a libwebrtc_vp8.a
 default all

@@ -59,7 +59,7 @@ function buildios() {
 echo "-- building webrtc ios"
 pushd trunk
 # wrios && gclient runhooks && ninja -C out_ios/Debug-iphoneos
-wrios && gclient runhooks --force && ninja -C out_ios/Debug-iphoneos AppRTCDemo
+wrios && gclient runhooks --force && ninja -C out_ios/Release-iphoneos AppRTCDemo
 
 popd
 echo "-- webrtc has been sucessfully built"
@@ -67,7 +67,7 @@ echo "-- webrtc has been sucessfully built"
 
 function launch() {
 echo "-- launching on device"
-ideviceinstaller -i trunk/out_ios/Debug-iphoneos/AppRTCDemo.app
+ideviceinstaller -i trunk/out_ios/Release-iphoneos/AppRTCDemo.app
 echo "-- launch complete"
 }
 
