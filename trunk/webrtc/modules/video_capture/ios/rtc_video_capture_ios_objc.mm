@@ -34,6 +34,7 @@ using namespace webrtc::videocapturemodule;
   AVCaptureConnection* _connection;
   BOOL _captureChanging;  // Guarded by _captureChangingCondition.
   NSCondition* _captureChangingCondition;
+  dispatch_queue_t _sessionQueue;
 }
 
 @synthesize frameRotation = _framRotation;
@@ -45,7 +46,7 @@ using namespace webrtc::videocapturemodule;
     _captureSession = [[AVCaptureSession alloc] init];
     _captureChanging = NO;
     _captureChangingCondition = [[NSCondition alloc] init];
-
+	_sessionQueue = dispatch_queue_create("webrtc video session queue", DISPATCH_QUEUE_SERIAL);
     if (!_captureSession || !_captureChangingCondition) {
       return nil;
     }
@@ -91,8 +92,7 @@ using namespace webrtc::videocapturemodule;
 - (void)directOutputToSelf {
   [[self currentOutput]
       setSampleBufferDelegate:self
-                        queue:dispatch_get_global_queue(
-                                  DISPATCH_QUEUE_PRIORITY_DEFAULT, 0)];
+                        queue:_sessionQueue];
 }
 
 - (void)directOutputToNil {
@@ -166,8 +166,7 @@ using namespace webrtc::videocapturemodule;
   [self directOutputToSelf];
 
   _captureChanging = YES;
-  dispatch_async(
-      dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0),
+  dispatch_async(_sessionQueue,
       ^(void) { [self startCaptureInBackgroundWithOutput:currentOutput]; });
   return YES;
 }
@@ -253,7 +252,7 @@ using namespace webrtc::videocapturemodule;
   }
 
   _captureChanging = YES;
-  dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0),
+  dispatch_async(_sessionQueue,
                  ^(void) { [self stopCaptureInBackground]; });
   return YES;
 }
