@@ -12,18 +12,12 @@ Requirements:
 Installation instructions (Parts taken from Ninjatec's awesome [blog post](http://ninjanetic.com/how-to-get-started-with-webrtc-and-ios-without-wasting-10-hours-of-your-life/)):
 ---------------
 - Install depot tools,unless you already have them.
-	- To install, run the following command in terminal: 
-<br />``` 
-git clone https://chromium.googlesource.com/chromium/tools/depot_tools.git 
-```
-	- Add the following line to your .bash_profile:
-	<br />```
-	export PATH=/a_bunch_of_stuff:/working_directory/depot_tools:$PATH
-	```
-	- Restart your terminal or run the following so changes take effect:
-	<br />``` 
-	source ~/.bash_profile
-	```
+	- To install, run the following command in terminal: <br />
+	``` git clone https://chromium.googlesource.com/chromium/tools/depot_tools.git ```
+	- Add the following line to your .bash_profile:<br /> 
+	``` export PATH=/a_bunch_of_stuff:/working_directory/depot_tools:$PATH ```
+	- Restart your terminal or run the following so changes take effect:<br />
+	``` source ~/.bash_profile ```
 - Clone this repo.
 
 That's it! Simple right?
