@@ -3,3 +3,4 @@
 *.o
 *.stamp
 *.ninja_log
+*.ninja
