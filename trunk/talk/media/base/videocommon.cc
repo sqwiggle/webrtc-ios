@@ -95,7 +95,7 @@ static float FindLowerScale(int width, int height, int target_num_pixels) {
       }
     }
   }
-  return kScaleFactors[best_index];
+  return 1.f / 2.f;
 }
 
 // Computes a scale less to fit in max_pixels while maintaining aspect ratio.
