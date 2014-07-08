@@ -327,36 +327,38 @@ using namespace webrtc::videocapturemodule;
 - (void)captureOutput:(AVCaptureOutput*)captureOutput
     didOutputSampleBuffer:(CMSampleBufferRef)sampleBuffer
            fromConnection:(AVCaptureConnection*)connection {
-  const int kFlags = 0;
-  CVImageBufferRef videoFrame = CMSampleBufferGetImageBuffer(sampleBuffer);
+   dispatch_async(dispatch_get_main_queue(), ^{
+	  const int kFlags = 0;
+	  CVImageBufferRef videoFrame = CMSampleBufferGetImageBuffer(sampleBuffer);
 
-  if (CVPixelBufferLockBaseAddress(videoFrame, kFlags) != kCVReturnSuccess) {
-    return;
-  }
+	  if (CVPixelBufferLockBaseAddress(videoFrame, kFlags) != kCVReturnSuccess) {
+	    return;
+	  }
 
-  const int kYPlaneIndex = 0;
-  const int kUVPlaneIndex = 1;
+	  const int kYPlaneIndex = 0;
+	  const int kUVPlaneIndex = 1;
 
-  uint8_t* baseAddress =
-      (uint8_t*)CVPixelBufferGetBaseAddressOfPlane(videoFrame, kYPlaneIndex);
-  int yPlaneBytesPerRow =
-      CVPixelBufferGetBytesPerRowOfPlane(videoFrame, kYPlaneIndex);
-  int yPlaneHeight = CVPixelBufferGetHeightOfPlane(videoFrame, kYPlaneIndex);
-  int uvPlaneBytesPerRow =
-      CVPixelBufferGetBytesPerRowOfPlane(videoFrame, kUVPlaneIndex);
-  int uvPlaneHeight = CVPixelBufferGetHeightOfPlane(videoFrame, kUVPlaneIndex);
-  int frameSize =
-      yPlaneBytesPerRow * yPlaneHeight + uvPlaneBytesPerRow * uvPlaneHeight;
+	  uint8_t* baseAddress =
+	      (uint8_t*)CVPixelBufferGetBaseAddressOfPlane(videoFrame, kYPlaneIndex);
+	  int yPlaneBytesPerRow =
+	      CVPixelBufferGetBytesPerRowOfPlane(videoFrame, kYPlaneIndex);
+	  int yPlaneHeight = CVPixelBufferGetHeightOfPlane(videoFrame, kYPlaneIndex);
+	  int uvPlaneBytesPerRow =
+	      CVPixelBufferGetBytesPerRowOfPlane(videoFrame, kUVPlaneIndex);
+	  int uvPlaneHeight = CVPixelBufferGetHeightOfPlane(videoFrame, kUVPlaneIndex);
+	  int frameSize =
+	      yPlaneBytesPerRow * yPlaneHeight + uvPlaneBytesPerRow * uvPlaneHeight;
 
-  VideoCaptureCapability tempCaptureCapability;
-  tempCaptureCapability.width = CVPixelBufferGetWidth(videoFrame);
-  tempCaptureCapability.height = CVPixelBufferGetHeight(videoFrame);
-  tempCaptureCapability.maxFPS = _capability.maxFPS;
-  tempCaptureCapability.rawType = kVideoNV12;
+	  VideoCaptureCapability tempCaptureCapability;
+	  tempCaptureCapability.width = CVPixelBufferGetWidth(videoFrame);
+	  tempCaptureCapability.height = CVPixelBufferGetHeight(videoFrame);
+	  tempCaptureCapability.maxFPS = _capability.maxFPS;
+	  tempCaptureCapability.rawType = kVideoNV12;
 
-  _owner->IncomingFrame(baseAddress, frameSize, tempCaptureCapability, 0);
+	  _owner->IncomingFrame(baseAddress, frameSize, tempCaptureCapability, 0);
 
-  CVPixelBufferUnlockBaseAddress(videoFrame, kFlags);
+	  CVPixelBufferUnlockBaseAddress(videoFrame, kFlags);
+	});
 }
 
 - (void)signalCaptureChangeEnd {
