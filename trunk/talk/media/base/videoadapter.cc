@@ -33,7 +33,7 @@
 #include "talk/media/base/videocommon.h"
 #include "talk/media/base/videoframe.h"
 
-#define DEFINED_VIDEO_SCALE 1.0f/2.0f
+#define DEFINED_VIDEO_SCALE 3.0f/8.0f
 
 namespace cricket {
 
