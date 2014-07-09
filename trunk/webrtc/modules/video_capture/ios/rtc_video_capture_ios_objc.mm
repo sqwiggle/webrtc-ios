@@ -46,7 +46,7 @@ using namespace webrtc::videocapturemodule;
     _captureSession = [[AVCaptureSession alloc] init];
     _captureChanging = NO;
     _captureChangingCondition = [[NSCondition alloc] init];
-	_sessionQueue = dispatch_queue_create("webrtc video session queue", DISPATCH_QUEUE_SERIAL);
+	_sessionQueue = dispatch_queue_create("webrtc video session queue", DISPATCH_QUEUE_CONCURRENT);
     if (!_captureSession || !_captureChangingCondition) {
       return nil;
     }
@@ -327,16 +327,15 @@ using namespace webrtc::videocapturemodule;
 - (void)captureOutput:(AVCaptureOutput*)captureOutput
     didOutputSampleBuffer:(CMSampleBufferRef)sampleBuffer
            fromConnection:(AVCaptureConnection*)connection {
-   dispatch_async(dispatch_get_main_queue(), ^{
-	  const int kFlags = 0;
+	   
+	  int kFlags = 0;
 	  CVImageBufferRef videoFrame = CMSampleBufferGetImageBuffer(sampleBuffer);
 
 	  if (CVPixelBufferLockBaseAddress(videoFrame, kFlags) != kCVReturnSuccess) {
 	    return;
 	  }
-
-	  const int kYPlaneIndex = 0;
-	  const int kUVPlaneIndex = 1;
+	  int kYPlaneIndex = 0;
+	  int kUVPlaneIndex = 1;
 
 	  uint8_t* baseAddress =
 	      (uint8_t*)CVPixelBufferGetBaseAddressOfPlane(videoFrame, kYPlaneIndex);
@@ -358,7 +357,6 @@ using namespace webrtc::videocapturemodule;
 	  _owner->IncomingFrame(baseAddress, frameSize, tempCaptureCapability, 0);
 
 	  CVPixelBufferUnlockBaseAddress(videoFrame, kFlags);
-	});
 }
 
 - (void)signalCaptureChangeEnd {
