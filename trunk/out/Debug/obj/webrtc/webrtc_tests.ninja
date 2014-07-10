@@ -1,8 +1,0 @@
-build obj/webrtc/webrtc_tests.actions_depends.stamp: stamp $
-    video_engine_tests video_loopback webrtc_perf_tests
-
-build obj/webrtc/webrtc_tests.compile_depends.stamp: stamp $
-    obj/webrtc/video_engine_tests.compile_depends.stamp $
-    obj/webrtc/video_loopback.compile_depends.stamp $
-    obj/webrtc/webrtc_perf_tests.compile_depends.stamp
-

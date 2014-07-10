@@ -3,3 +3,6 @@
 *.o
 *.stamp
 *.ninja_log
+*.ninja
+
+/trunk/out_ios/Release-iphoneos/libvpx_obj_int_extract

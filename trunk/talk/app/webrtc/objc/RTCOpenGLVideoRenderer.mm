@@ -204,21 +204,25 @@ static const GLsizei kNumTextures = 3 * kNumTextureSets;
   if (_lastDrawnFrame == frame) {
     return NO;
   }
-  [self ensureGLContext];
-  if (![self updateTextureSizesForFrame:frame] ||
-      ![self updateTextureDataForFrame:frame]) {
-    return NO;
-  }
-  glClear(GL_COLOR_BUFFER_BIT);
-#if !TARGET_OS_IPHONE
-  glBindVertexArray(_vertexArray);
-#endif
-  glBindBuffer(GL_ARRAY_BUFFER, _vertexBuffer);
-  glDrawArrays(GL_TRIANGLE_FAN, 0, 4);
-#if !TARGET_OS_IPHONE
-  [_context flushBuffer];
-#endif
-  _lastDrawnFrame = frame;
+	  [self ensureGLContext];
+
+	  if (![self updateTextureSizesForFrame:frame] ||
+	      ![self updateTextureDataForFrame:frame]) {
+	    return NO;
+	  }
+	  
+	  
+	  glClear(GL_COLOR_BUFFER_BIT);
+	#if !TARGET_OS_IPHONE
+	  glBindVertexArray(_vertexArray);
+	#endif
+	  glBindBuffer(GL_ARRAY_BUFFER, _vertexBuffer);
+	  glDrawArrays(GL_TRIANGLE_FAN, 0, 4);
+	#if !TARGET_OS_IPHONE
+	  [_context flushBuffer];
+	#endif
+	  _lastDrawnFrame = frame;
+
   return YES;
 }
 
@@ -324,90 +328,96 @@ static const GLsizei kNumTextures = 3 * kNumTextureSets;
       frame.chromaHeight == _lastDrawnFrame.chromaHeight) {
     return YES;
   }
-  GLsizei lumaWidth = frame.width;
-  GLsizei lumaHeight = frame.height;
-  GLsizei chromaWidth = frame.chromaWidth;
-  GLsizei chromaHeight = frame.chromaHeight;
-  for (GLint i = 0; i < kNumTextureSets; i++) {
-    glActiveTexture(GL_TEXTURE0 + i * 3);
-    glTexImage2D(GL_TEXTURE_2D,
-                 0,
-                 RTC_PIXEL_FORMAT,
-                 lumaWidth,
-                 lumaHeight,
-                 0,
-                 RTC_PIXEL_FORMAT,
-                 GL_UNSIGNED_BYTE,
-                 0);
-    glActiveTexture(GL_TEXTURE0 + i * 3 + 1);
-    glTexImage2D(GL_TEXTURE_2D,
-                 0,
-                 RTC_PIXEL_FORMAT,
-                 chromaWidth,
-                 chromaHeight,
-                 0,
-                 RTC_PIXEL_FORMAT,
-                 GL_UNSIGNED_BYTE,
-                 0);
-    glActiveTexture(GL_TEXTURE0 + i * 3 + 2);
-    glTexImage2D(GL_TEXTURE_2D,
-                 0,
-                 RTC_PIXEL_FORMAT,
-                 chromaWidth,
-                 chromaHeight,
-                 0,
-                 RTC_PIXEL_FORMAT,
-                 GL_UNSIGNED_BYTE,
-                 0);
-  }
+  
+	dispatch_async(dispatch_get_main_queue(), ^{
+  
+	  GLsizei lumaWidth = frame.width;
+	  GLsizei lumaHeight = frame.height;
+	  GLsizei chromaWidth = frame.chromaWidth;
+	  GLsizei chromaHeight = frame.chromaHeight;
+	  for (GLint i = 0; i < kNumTextureSets; i++) {
+	    glActiveTexture(GL_TEXTURE0 + i * 3);
+	    glTexImage2D(GL_TEXTURE_2D,
+	                 0,
+	                 RTC_PIXEL_FORMAT,
+	                 lumaWidth,
+	                 lumaHeight,
+	                 0,
+	                 RTC_PIXEL_FORMAT,
+	                 GL_UNSIGNED_BYTE,
+	                 0);
+	    glActiveTexture(GL_TEXTURE0 + i * 3 + 1);
+	    glTexImage2D(GL_TEXTURE_2D,
+	                 0,
+	                 RTC_PIXEL_FORMAT,
+	                 chromaWidth,
+	                 chromaHeight,
+	                 0,
+	                 RTC_PIXEL_FORMAT,
+	                 GL_UNSIGNED_BYTE,
+	                 0);
+	    glActiveTexture(GL_TEXTURE0 + i * 3 + 2);
+	    glTexImage2D(GL_TEXTURE_2D,
+	                 0,
+	                 RTC_PIXEL_FORMAT,
+	                 chromaWidth,
+	                 chromaHeight,
+	                 0,
+	                 RTC_PIXEL_FORMAT,
+	                 GL_UNSIGNED_BYTE,
+	                 0);
+	  }
+	});
   return YES;
 }
 
 - (BOOL)updateTextureDataForFrame:(RTCI420Frame*)frame {
-  NSUInteger textureOffset = _currentTextureSet * 3;
-  NSAssert(textureOffset + 3 <= kNumTextures, @"invalid offset");
-  NSParameterAssert(frame.yPitch == frame.width);
-  NSParameterAssert(frame.uPitch == frame.chromaWidth);
-  NSParameterAssert(frame.vPitch == frame.chromaWidth);
+	
+	dispatch_async(dispatch_get_main_queue(), ^{
+	  NSUInteger textureOffset = _currentTextureSet * 3;
+	  NSAssert(textureOffset + 3 <= kNumTextures, @"invalid offset");
+	  NSParameterAssert(frame.yPitch == frame.width);
+	  NSParameterAssert(frame.uPitch == frame.chromaWidth);
+	  NSParameterAssert(frame.vPitch == frame.chromaWidth);
 
-  glActiveTexture(GL_TEXTURE0 + textureOffset);
-  // When setting texture sampler uniforms, the texture index is used not
-  // the texture handle.
-  glUniform1i(_ySampler, textureOffset);
-  glTexImage2D(GL_TEXTURE_2D,
-               0,
-               RTC_PIXEL_FORMAT,
-               frame.width,
-               frame.height,
-               0,
-               RTC_PIXEL_FORMAT,
-               GL_UNSIGNED_BYTE,
-               frame.yPlane);
+	  glActiveTexture(GL_TEXTURE0 + textureOffset);
+	  // When setting texture sampler uniforms, the texture index is used not
+	  // the texture handle.
+	  glUniform1i(_ySampler, textureOffset);
+	  glTexImage2D(GL_TEXTURE_2D,
+	               0,
+	               RTC_PIXEL_FORMAT,
+	               frame.width,
+	               frame.height,
+	               0,
+	               RTC_PIXEL_FORMAT,
+	               GL_UNSIGNED_BYTE,
+	               frame.yPlane);
 
-  glActiveTexture(GL_TEXTURE0 + textureOffset + 1);
-  glUniform1i(_uSampler, textureOffset + 1);
-  glTexImage2D(GL_TEXTURE_2D,
-               0,
-               RTC_PIXEL_FORMAT,
-               frame.chromaWidth,
-               frame.chromaHeight,
-               0,
-               RTC_PIXEL_FORMAT,
-               GL_UNSIGNED_BYTE,
-               frame.uPlane);
+	  glActiveTexture(GL_TEXTURE0 + textureOffset + 1);
+	  glUniform1i(_uSampler, textureOffset + 1);
+	  glTexImage2D(GL_TEXTURE_2D,
+	               0,
+	               RTC_PIXEL_FORMAT,
+	               frame.chromaWidth,
+	               frame.chromaHeight,
+	               0,
+	               RTC_PIXEL_FORMAT,
+	               GL_UNSIGNED_BYTE,
+	               frame.uPlane);
 
-  glActiveTexture(GL_TEXTURE0 + textureOffset + 2);
-  glUniform1i(_vSampler, textureOffset + 2);
-  glTexImage2D(GL_TEXTURE_2D,
-               0,
-               RTC_PIXEL_FORMAT,
-               frame.chromaWidth,
-               frame.chromaHeight,
-               0,
-               RTC_PIXEL_FORMAT,
-               GL_UNSIGNED_BYTE,
-               frame.vPlane);
-
+	  glActiveTexture(GL_TEXTURE0 + textureOffset + 2);
+	  glUniform1i(_vSampler, textureOffset + 2);
+	  glTexImage2D(GL_TEXTURE_2D,
+	               0,
+	               RTC_PIXEL_FORMAT,
+	               frame.chromaWidth,
+	               frame.chromaHeight,
+	               0,
+	               RTC_PIXEL_FORMAT,
+	               GL_UNSIGNED_BYTE,
+	               frame.vPlane);
+	});
   _currentTextureSet = (_currentTextureSet + 1) % kNumTextureSets;
   return YES;
 }

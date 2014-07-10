@@ -110,6 +110,7 @@
 
 - (instancetype)initWithFrame:(CGRect)frame {
   if (self = [super initWithFrame:frame]) {
+	
     EAGLContext* glContext =
         [[EAGLContext alloc] initWithAPI:kEAGLRenderingAPIOpenGLES2];
     _glRenderer = [[RTCOpenGLVideoRenderer alloc] initWithContext:glContext];
@@ -194,7 +195,9 @@
   if (self.i420Frame) {
     // The renderer will draw the frame to the framebuffer corresponding to the
     // one used by |view|.
-    [_glRenderer drawFrame:self.i420Frame];
+  	dispatch_async(dispatch_get_main_queue(), ^{
+    	[_glRenderer drawFrame:self.i420Frame];
+	});
   }
 }
 

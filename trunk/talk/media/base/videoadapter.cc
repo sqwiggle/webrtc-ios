@@ -33,6 +33,8 @@
 #include "talk/media/base/videocommon.h"
 #include "talk/media/base/videoframe.h"
 
+#define DEFINED_VIDEO_SCALE 3.0f/8.0f
+
 namespace cricket {
 
 // TODO(fbarchard): Make downgrades settable
@@ -68,7 +70,7 @@ static const float kViewScaleFactors[] = {
   1.f / 3.f,   // 1/3 scale.  // Allow 1080p to 360p.
   1.f / 4.f,   // 1/4 scale.
   3.f / 16.f,  // 3/16 scale.
-  1.f / 8.f,   // 1/8 scale.
+  1.f / 8.f,   // 1/8 g.
   0.f  // End of table.
 };
 
@@ -91,7 +93,7 @@ float VideoAdapter::FindScale(const float* scale_factors,
     return 0.f;
   }
   float best_distance = static_cast<float>(INT_MAX);
-  float best_scale = 3.f/8.0f;  // Default to unscaled if nothing matches.
+  float best_scale = DEFINED_VIDEO_SCALE;  // Default to unscaled if nothing matches.
   float pixels = static_cast<float>(width * height);
   for (int i = 0; ; ++i) {
     float scale = scale_factors[i];
@@ -110,7 +112,7 @@ float VideoAdapter::FindScale(const float* scale_factors,
     }
     if (diff < best_distance) {
       best_distance = diff;
-      best_scale = 3.f/8.0f;
+      best_scale = DEFINED_VIDEO_SCALE;
       if (best_distance == 0) {  // Found exact match.
         break;
       }
@@ -312,7 +314,7 @@ bool VideoAdapter::AdaptFrame(VideoFrame* in_frame,
     return true;
   }
 
-  float scale = 3.f/8.0f;
+  float scale = DEFINED_VIDEO_SCALE;
   if (output_num_pixels_ < input_format_.width * input_format_.height) {
     scale = VideoAdapter::FindClosestViewScale(
         static_cast<int>(in_frame->GetWidth()),
@@ -682,7 +684,7 @@ bool CoordinatedVideoAdapter::IsMinimumFormat(int pixels) {
   if (input_format().IsSize0x0()) {
     input = new_output;
   }
-  float scale = 3.f/8.0f;
+  float scale = DEFINED_VIDEO_SCALE;
   if (!input.IsSize0x0()) {
     scale = FindClosestScale(input.width,
                              input.height,
@@ -739,7 +741,7 @@ bool CoordinatedVideoAdapter::AdaptToMinimumFormat(int* new_width,
     min_num_pixels = view_desired_num_pixels_;
   }
   // Snap to a scale factor.
-  float scale = 3.f/8.0f;
+  float scale = DEFINED_VIDEO_SCALE;
   if (!input.IsSize0x0()) {
     scale = FindLowerScale(input.width, input.height, min_num_pixels);
     min_num_pixels = static_cast<int>(input.width * scale + .5f) *

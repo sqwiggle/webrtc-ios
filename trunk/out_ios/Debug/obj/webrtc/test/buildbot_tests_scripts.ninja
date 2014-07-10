@@ -1,9 +1,0 @@
-build buildbot_tests.py: copy ../../webrtc/test/buildbot_tests.py
-build run_audio_test.py: copy $
-    ../../webrtc/tools/e2e_quality/audio/run_audio_test.py
-build perf/__init__.py: copy ../../tools/perf/__init__.py
-build perf/perf_utils.py: copy ../../tools/perf/perf_utils.py
-build obj/webrtc/test/buildbot_tests_scripts.actions_rules_copies.stamp: $
-    stamp buildbot_tests.py run_audio_test.py perf/__init__.py $
-    perf/perf_utils.py
-
