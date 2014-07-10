@@ -204,15 +204,13 @@ static const GLsizei kNumTextures = 3 * kNumTextureSets;
   if (_lastDrawnFrame == frame) {
     return NO;
   }
-	dispatch_async(dispatch_get_main_queue(), ^{
 	  [self ensureGLContext];
-	});
+
 	  if (![self updateTextureSizesForFrame:frame] ||
 	      ![self updateTextureDataForFrame:frame]) {
 	    return NO;
 	  }
 	  
-  	dispatch_async(dispatch_get_main_queue(), ^{
 	  
 	  glClear(GL_COLOR_BUFFER_BIT);
 	#if !TARGET_OS_IPHONE
@@ -224,7 +222,6 @@ static const GLsizei kNumTextures = 3 * kNumTextureSets;
 	  [_context flushBuffer];
 	#endif
 	  _lastDrawnFrame = frame;
-  	});
 
   return YES;
 }

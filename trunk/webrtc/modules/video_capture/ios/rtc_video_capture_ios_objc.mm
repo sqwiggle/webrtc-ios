@@ -46,7 +46,7 @@ using namespace webrtc::videocapturemodule;
     _captureSession = [[AVCaptureSession alloc] init];
     _captureChanging = NO;
     _captureChangingCondition = [[NSCondition alloc] init];
-	_sessionQueue = dispatch_queue_create("webrtc video session queue", DISPATCH_QUEUE_CONCURRENT);
+	_sessionQueue = dispatch_queue_create("webrtc video session queue", DISPATCH_QUEUE_SERIAL);
     if (!_captureSession || !_captureChangingCondition) {
       return nil;
     }

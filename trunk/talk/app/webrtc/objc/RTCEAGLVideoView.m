@@ -110,6 +110,7 @@
 
 - (instancetype)initWithFrame:(CGRect)frame {
   if (self = [super initWithFrame:frame]) {
+	
     EAGLContext* glContext =
         [[EAGLContext alloc] initWithAPI:kEAGLRenderingAPIOpenGLES2];
     _glRenderer = [[RTCOpenGLVideoRenderer alloc] initWithContext:glContext];

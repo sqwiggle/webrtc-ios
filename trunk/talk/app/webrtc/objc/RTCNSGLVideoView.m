@@ -148,7 +148,10 @@ static CVReturn OnDisplayLinkFired(CVDisplayLinkRef displayLink,
     // This method may be called from CVDisplayLink callback which isn't on the
     // main thread so we have to lock the GL context before drawing.
     CGLLockContext([[self openGLContext] CGLContextObj]);
+  	dispatch_async(dispatch_get_main_queue(), ^{
+	
     [self.glRenderer drawFrame:i420Frame];
+	});
     CGLUnlockContext([[self openGLContext] CGLContextObj]);
   }
 }
