@@ -15,6 +15,10 @@
 
 #include "libyuv/basic_types.h"
 
+#if defined(__native_client__)
+#include "ppapi/c/pp_macros.h"  // For PPAPI_RELEASE
+#endif
+
 #ifdef __cplusplus
 namespace libyuv {
 extern "C" {
@@ -38,7 +42,8 @@ extern "C" {
   var = 0
 
 #if defined(__pnacl__) || defined(__CLR_VER) || defined(COVERAGE_ENABLED) || \
-    defined(TARGET_IPHONE_SIMULATOR)
+    defined(TARGET_IPHONE_SIMULATOR) || \
+    (defined(_MSC_VER) && defined(__clang__))
 #define LIBYUV_DISABLE_X86
 #endif
 // True if compiling for SSSE3 as a requirement.
@@ -47,7 +52,12 @@ extern "C" {
 #endif
 
 // Enable for NaCL pepper 33 for bundle and AVX2 support.
-//  #define NEW_BINUTILS
+#if defined(__native_client__) && PPAPI_RELEASE >= 33
+#define NEW_BINUTILS
+#endif
+#if defined(__native_client__) && defined(__arm__) && PPAPI_RELEASE < 37
+#define LIBYUV_DISABLE_NEON
+#endif
 
 // The following are available on all x86 platforms:
 #if !defined(LIBYUV_DISABLE_X86) && \
@@ -150,6 +160,11 @@ extern "C" {
 #define HAS_YUY2TOUV422ROW_SSE2
 #define HAS_YUY2TOUVROW_SSE2
 #define HAS_YUY2TOYROW_SSE2
+#endif
+
+// The following are available on x64 Visual C:
+#if !defined(LIBYUV_DISABLE_X86) && defined (_M_X64)
+#define HAS_I422TOARGBROW_SSSE3
 #endif
 
 // GCC >= 4.7.0 required for AVX2.
@@ -312,7 +327,6 @@ extern "C" {
 #define HAS_ARGBADDROW_NEON
 #define HAS_ARGBATTENUATEROW_NEON
 #define HAS_ARGBBLENDROW_NEON
-#define HAS_ARGBCOLORMATRIXROW_NEON
 #define HAS_ARGBGRAYROW_NEON
 #define HAS_ARGBMIRRORROW_NEON
 #define HAS_ARGBMULTIPLYROW_NEON
@@ -326,10 +340,13 @@ extern "C" {
 #define HAS_SOBELXROW_NEON
 #define HAS_SOBELYROW_NEON
 #define HAS_INTERPOLATEROW_NEON
+// TODO(fbarchard): Investigate neon unittest failure.
+// #define HAS_ARGBCOLORMATRIXROW_NEON
 #endif
 
 // The following are available on Mips platforms:
-#if !defined(LIBYUV_DISABLE_MIPS) && defined(__mips__)
+#if !defined(LIBYUV_DISABLE_MIPS) && defined(__mips__) && \
+    (_MIPS_SIM == _MIPS_SIM_ABI32)
 #define HAS_COPYROW_MIPS
 #if defined(__mips_dsp) && (__mips_dsp_rev >= 2)
 #define HAS_I422TOABGRROW_MIPS_DSPR2
@@ -425,7 +442,7 @@ typedef uint8 uvec8[16];
     "lea " #offset "(%q" #base ",%q" #index "," #scale "),%%r14d\n" \
     #opcode " (%%r15,%%r14),%" #arg "\n" \
     BUNDLEUNLOCK
-#else
+#else  // defined(__native_client__) && defined(__x86_64__)
 #define BUNDLEALIGN "\n"
 #define MEMACCESS(base) "(%" #base ")"
 #define MEMACCESS2(offset, base) #offset "(%" #base ")"
@@ -442,6 +459,15 @@ typedef uint8 uvec8[16];
     #opcode " %%" #reg ","#offset "(%" #base ",%" #index "," #scale ")\n"
 #define MEMOPARG(opcode, offset, base, index, scale, arg) \
     #opcode " " #offset "(%" #base ",%" #index "," #scale "),%" #arg "\n"
+#endif  // defined(__native_client__) && defined(__x86_64__)
+
+#if defined(__arm__)
+#undef MEMACCESS
+#if defined(__native_client__)
+#define MEMACCESS(base) ".p2align   3\nbic %" #base ", #0xc0000000\n"
+#else
+#define MEMACCESS(base) "\n"
+#endif
 #endif
 
 void I444ToARGBRow_NEON(const uint8* src_y,
@@ -771,6 +797,8 @@ void CopyRow_X86(const uint8* src, uint8* dst, int count);
 void CopyRow_NEON(const uint8* src, uint8* dst, int count);
 void CopyRow_MIPS(const uint8* src, uint8* dst, int count);
 void CopyRow_C(const uint8* src, uint8* dst, int count);
+
+void CopyRow_16_C(const uint16* src, uint16* dst, int count);
 
 void ARGBCopyAlphaRow_C(const uint8* src_argb, uint8* dst_argb, int width);
 void ARGBCopyAlphaRow_SSE2(const uint8* src_argb, uint8* dst_argb, int width);
@@ -1457,6 +1485,9 @@ void HalfRow_AVX2(const uint8* src_uv, int src_uv_stride,
 void HalfRow_NEON(const uint8* src_uv, int src_uv_stride,
                   uint8* dst_uv, int pix);
 
+void HalfRow_16_C(const uint16* src_uv, int src_uv_stride,
+                  uint16* dst_uv, int pix);
+
 void ARGBToBayerRow_C(const uint8* src_argb, uint8* dst_bayer,
                       uint32 selector, int pix);
 void ARGBToBayerRow_SSSE3(const uint8* src_argb, uint8* dst_bayer,
@@ -1637,6 +1668,10 @@ void InterpolateRow_Any_AVX2(uint8* dst_ptr, const uint8* src_ptr,
 void InterpolateRows_Any_MIPS_DSPR2(uint8* dst_ptr, const uint8* src_ptr,
                                     ptrdiff_t src_stride_ptr, int width,
                                     int source_y_fraction);
+
+void InterpolateRow_16_C(uint16* dst_ptr, const uint16* src_ptr,
+                         ptrdiff_t src_stride_ptr,
+                         int width, int source_y_fraction);
 
 // Sobel images.
 void SobelXRow_C(const uint8* src_y0, const uint8* src_y1, const uint8* src_y2,

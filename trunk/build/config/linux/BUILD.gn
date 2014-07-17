@@ -4,6 +4,8 @@
 
 import("//build/config/linux/pkg_config.gni")
 import("//build/config/sysroot.gni")
+import("//build/config/ui.gni")
+import("//tools/generate_library_loader/generate_library_loader.gni")
 
 config("sdk") {
   if (sysroot != "") {
@@ -48,6 +50,26 @@ pkg_config("udev") {
   packages = [ "libudev" ]
 }
 
+# Note: if your target also depends on //dbus, you don't need to add this
+# config (it will get added automatically if you depend on //dbus).
+pkg_config("dbus") {
+  packages = [ "dbus-1" ]
+}
+
+pkg_config("gnome_keyring") {
+  packages = [ "gnome-keyring-1" ]
+}
+
+if (use_evdev_gestures) {
+  pkg_config("libevdev-cros") {
+    packages = [ "libevdev-cros" ]
+  }
+
+  pkg_config("libgestures") {
+    packages = [ "libgestures" ]
+  }
+}
+
 config("x11") {
   # Don't bother running pkg-config for these X related libraries since it just
   # returns the same libs, and forking pkg-config is slow.
@@ -73,6 +95,18 @@ config("xext") {
   libs = [ "Xext" ]
 }
 
+config("xrandr") {
+  libs = [ "xrandr" ]
+}
+
+config("xscrnsaver") {
+  libs = [ "Xss" ]
+}
+
+config("libcap") {
+  libs = [ "cap" ]
+}
+
 config("libresolv") {
   libs = [ "resolv" ]
 }
@@ -85,28 +119,18 @@ pkg_config("gconf") {
 pkg_config("gio_config") {
   packages = [ "gio-2.0" ]
   defines = [ "USE_GIO" ]
+  ignore_libs = true  # Loader generated below.
 }
 
-gio_output_h = "$root_gen_dir/library_loaders/libgio.h"
-gio_output_cc = "$root_gen_dir/library_loaders/libgio_loader.cc"
+# This generates a target named "gio".
+generate_library_loader("gio") {
+  name = "LibGioLoader"
+  output_h = "libgio.h"
+  output_cc = "libgio_loader.cc"
+  header = "<gio/gio.h>"
+  config = ":gio_config"
 
-action("make_gio_headers") {
-  visibility = ":gio"
-
-  script = "//tools/generate_library_loader/generate_library_loader.py"
-
-  outputs = [ gio_output_h, gio_output_cc ]
-
-  args = [
-    "--name", "LibGioLoader",
-    "--output-h", rebase_path(gio_output_h),
-    "--output-cc", rebase_path(gio_output_cc),
-    # TODO(brettw) convert ti "<gio/gio.h>" once GN doesn't mangle <>.
-    "--header", "\"gio/gio.h\"",
-    # Note GYP build exposes a variable linux_link_gsettings to control this,
-    # which, if manually set to true, will disable dlopen() for this. Its not
-    # clear this is needed, so here we just leave off.
-    "--link-directly=0",
+  functions = [
     "g_settings_new",
     "g_settings_get_child",
     "g_settings_get_string",
@@ -117,8 +141,21 @@ action("make_gio_headers") {
   ]
 }
 
-source_set("gio") {
-  direct_dependent_configs = [ ":gio_config" ]
-  sources = [ gio_output_h, gio_output_cc ]
-  deps = [ ":make_gio_headers" ]
+# This generates a target named "libpci".
+generate_library_loader("libpci") {
+  name = "LibPciLoader"
+  output_h = "libpci.h"
+  output_cc = "libpci_loader.cc"
+  header = "<pci/pci.h>"
+
+  functions = [
+    "pci_alloc",
+    "pci_init",
+    "pci_cleanup",
+    "pci_scan_bus",
+    "pci_fill_info",
+    "pci_lookup_name",
+  ]
 }
+
+# Looking for libspeechd? Use //third_party/speech-dispatcher

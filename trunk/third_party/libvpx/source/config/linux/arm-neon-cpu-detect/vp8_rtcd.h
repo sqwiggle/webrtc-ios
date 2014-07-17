@@ -91,6 +91,10 @@ int vp8_denoiser_filter_c(unsigned char *mc_running_avg_y, int mc_avg_y_stride, 
 int vp8_denoiser_filter_neon(unsigned char *mc_running_avg_y, int mc_avg_y_stride, unsigned char *running_avg_y, int avg_y_stride, unsigned char *sig, int sig_stride, unsigned int motion_magnitude, int increase_denoising);
 RTCD_EXTERN int (*vp8_denoiser_filter)(unsigned char *mc_running_avg_y, int mc_avg_y_stride, unsigned char *running_avg_y, int avg_y_stride, unsigned char *sig, int sig_stride, unsigned int motion_magnitude, int increase_denoising);
 
+int vp8_denoiser_filter_uv_c(unsigned char *mc_running_avg, int mc_avg_stride, unsigned char *running_avg, int avg_stride, unsigned char *sig, int sig_stride, unsigned int motion_magnitude, int increase_denoising);
+int vp8_denoiser_filter_uv_neon(unsigned char *mc_running_avg, int mc_avg_stride, unsigned char *running_avg, int avg_stride, unsigned char *sig, int sig_stride, unsigned int motion_magnitude, int increase_denoising);
+RTCD_EXTERN int (*vp8_denoiser_filter_uv)(unsigned char *mc_running_avg, int mc_avg_stride, unsigned char *running_avg, int avg_stride, unsigned char *sig, int sig_stride, unsigned int motion_magnitude, int increase_denoising);
+
 void vp8_dequant_idct_add_c(short *input, short *dq, unsigned char *output, int stride);
 void vp8_dequant_idct_add_v6(short *input, short *dq, unsigned char *output, int stride);
 void vp8_dequant_idct_add_neon(short *input, short *dq, unsigned char *output, int stride);
@@ -459,6 +463,8 @@ static void setup_rtcd_internal(void)
     if (flags & HAS_NEON) vp8_dc_only_idct_add = vp8_dc_only_idct_add_neon;
     vp8_denoiser_filter = vp8_denoiser_filter_c;
     if (flags & HAS_NEON) vp8_denoiser_filter = vp8_denoiser_filter_neon;
+    vp8_denoiser_filter_uv = vp8_denoiser_filter_uv_c;
+    if (flags & HAS_NEON) vp8_denoiser_filter_uv = vp8_denoiser_filter_uv_neon;
     vp8_dequant_idct_add = vp8_dequant_idct_add_c;
     if (flags & HAS_MEDIA) vp8_dequant_idct_add = vp8_dequant_idct_add_v6;
     if (flags & HAS_NEON) vp8_dequant_idct_add = vp8_dequant_idct_add_neon;

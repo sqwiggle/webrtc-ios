@@ -71,7 +71,7 @@ class TestRunner(base_test_runner.BaseTestRunner):
       else:
         device_dir = self.device.GetExternalStoragePath()
       for p in os.listdir(constants.ISOLATE_DEPS_DIR):
-        self.device.old_interface.PushIfNeeded(
+        self.device.PushChangedFiles(
             os.path.join(constants.ISOLATE_DEPS_DIR, p),
             os.path.join(device_dir, p))
 
@@ -192,7 +192,7 @@ class TestRunner(base_test_runner.BaseTestRunner):
   def TearDown(self):
     """Cleans up the test enviroment for the test suite."""
     if _TestSuiteRequiresHighPerfMode(self.test_package.suite_name):
-      self._perf_controller.RestoreOriginalPerfMode()
+      self._perf_controller.SetDefaultPerfMode()
     self.test_package.ClearApplicationState(self.device)
     self.tool.CleanUpEnvironment()
     super(TestRunner, self).TearDown()

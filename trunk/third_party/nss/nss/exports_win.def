@@ -172,6 +172,7 @@ PK11_IsLoggedIn
 PK11_IsPresent
 PK11_IVFromParam
 PK11_KeyGen
+PK11_MakeIDFromPubKey
 PK11_MapSignKeyType
 PK11_NeedLogin
 PK11_ParamFromIV

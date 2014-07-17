@@ -56,6 +56,12 @@
             'LIBYUV_DISABLE_NEON'
           ],
         }],
+        [ 'OS == "ios"', {
+          'xcode_settings': {
+            'DEBUGGING_SYMBOLS': 'YES',
+            'DEBUG_INFORMATION_FORMAT' : 'dwarf-with-dsym',
+          },
+        }],
         [ 'OS != "ios"', {
           'defines': [
             'HAVE_JPEG',
@@ -116,7 +122,15 @@
             'LIBYUV_DISABLE_NEON'
           ],
         }],
+        [ 'OS != "ios"', {
+          'defines': [
+            'HAVE_JPEG',
+          ],
+        }],
       ], # conditions
+      'dependencies': [
+        'libyuv.gyp:libyuv',
+      ],
     },
     {
       'target_name': 'cpuid',

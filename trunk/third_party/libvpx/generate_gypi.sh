@@ -143,9 +143,7 @@ function write_special_flags {
     write_target_definition ssse3_sources[@] $2 libvpx_intrinsics_ssse3 ssse3
   fi
   if [ 0 -ne ${#sse4_1_sources} ]; then
-    #write_target_definition sse4_1_sources[@] $2 libvpx_intrinsics_sse4_1 sse4.1
-    echo "ERROR: Uncomment sse4_1 sections in libvpx.gyp"
-    exit 1
+    write_target_definition sse4_1_sources[@] $2 libvpx_intrinsics_sse4_1 sse4.1
   fi
   if [ 0 -ne ${#avx_sources} ]; then
     #write_target_definition avx_sources[@] $2 libvpx_intrinsics_avx avx
@@ -334,10 +332,10 @@ echo "Generate Config Files"
 all_platforms="--enable-external-build --enable-postproc --disable-install-srcs --enable-multi-res-encoding --enable-temporal-denoising --disable-unit-tests --disable-install-docs --disable-examples --disable-avx2"
 gen_config_files linux/ia32 "--target=x86-linux-gcc --disable-ccache --enable-pic --enable-realtime-only ${all_platforms}"
 gen_config_files linux/x64 "--target=x86_64-linux-gcc --disable-ccache --enable-pic --enable-realtime-only ${all_platforms}"
-gen_config_files linux/arm "--target=armv6-linux-gcc --enable-pic --enable-realtime-only --disable-install-bins --disable-install-libs ${all_platforms}"
-gen_config_files linux/arm-neon "--target=armv7-linux-gcc --enable-pic --enable-realtime-only ${all_platforms}"
-gen_config_files linux/arm-neon-cpu-detect "--target=armv7-linux-gcc --enable-pic --enable-realtime-only --enable-runtime-cpu-detect ${all_platforms}"
-gen_config_files linux/arm64 "--force-target=armv8-linux-gcc --enable-pic --enable-realtime-only ${all_platforms}"
+gen_config_files linux/arm "--target=armv6-linux-gcc --enable-pic --enable-realtime-only --disable-install-bins --disable-install-libs --disable-edsp ${all_platforms}"
+gen_config_files linux/arm-neon "--target=armv7-linux-gcc --enable-pic --enable-realtime-only --disable-edsp ${all_platforms}"
+gen_config_files linux/arm-neon-cpu-detect "--target=armv7-linux-gcc --enable-pic --enable-realtime-only --enable-runtime-cpu-detect --disable-edsp ${all_platforms}"
+gen_config_files linux/arm64 "--force-target=armv8-linux-gcc --enable-pic --enable-realtime-only --disable-edsp ${all_platforms}"
 gen_config_files linux/mipsel "--target=mips32-linux-gcc --disable-fast-unaligned ${all_platforms}"
 gen_config_files linux/generic "--target=generic-gnu --enable-pic --enable-realtime-only ${all_platforms}"
 gen_config_files win/ia32 "--target=x86-win32-vs12 --enable-realtime-only ${all_platforms}"

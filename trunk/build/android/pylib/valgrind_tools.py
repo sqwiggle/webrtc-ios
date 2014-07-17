@@ -37,9 +37,9 @@ def SetChromeTimeoutScale(device, scale):
   path = '/data/local/tmp/chrome_timeout_scale'
   if not scale or scale == 1.0:
     # Delete if scale is None/0.0/1.0 since the default timeout scale is 1.0
-    device.old_interface.RunShellCommand('rm %s' % path)
+    device.RunShellCommand('rm %s' % path)
   else:
-    device.old_interface.SetProtectedFileContents(path, '%f' % scale)
+    device.WriteFile(path, '%f' % scale, as_root=True)
 
 
 class BaseTool(object):
@@ -166,30 +166,30 @@ class ValgrindTool(BaseTool):
 
   def CopyFiles(self):
     """Copies Valgrind tools to the device."""
-    self._device.old_interface.RunShellCommand(
+    self._device.RunShellCommand(
         'rm -r %s; mkdir %s' % (ValgrindTool.VG_DIR, ValgrindTool.VG_DIR))
-    self._device.old_interface.RunShellCommand(
+    self._device.RunShellCommand(
         'rm -r %s; mkdir %s' % (ValgrindTool.VGLOGS_DIR,
                                 ValgrindTool.VGLOGS_DIR))
     files = self.GetFilesForTool()
     for f in files:
-      self._device.old_interface.PushIfNeeded(
+      self._device.PushChangedFiles(
           os.path.join(DIR_SOURCE_ROOT, f),
           os.path.join(ValgrindTool.VG_DIR, os.path.basename(f)))
 
   def SetupEnvironment(self):
     """Sets up device environment."""
-    self._device.old_interface.RunShellCommand('chmod 777 /data/local/tmp')
-    self._device.old_interface.RunShellCommand('setenforce 0')
+    self._device.RunShellCommand('chmod 777 /data/local/tmp')
+    self._device.RunShellCommand('setenforce 0')
     for prop in self._wrap_properties:
-      self._device.old_interface.RunShellCommand(
+      self._device.RunShellCommand(
           'setprop %s "logwrapper %s"' % (prop, self.GetTestWrapper()))
     SetChromeTimeoutScale(self._device, self.GetTimeoutScale())
 
   def CleanUpEnvironment(self):
     """Cleans up device environment."""
     for prop in self._wrap_properties:
-      self._device.old_interface.RunShellCommand('setprop %s ""' % (prop,))
+      self._device.RunShellCommand('setprop %s ""' % (prop,))
     SetChromeTimeoutScale(self._device, None)
 
   def GetFilesForTool(self):

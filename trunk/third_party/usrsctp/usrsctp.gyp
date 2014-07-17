@@ -127,7 +127,7 @@
           'cflags!': [ '-Werror', '-Wall' ],
           'cflags': [ '-w' ],
         }],
-        ['OS=="mac"', {
+        ['OS=="mac" or OS=="ios"', {
           'defines': [
             'HAVE_SA_LEN',
             'HAVE_SCONN_LEN',
@@ -151,6 +151,11 @@
             # this way would is incompatible  with windows XP.
             'WINVER=0x0502',
             '_WIN32_WINNT=0x0502',
+          ],
+          'defines!': [
+            # Remove Chrome's WINVER defines to avoid redefinition warnings.
+            'WINVER=0x0602',
+            '_WIN32_WINNT=0x0602',
           ],
           'cflags!': [ '/W3', '/WX' ],
           'cflags': [ '/w' ],

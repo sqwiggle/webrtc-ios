@@ -39,6 +39,7 @@ _ISOLATE_FILE_PATHS = {
     'media_perftests': 'media/media_perftests.isolate',
     'media_unittests': 'media/media_unittests.isolate',
     'net_unittests': 'net/net_unittests.isolate',
+    'sql_unittests': 'sql/sql_unittests.isolate',
     'ui_unittests': 'ui/ui_unittests.isolate',
     'unit_tests': 'chrome/unit_tests.isolate',
     'webkit_unit_tests':
@@ -48,7 +49,7 @@ _ISOLATE_FILE_PATHS = {
 # Paths relative to third_party/webrtc/ (kept separate for readability).
 _WEBRTC_ISOLATE_FILE_PATHS = {
     'audio_decoder_unittests':
-      'modules/audio_coding/neteq4/audio_decoder_unittests.isolate',
+      'modules/audio_coding/neteq/audio_decoder_unittests.isolate',
     'common_audio_unittests': 'common_audio/common_audio_unittests.isolate',
     'common_video_unittests': 'common_video/common_video_unittests.isolate',
     'modules_tests': 'modules/modules_tests.isolate',
@@ -57,9 +58,11 @@ _WEBRTC_ISOLATE_FILE_PATHS = {
       'system_wrappers/source/system_wrappers_unittests.isolate',
     'test_support_unittests': 'test/test_support_unittests.isolate',
     'tools_unittests': 'tools/tools_unittests.isolate',
+    'video_engine_tests': 'video_engine_tests.isolate',
     'video_engine_core_unittests':
       'video_engine/video_engine_core_unittests.isolate',
     'voice_engine_unittests': 'voice_engine/voice_engine_unittests.isolate',
+    'webrtc_perf_tests': 'webrtc_perf_tests.isolate',
 }
 
 # Append the WebRTC tests with the full path from Chromium's src/ root.
@@ -128,12 +131,16 @@ def _GenerateDepsDirUsingIsolate(suite_name, isolate_file_path=None):
       '--isolated', isolated_abs_path,
       '--outdir', constants.ISOLATE_DEPS_DIR,
 
+      '--path-variable', 'DEPTH', constants.DIR_SOURCE_ROOT,
       '--path-variable', 'PRODUCT_DIR', constants.GetOutDirectory(),
 
       '--config-variable', 'OS', 'android',
+      '--config-variable', 'CONFIGURATION_NAME', constants.GetBuildType(),
       '--config-variable', 'chromeos', '0',
       '--config-variable', 'component', 'static_library',
       '--config-variable', 'icu_use_data_file_flag', '1',
+      # TODO(maruel): This may not be always true.
+      '--config-variable', 'target_arch', 'arm',
       '--config-variable', 'use_openssl', '0',
   ]
   assert not cmd_helper.RunCmd(isolate_cmd)

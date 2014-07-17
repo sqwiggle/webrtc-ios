@@ -755,7 +755,8 @@ void open_input_file(struct VpxInputContext *input) {
       input->height = input->y4m.pic_h;
       input->framerate.numerator = input->y4m.fps_n;
       input->framerate.denominator = input->y4m.fps_d;
-      input->use_i420 = 0;
+      input->fmt = input->y4m.vpx_fmt;
+      input->bit_depth = input->y4m.bit_depth;
     } else
       fatal("Unsupported Y4M stream.");
   } else if (input->detect.buf_read == 4 && fourcc_is_ivf(input->detect.buf)) {
@@ -1059,6 +1060,23 @@ static void set_default_kf_interval(struct stream_state *stream,
   }
 }
 
+static const char* file_type_to_string(enum VideoFileType t) {
+  switch (t) {
+    case FILE_TYPE_RAW: return "RAW";
+    case FILE_TYPE_Y4M: return "Y4M";
+    default: return "Other";
+  }
+}
+
+static const char* image_format_to_string(vpx_img_fmt_t f) {
+  switch (f) {
+    case VPX_IMG_FMT_I420: return "I420";
+    case VPX_IMG_FMT_I422: return "I422";
+    case VPX_IMG_FMT_I444: return "I444";
+    case VPX_IMG_FMT_YV12: return "YV12";
+    default: return "Other";
+  }
+}
 
 static void show_stream_config(struct stream_state *stream,
                                struct VpxEncoderConfig *global,
@@ -1070,8 +1088,10 @@ static void show_stream_config(struct stream_state *stream,
   if (stream->index == 0) {
     fprintf(stderr, "Codec: %s\n",
             vpx_codec_iface_name(global->codec->interface()));
-    fprintf(stderr, "Source file: %s Format: %s\n", input->filename,
-            input->use_i420 ? "I420" : "YV12");
+    fprintf(stderr, "Source file: %s File Type: %s Format: %s\n",
+            input->filename,
+            file_type_to_string(input->file_type),
+            image_format_to_string(input->fmt));
   }
   if (stream->next || stream->index)
     fprintf(stderr, "\nStream Index: %d\n", stream->index);
@@ -1245,6 +1265,11 @@ static void encode_frame(struct stream_state *stream,
 
   /* Scale if necessary */
   if (img && (img->d_w != cfg->g_w || img->d_h != cfg->g_h)) {
+    if (img->fmt != VPX_IMG_FMT_I420 && img->fmt != VPX_IMG_FMT_YV12) {
+      fprintf(stderr, "%s can only scale 4:2:0 8bpp inputs\n", exec_name);
+      exit(EXIT_FAILURE);
+    }
+#if CONFIG_LIBYUV
     if (!stream->img)
       stream->img = vpx_img_alloc(NULL, VPX_IMG_FMT_I420,
                                   cfg->g_w, cfg->g_h, 16);
@@ -1260,8 +1285,15 @@ static void encode_frame(struct stream_state *stream,
               stream->img->stride[VPX_PLANE_V],
               stream->img->d_w, stream->img->d_h,
               kFilterBox);
-
     img = stream->img;
+#else
+    stream->encoder.err = 1;
+    ctx_exit_on_error(&stream->encoder,
+                      "Stream %d: Failed to encode frame.\n"
+                      "Scaling disabled in this configuration. \n"
+                      "To enable, configure with --enable-libyuv\n",
+                      stream->index);
+#endif
   }
 
   vpx_usec_timer_start(&timer);
@@ -1501,8 +1533,8 @@ int main(int argc, const char **argv_) {
   /* Setup default input stream settings */
   input.framerate.numerator = 30;
   input.framerate.denominator = 1;
-  input.use_i420 = 1;
   input.only_i420 = 1;
+  input.bit_depth = 0;
 
   /* First parse the global configuration values, because we want to apply
    * other parameters on top of the default configuration provided by the
@@ -1511,6 +1543,7 @@ int main(int argc, const char **argv_) {
   argv = argv_dup(argc - 1, argv_ + 1);
   parse_global_config(&global, argv);
 
+  input.fmt = global.use_i420 ? VPX_IMG_FMT_I420 : VPX_IMG_FMT_YV12;
 
   {
     /* Now parse each stream's parameters. Using a local scope here
@@ -1611,10 +1644,7 @@ int main(int argc, const char **argv_) {
            frames.*/
         memset(&raw, 0, sizeof(raw));
       else
-        vpx_img_alloc(&raw,
-                      input.use_i420 ? VPX_IMG_FMT_I420
-                      : VPX_IMG_FMT_YV12,
-                      input.width, input.height, 32);
+        vpx_img_alloc(&raw, input.fmt, input.width, input.height, 32);
 
       FOREACH_STREAM(stream->rate_hist =
                          init_rate_histogram(&stream->config.cfg,
@@ -1656,7 +1686,6 @@ int main(int argc, const char **argv_) {
                   fps >= 1.0 ? fps : fps * 60,
                   fps >= 1.0 ? "fps" : "fpm");
           print_time("ETA", estimated_time_left);
-          fprintf(stderr, "\033[K");
         }
 
       } else
@@ -1707,6 +1736,8 @@ int main(int argc, const char **argv_) {
       }
 
       fflush(stdout);
+      if (!global.quiet)
+        fprintf(stderr, "\033[K");
     }
 
     if (stream_cnt > 1)

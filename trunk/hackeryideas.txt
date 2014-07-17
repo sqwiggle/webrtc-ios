@@ -1,0 +1,2 @@
+- Chat
+- Control Spotify from Mac while playing on iPad (maybe through app?)

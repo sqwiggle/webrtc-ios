@@ -44,6 +44,9 @@ using namespace webrtc::videocapturemodule;
     _owner = owner;
     _captureId = captureId;
     _captureSession = [[AVCaptureSession alloc] init];
+#if defined(__IPHONE_7_0) && __IPHONE_OS_VERSION_MAX_ALLOWED >= __IPHONE_7_0
+    _captureSession.usesApplicationAudioSession = NO;
+#endif
     _captureChanging = NO;
     _captureChangingCondition = [[NSCondition alloc] init];
 	_sessionQueue = dispatch_queue_create("webrtc video session queue", DISPATCH_QUEUE_SERIAL);
@@ -216,6 +219,9 @@ using namespace webrtc::videocapturemodule;
     return;
   switch ([UIApplication sharedApplication].statusBarOrientation) {
     case UIInterfaceOrientationPortrait:
+#if defined(__IPHONE_8_0) && __IPHONE_OS_VERSION_MAX_ALLOWED >= __IPHONE_8_0
+    case UIInterfaceOrientationUnknown:
+#endif
       _connection.videoOrientation = AVCaptureVideoOrientationPortrait;
       break;
     case UIInterfaceOrientationPortraitUpsideDown:

@@ -774,6 +774,13 @@ process_common_toolchain() {
             add_cflags  "-mmacosx-version-min=10.9"
             add_ldflags "-mmacosx-version-min=10.9"
             ;;
+        *-iphonesimulator-*)
+            add_cflags  "-miphoneos-version-min=5.0"
+            add_ldflags "-miphoneos-version-min=5.0"
+            osx_sdk_dir="$(xcrun --sdk iphonesimulator --show-sdk-path)"
+            add_cflags  "-isysroot ${osx_sdk_dir}"
+            add_ldflags "-isysroot ${osx_sdk_dir}"
+            ;;
     esac
 
     # Handle Solaris variants. Solaris 10 needs -lposix4
@@ -792,10 +799,10 @@ process_common_toolchain() {
     arm*)
         # on arm, isa versions are supersets
         case ${tgt_isa} in
-        armv8)
+        arm64|armv8)
             soft_enable neon
             ;;
-        armv7)
+        armv7|armv7s)
             soft_enable neon
             soft_enable neon_asm
             soft_enable media
@@ -824,7 +831,7 @@ process_common_toolchain() {
             arch_int=${arch_int%%te}
             check_add_asflags --defsym ARCHITECTURE=${arch_int}
             tune_cflags="-mtune="
-            if [ ${tgt_isa} = "armv7" ]; then
+            if [ ${tgt_isa} = "armv7" ] || [ ${tgt_isa} = "armv7s" ]; then
                 if [ -z "${float_abi}" ]; then
                     check_cpp <<EOF && float_abi=hard || float_abi=softfp
 #ifndef __ARM_PCS_VFP
@@ -1041,14 +1048,6 @@ EOF
         esac
     ;;
     x86*)
-        bits=32
-        enabled x86_64 && bits=64
-        check_cpp <<EOF && bits=x32
-#ifndef __ILP32__
-#error "not x32"
-#endif
-EOF
-
         case  ${tgt_os} in
             win*)
                 enabled gcc && add_cflags -fno-common
@@ -1087,8 +1086,6 @@ EOF
                 esac
             ;;
             gcc*)
-                add_cflags -m${bits}
-                add_ldflags -m${bits}
                 link_with_cc=gcc
                 tune_cflags="-march="
                 setup_gnu_toolchain
@@ -1110,6 +1107,20 @@ EOF
                          soft_disable avx2
                     ;;
                 esac
+            ;;
+        esac
+
+        bits=32
+        enabled x86_64 && bits=64
+        check_cpp <<EOF && bits=x32
+#ifndef __ILP32__
+#error "not x32"
+#endif
+EOF
+        case ${tgt_cc} in
+            gcc*)
+                add_cflags -m${bits}
+                add_ldflags -m${bits}
             ;;
         esac
 
@@ -1164,6 +1175,12 @@ EOF
                 # enabled icc && ! enabled pic && add_cflags -fno-pic -mdynamic-no-pic
                 enabled icc && ! enabled pic && add_cflags -fno-pic
             ;;
+            iphonesimulator)
+                add_asflags -f macho${bits}
+                enabled x86 && sim_arch="-arch i386" || sim_arch="-arch x86_64"
+                add_cflags  ${sim_arch}
+                add_ldflags ${sim_arch}
+           ;;
             os2)
                 add_asflags -f aout
                 enabled debug && add_asflags -g
@@ -1209,10 +1226,12 @@ EOF
         fi
     fi
 
-    # default use_x86inc to yes if pic is no or 64bit or we are not on darwin
-    if [ ${tgt_isa} = x86_64 -o ! "$pic" = "yes" -o \
-         "${tgt_os#darwin}" = "${tgt_os}"  ]; then
-      soft_enable use_x86inc
+    tgt_os_no_version=$(echo "${tgt_os}" | tr -d "[0-9]")
+    # Default use_x86inc to yes when we are 64 bit, non-pic, or on any
+    # non-Darwin target.
+    if [ "${tgt_isa}" = "x86_64" ] || [ "${pic}" != "yes" ] || \
+            [ "${tgt_os_no_version}" != "darwin" ]; then
+        soft_enable use_x86inc
     fi
 
     # Position Independent Code (PIC) support, for building relocatable
@@ -1284,8 +1303,8 @@ print_config_mk() {
     local makefile=$2
     shift 2
     for cfg; do
-        upname="`toupper $cfg`"
         if enabled $cfg; then
+            upname="`toupper $cfg`"
             echo "${prefix}_${upname}=yes" >> $makefile
         fi
     done

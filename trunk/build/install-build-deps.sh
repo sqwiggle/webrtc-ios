@@ -97,17 +97,17 @@ chromeos_dev_list="libbluetooth-dev"
 dev_list="apache2.2-bin bison curl dpkg-dev elfutils devscripts fakeroot flex
           fonts-thai-tlwg g++ git-core gperf language-pack-da language-pack-fr
           language-pack-he language-pack-zh-hant libapache2-mod-php5
-          libasound2-dev libbrlapi-dev libbz2-dev libcairo2-dev libcap-dev
-          libcups2-dev libcurl4-gnutls-dev libdrm-dev libelf-dev libexif-dev
-          libgconf2-dev libgl1-mesa-dev libglib2.0-dev libglu1-mesa-dev
-          libgnome-keyring-dev libgtk2.0-dev libkrb5-dev libnspr4-dev
-          libnss3-dev libpam0g-dev libpci-dev libpulse-dev libsctp-dev
-          libspeechd-dev libsqlite3-dev libssl-dev libudev-dev libwww-perl
-          libxslt1-dev libxss-dev libxt-dev libxtst-dev mesa-common-dev openbox
-          patch perl php5-cgi pkg-config python python-cherrypy3 python-dev
-          python-psutil rpm ruby subversion ttf-dejavu-core ttf-indic-fonts
-          ttf-kochi-gothic ttf-kochi-mincho wdiff xfonts-mathml zip
-          $chromeos_dev_list"
+          libasound2-dev libbrlapi-dev libav-tools libbz2-dev libcairo2-dev
+          libcap-dev libcups2-dev libcurl4-gnutls-dev libdrm-dev libelf-dev
+          libexif-dev libgconf2-dev libgl1-mesa-dev libglib2.0-dev
+          libglu1-mesa-dev libgnome-keyring-dev libgtk2.0-dev libkrb5-dev
+          libnspr4-dev libnss3-dev libpam0g-dev libpci-dev libpulse-dev
+          libsctp-dev libspeechd-dev libsqlite3-dev libssl-dev libudev-dev
+          libwww-perl libxslt1-dev libxss-dev libxt-dev libxtst-dev
+          mesa-common-dev openbox patch perl php5-cgi pkg-config python
+          python-cherrypy3 python-dev python-psutil rpm ruby subversion
+          ttf-dejavu-core ttf-indic-fonts ttf-kochi-gothic ttf-kochi-mincho
+          wdiff xfonts-mathml zip $chromeos_dev_list"
 
 # 64-bit systems need a minimum set of 32-bit compat packages for the pre-built
 # NaCl binaries. These are always needed, regardless of whether or not we want
@@ -142,8 +142,28 @@ arm_list="libc6-dev-armhf-cross
           linux-libc-dev-armhf-cross
           g++-arm-linux-gnueabihf"
 
-# Packages to build standalone NaCl and all its toolchains.
-nacl_list="g++-mingw-w64-i686 libtinfo-dev:i386"
+# Packages to build NaCl, its toolchains, and its ports.
+nacl_list="autoconf bison cmake g++-mingw-w64-i686 gawk lib32z1-dev
+           libasound2:i386 libcap2:i386 libelf-dev:i386 libexif12:i386
+           libfontconfig1:i386 libgconf-2-4:i386 libglib2.0-0:i386 libgpm2:i386
+           libgtk2.0-0:i386 libncurses5:i386 libnss3:i386 libpango1.0-0:i386
+           libssl0.9.8:i386 libtinfo-dev libtinfo-dev:i386 libtool
+           libxcomposite1:i386 libxcursor1:i386 libxdamage1:i386 libxi6:i386
+           libxrandr2:i386 libxss1:i386 libxtst6:i386 texinfo xvfb"
+
+# Find the proper version of libgbm-dev. We can't just install libgbm-dev as
+# it depends on mesa, and only one version of mesa can exists on the system.
+# Hence we must match the same version or this entire script will fail.
+mesa_variant=""
+for variant in "-lts-quantal" "-lts-raring" "-lts-saucy"; do
+  if $(dpkg-query -Wf'${Status}' libgl1-mesa-glx${variant} | \
+       grep -q " ok installed"); then
+    mesa_variant="${variant}"
+  fi
+done
+dev_list="${dev_list} libgbm-dev${mesa_variant}
+          libgles2-mesa-dev${mesa_variant}"
+nacl_list="${nacl_list} libgl1-mesa-glx${mesa_variant}:i386"
 
 # Some package names have changed over time
 if package_exists ttf-mscorefonts-installer; then
@@ -165,8 +185,10 @@ else
 fi
 if package_exists libudev1; then
   dev_list="${dev_list} libudev1"
+  nacl_list="${nacl_list} libudev1:i386"
 else
   dev_list="${dev_list} libudev0"
+  nacl_list="${nacl_list} libudev0:i386"
 fi
 if package_exists libbrlapi0.6; then
   dev_list="${dev_list} libbrlapi0.6"
@@ -260,9 +282,9 @@ else
 fi
 
 if test "$do_inst_nacl" = "1"; then
-  echo "Including standalone NaCl dependencies."
+  echo "Including NaCl, NaCl toolchain, NaCl ports dependencies."
 else
-  echo "Skipping standalone NaCl dependencies."
+  echo "Skipping NaCl, NaCl toolchain, NaCl ports dependencies."
   nacl_list=
 fi
 
@@ -369,6 +391,18 @@ if test "$do_inst_chromeos_fonts" != "0"; then
   fi
 else
   echo "Skipping installation of Chrome OS fonts."
+fi
+
+if test "$do_inst_nacl" = "1"; then
+  echo "Installing symbolic links for NaCl."
+  if [ ! -r /usr/lib/i386-linux-gnu/libcrypto.so ]; then
+    sudo ln -fs libcrypto.so.0.9.8 /usr/lib/i386-linux-gnu/libcrypto.so
+  fi
+  if [ ! -r /usr/lib/i386-linux-gnu/libssl.so ]; then
+    sudo ln -fs libssl.so.0.9.8 /usr/lib/i386-linux-gnu/libssl.so
+  fi
+else
+  echo "Skipping symbolic links for NaCl."
 fi
 
 # Install 32bit backwards compatibility support for 64bit systems

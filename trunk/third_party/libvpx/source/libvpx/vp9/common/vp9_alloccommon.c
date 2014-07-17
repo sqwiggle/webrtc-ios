@@ -53,32 +53,41 @@ static void setup_mi(VP9_COMMON *cm) {
 }
 
 static int alloc_mi(VP9_COMMON *cm, int mi_size) {
-  cm->mip = (MODE_INFO *)vpx_calloc(mi_size, sizeof(*cm->mip));
-  if (cm->mip == NULL)
-    return 1;
+  int i;
 
-  cm->prev_mip = (MODE_INFO *)vpx_calloc(mi_size, sizeof(*cm->prev_mip));
-  if (cm->prev_mip == NULL)
-    return 1;
+  for (i = 0; i < 2; ++i) {
+    cm->mip_array[i] =
+        (MODE_INFO *)vpx_calloc(mi_size, sizeof(*cm->mip));
+    if (cm->mip_array[i] == NULL)
+      return 1;
 
-  cm->mi_grid_base =
-      (MODE_INFO **)vpx_calloc(mi_size, sizeof(*cm->mi_grid_base));
-  if (cm->mi_grid_base == NULL)
-    return 1;
+    cm->mi_grid_base_array[i] =
+        (MODE_INFO **)vpx_calloc(mi_size, sizeof(*cm->mi_grid_base));
+    if (cm->mi_grid_base_array[i] == NULL)
+      return 1;
+  }
 
-  cm->prev_mi_grid_base =
-      (MODE_INFO **)vpx_calloc(mi_size, sizeof(*cm->prev_mi_grid_base));
-  if (cm->prev_mi_grid_base == NULL)
-    return 1;
+  // Init the index.
+  cm->mi_idx = 0;
+  cm->prev_mi_idx = 1;
+
+  cm->mip = cm->mip_array[cm->mi_idx];
+  cm->prev_mip = cm->mip_array[cm->prev_mi_idx];
+  cm->mi_grid_base = cm->mi_grid_base_array[cm->mi_idx];
+  cm->prev_mi_grid_base = cm->mi_grid_base_array[cm->prev_mi_idx];
 
   return 0;
 }
 
 static void free_mi(VP9_COMMON *cm) {
-  vpx_free(cm->mip);
-  vpx_free(cm->prev_mip);
-  vpx_free(cm->mi_grid_base);
-  vpx_free(cm->prev_mi_grid_base);
+  int i;
+
+  for (i = 0; i < 2; ++i) {
+    vpx_free(cm->mip_array[i]);
+    cm->mip_array[i] = NULL;
+    vpx_free(cm->mi_grid_base_array[i]);
+    cm->mi_grid_base_array[i] = NULL;
+  }
 
   cm->mip = NULL;
   cm->prev_mip = NULL;
@@ -100,7 +109,9 @@ void vp9_free_frame_buffers(VP9_COMMON *cm) {
   }
 
   vp9_free_frame_buffer(&cm->post_proc_buffer);
+}
 
+void vp9_free_context_buffers(VP9_COMMON *cm) {
   free_mi(cm);
 
   vpx_free(cm->last_frame_seg_map);
@@ -116,12 +127,15 @@ void vp9_free_frame_buffers(VP9_COMMON *cm) {
 int vp9_resize_frame_buffers(VP9_COMMON *cm, int width, int height) {
   const int aligned_width = ALIGN_POWER_OF_TWO(width, MI_SIZE_LOG2);
   const int aligned_height = ALIGN_POWER_OF_TWO(height, MI_SIZE_LOG2);
+#if CONFIG_INTERNAL_STATS || CONFIG_VP9_POSTPROC
   const int ss_x = cm->subsampling_x;
   const int ss_y = cm->subsampling_y;
 
+  // TODO(agrange): this should be conditionally allocated.
   if (vp9_realloc_frame_buffer(&cm->post_proc_buffer, width, height, ss_x, ss_y,
                                VP9_DEC_BORDER_IN_PIXELS, NULL, NULL, NULL) < 0)
     goto fail;
+#endif
 
   set_mb_mi(cm, aligned_width, aligned_height);
 
@@ -156,36 +170,56 @@ int vp9_resize_frame_buffers(VP9_COMMON *cm, int width, int height) {
 
  fail:
   vp9_free_frame_buffers(cm);
+  vp9_free_context_buffers(cm);
   return 1;
 }
 
+static void init_frame_bufs(VP9_COMMON *cm) {
+  int i;
+
+  cm->new_fb_idx = FRAME_BUFFERS - 1;
+  cm->frame_bufs[cm->new_fb_idx].ref_count = 1;
+
+  for (i = 0; i < REF_FRAMES; ++i) {
+    cm->ref_frame_map[i] = i;
+    cm->frame_bufs[i].ref_count = 1;
+  }
+}
+
 int vp9_alloc_frame_buffers(VP9_COMMON *cm, int width, int height) {
-  const int aligned_width = ALIGN_POWER_OF_TWO(width, MI_SIZE_LOG2);
-  const int aligned_height = ALIGN_POWER_OF_TWO(height, MI_SIZE_LOG2);
+  int i;
   const int ss_x = cm->subsampling_x;
   const int ss_y = cm->subsampling_y;
-  int i;
 
   vp9_free_frame_buffers(cm);
 
-  for (i = 0; i < FRAME_BUFFERS; i++) {
+  for (i = 0; i < FRAME_BUFFERS; ++i) {
     cm->frame_bufs[i].ref_count = 0;
     if (vp9_alloc_frame_buffer(&cm->frame_bufs[i].buf, width, height,
                                ss_x, ss_y, VP9_ENC_BORDER_IN_PIXELS) < 0)
       goto fail;
   }
 
-  cm->new_fb_idx = FRAME_BUFFERS - 1;
-  cm->frame_bufs[cm->new_fb_idx].ref_count = 1;
+  init_frame_bufs(cm);
 
-  for (i = 0; i < REF_FRAMES; i++) {
-    cm->ref_frame_map[i] = i;
-    cm->frame_bufs[i].ref_count = 1;
-  }
-
+#if CONFIG_INTERNAL_STATS || CONFIG_VP9_POSTPROC
   if (vp9_alloc_frame_buffer(&cm->post_proc_buffer, width, height, ss_x, ss_y,
                              VP9_ENC_BORDER_IN_PIXELS) < 0)
     goto fail;
+#endif
+
+  return 0;
+
+ fail:
+  vp9_free_frame_buffers(cm);
+  return 1;
+}
+
+int vp9_alloc_context_buffers(VP9_COMMON *cm, int width, int height) {
+  const int aligned_width = ALIGN_POWER_OF_TWO(width, MI_SIZE_LOG2);
+  const int aligned_height = ALIGN_POWER_OF_TWO(height, MI_SIZE_LOG2);
+
+  vp9_free_context_buffers(cm);
 
   set_mb_mi(cm, aligned_width, aligned_height);
 
@@ -215,12 +249,13 @@ int vp9_alloc_frame_buffers(VP9_COMMON *cm, int width, int height) {
   return 0;
 
  fail:
-  vp9_free_frame_buffers(cm);
+  vp9_free_context_buffers(cm);
   return 1;
 }
 
 void vp9_remove_common(VP9_COMMON *cm) {
   vp9_free_frame_buffers(cm);
+  vp9_free_context_buffers(cm);
   vp9_free_internal_frame_buffers(&cm->int_frame_buffers);
 }
 
@@ -237,13 +272,16 @@ void vp9_update_frame_size(VP9_COMMON *cm) {
 }
 
 void vp9_swap_mi_and_prev_mi(VP9_COMMON *cm) {
+  // Swap indices.
+  const int tmp = cm->mi_idx;
+  cm->mi_idx = cm->prev_mi_idx;
+  cm->prev_mi_idx = tmp;
+
   // Current mip will be the prev_mip for the next frame.
-  MODE_INFO *temp = cm->prev_mip;
-  MODE_INFO **temp2 = cm->prev_mi_grid_base;
-  cm->prev_mip = cm->mip;
-  cm->mip = temp;
-  cm->prev_mi_grid_base = cm->mi_grid_base;
-  cm->mi_grid_base = temp2;
+  cm->mip = cm->mip_array[cm->mi_idx];
+  cm->prev_mip = cm->mip_array[cm->prev_mi_idx];
+  cm->mi_grid_base = cm->mi_grid_base_array[cm->mi_idx];
+  cm->prev_mi_grid_base = cm->mi_grid_base_array[cm->prev_mi_idx];
 
   // Update the upper left visible macroblock ptrs.
   cm->mi = cm->mip + cm->mi_stride + 1;

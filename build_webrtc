@@ -48,7 +48,7 @@ function buildsim() {
 echo "-- building webrtc ios"
 pushd trunk
 # wrios && gclient runhooks && ninja -C out_ios/Debug-iphoneos
-wrsim && gclient runhooks --force && ninja -C out_sim/Debug-iphoneos AppRTCDemo
+wrsim && gclient runhooks --force && ninja -C out_sim/Release-iphonesimulator AppRTCDemo
 
 popd
 echo "-- webrtc has been sucessfully built"
@@ -82,9 +82,9 @@ exit 1
 #upgradeSVN || fail
 #wrsim || fail
 
-#wrsim || fail
-#buildsim || fail
-	
+# wrsim || fail
+# buildsim || fail
+
 
 wrios || fail
 buildios || fail
