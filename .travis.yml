@@ -6,10 +6,6 @@ install:
   - export PATH="$PATH":`pwd`/depot_tools
   - popd
   - brew install ninja
-  - pushd trunk
-  - svn cleanup
-  - svn upgrade 
-  - popd
 script:
   - ./build_webrtc
 notifications:
