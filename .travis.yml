@@ -1,6 +1,9 @@
 language: objective-c
 install:
   - pushd ..
+  - pwd
+  - svn delete /Users/travis/build/sqwiggle/webrtc-ios/trunk/webrtc/video_engine/test/auto_test/android/jni/Android.mk
+  - svn upgrade
   - git clone https://chromium.googlesource.com/chromium/tools/depot_tools.git
   - export PATH="$PATH":`pwd`/depot_tools
   - popd
