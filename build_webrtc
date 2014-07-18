@@ -77,8 +77,6 @@ echo "*** webrtc build failed"
 exit 1
 }
 
-gclient sync --force
-
 #fetch || fail
 #wrsim || fail
 
