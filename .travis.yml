@@ -7,7 +7,7 @@ install:
   - popd
   - brew install ninja
   - pushd trunk
-  - svn clean
+  - svn cleanup
   - svn upgrade 
   - popd
 script:
