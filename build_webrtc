@@ -80,7 +80,7 @@ exit 1
 
 
 #fetch || fail
-#upgradeSVN || fail
+upgradeSVN || fail
 #wrsim || fail
 
 wrsim || fail
