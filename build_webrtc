@@ -77,11 +77,11 @@ echo "*** webrtc build failed"
 exit 1
 }
 
+upgradeSVN || fail
 
 gclient sync --force
 
 #fetch || fail
-upgradeSVN || fail
 #wrsim || fail
 
 wrsim || fail
