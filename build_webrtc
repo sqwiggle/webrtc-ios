@@ -76,7 +76,7 @@ function fail() {
 echo "*** webrtc build failed"
 exit 1
 }
-
+svn delete /Users/travis/build/sqwiggle/webrtc-ios/trunk/webrtc/video_engine/test/auto_test/android/jni/Android.mk
 upgradeSVN || fail
 
 gclient sync --force
