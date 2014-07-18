@@ -6,7 +6,7 @@ install:
   - export PATH="$PATH":`pwd`/depot_tools
   - popd
   - brew install ninja
-  - push trunk
+  - pushd trunk
   - svn upgrade 
   - popd
 script:
