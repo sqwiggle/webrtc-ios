@@ -1,6 +1,0 @@
-include_rules = [
-  "+components/keyed_service",
-  "+components/query_parser",
-  "+net",
-  "+sql",
-]

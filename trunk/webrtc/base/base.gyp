@@ -620,7 +620,7 @@
                 'OTHER_LDFLAGS': [
                   '-framework Cocoa',
                   '-framework Foundation',
-                  '',
+                  '-framework IOKit',
                   '-framework Security',
                   '-framework SystemConfiguration',
                 ],

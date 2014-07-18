@@ -1,9 +1,0 @@
-# ninja log v5
-34	382	0	obj/webrtc/modules/audio_coding/codecs/pcm16b/PCM16B.pcm16b.o	aa6b4ea8219cec6d
-38	415	0	obj/third_party/libvpx/source/libvpx/vp8/common/x86/libvpx_intrinsics_mmx.idct_blk_mmx.o	a0d28ff577b9920d
-415	512	0	obj/third_party/libvpx/source/libvpx/vp8/common/x86/libvpx_intrinsics_mmx.variance_mmx.o	918b925dd45da3c1
-382	715	0	libPCM16B.a	b3c5f4d5b9887e7a
-715	870	0	obj/third_party/libvpx/source/libvpx/vp9/encoder/x86/libvpx_intrinsics_mmx.vp9_variance_mmx.o	7c918110e1be7e1c
-25	944	0	obj/third_party/expat/files/lib/expat.xmlrole.o	d8c648c5a91b2606
-27	1944	0	obj/third_party/expat/files/lib/expat.xmlparse.o	c819982bdb9403dd
-32	2541	0	obj/third_party/expat/files/lib/expat.xmltok.o	6064f4082f20779

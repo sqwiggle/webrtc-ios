@@ -1,5 +1,0 @@
-include_rules = [
-  "+chrome/browser",
-  "+components/breakpad",
-  "+third_party/re2",
-]

@@ -1,8 +1,0 @@
-include_rules = [
-  "+skia/ext",
-  "+third_party/skia",
-  "+ui/display/types",
-  "+ui/events",
-  "+ui/gfx",
-  "+ui/base/cursor",
-]

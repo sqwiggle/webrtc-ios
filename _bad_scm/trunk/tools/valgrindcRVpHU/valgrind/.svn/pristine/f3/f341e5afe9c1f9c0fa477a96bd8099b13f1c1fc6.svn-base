@@ -1,3 +1,0 @@
-# Crashes under Valgrind on Mac, http://crbug.com/247601
-VideoCaptureDeviceTest.FakeCapture
-VideoCaptureDeviceTest.FakeCaptureVariableResolution

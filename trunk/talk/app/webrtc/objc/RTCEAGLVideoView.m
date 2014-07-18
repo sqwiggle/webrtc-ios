@@ -194,9 +194,7 @@
   if (self.i420Frame) {
     // The renderer will draw the frame to the framebuffer corresponding to the
     // one used by |view|.
-  	dispatch_async(dispatch_get_main_queue(), ^{
-    	[_glRenderer drawFrame:self.i420Frame];
-	});
+    [_glRenderer drawFrame:self.i420Frame];
   }
 }
 
