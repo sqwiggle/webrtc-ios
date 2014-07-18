@@ -78,6 +78,7 @@ exit 1
 }
 
 
+gclient sync --force
 
 #fetch || fail
 upgradeSVN || fail
