@@ -6,6 +6,6 @@ install:
   - popd
   - brew install ninja
 script:
-  - ./makeall-iossim.sh 
+  - ./build_webrtc
 notifications:
   email: false
