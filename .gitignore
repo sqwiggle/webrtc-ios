@@ -5,4 +5,4 @@
 *.ninja_log
 *.ninja
 
-trunk/
+trunk/*
