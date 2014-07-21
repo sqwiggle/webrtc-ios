@@ -80,6 +80,8 @@ exit 1
 #fetch || fail
 #wrsim || fail
 
+
+
 wrsim || fail
 echo "building simulator libraries"
 buildsim || fail
@@ -95,6 +97,8 @@ echo "done building device libraries"
 _dfiles="trunk/out_ios/Release-iphoneos/*.a"
 
 mkdir $"built_libs/"
+rm -rf $"built_libs/device/"
+rm -rf $"built_libs/simulator/"
 mkdir $"built_libs/device/"
 mkdir $"built_libs/simulator/"
 
