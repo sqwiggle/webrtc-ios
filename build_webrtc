@@ -80,8 +80,6 @@ exit 1
 #fetch || fail
 #wrsim || fail
 
-gclient sync --force
-
 
 wrsim || fail
 echo "building simulator libraries"

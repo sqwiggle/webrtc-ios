@@ -6,6 +6,9 @@ install:
   - export PATH="$PATH":`pwd`/depot_tools
   - popd
   - brew install ninja
+  - pushd trunk
+  - gclient sync --force
+  - popd
 script:
   - ./build_webrtc
 notifications:
