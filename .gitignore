@@ -6,3 +6,4 @@
 *.ninja
 
 trunk/*
+*bad_scm*

@@ -80,6 +80,7 @@ exit 1
 #fetch || fail
 #wrsim || fail
 
+gclient sync --force
 
 
 wrsim || fail
@@ -88,10 +89,10 @@ buildsim || fail
 echo "done building simulator libraries"
 
 
-wrios || fail
-echo "building device libraries"
-buildios || fail
-echo "done building device libraries"
+# wrios || fail
+# echo "building device libraries"
+# buildios || fail
+# echo "done building device libraries"
 
 
 _dfiles="trunk/out_ios/Release-iphoneos/*.a"
