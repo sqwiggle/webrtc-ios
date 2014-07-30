@@ -3,3 +3,7 @@
 *.o
 *.stamp
 *.ninja_log
+*.ninja
+
+trunk/*
+*bad_scm*

@@ -1,11 +1,13 @@
 language: objective-c
 install:
   - pushd ..
+  - pwd
   - git clone https://chromium.googlesource.com/chromium/tools/depot_tools.git
   - export PATH="$PATH":`pwd`/depot_tools
   - popd
   - brew install ninja
+  - gclient sync --force
 script:
-  - ./makeall-iossim.sh 
+  - ./build_webrtc
 notifications:
   email: false
