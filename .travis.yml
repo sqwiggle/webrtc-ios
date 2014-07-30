@@ -1,13 +1,24 @@
 language: objective-c
 install:
-  - pushd ..
-  - pwd
-  - git clone https://chromium.googlesource.com/chromium/tools/depot_tools.git
-  - export PATH="$PATH":`pwd`/depot_tools
-  - popd
-  - brew install ninja
-  - gclient sync --force
+- pushd ..
+- pwd
+- git clone https://chromium.googlesource.com/chromium/tools/depot_tools.git
+- export PATH="$PATH":`pwd`/depot_tools
+- popd
+- brew install ninja
+- gclient sync --force
 script:
-  - ./build_webrtc
+- ./build_webrtc
 notifications:
   email: false
+deploy:
+  provider: s3
+  access_key_id: AKIAJOHRLVZAEMAKXYEQ
+  secret_access_key:
+    secure: MCx+cY2fxcMz5VzQ5JpCXHTQFKnmT7z9SKSgCAohgV4UBogYWXJ/CUojfkkznHlEO0WKeTYqSWvWvUoxfr5+KIv4OxAhmu2hc23EJQlORrImRTo/si3ftixBkTcNQdecKeyb628LH5Ys+SEMAvQaZWTEpw2ZZJlMYPdb+CTZAfY=
+  bucket: webrtc-builds
+  local-dir: built_libs
+  acl: !ruby/string:HighLine::String |-
+    cHVibGljX3JlYWQ=
+  on:
+    repo: sqwiggle/webrtc-ios

@@ -97,8 +97,9 @@ rm -rf $"built_libs/"
 mkdir $"built_libs/"
 mkdir $"built_libs/device/"
 mkdir $"built_libs/simulator/"
+mkdir $"built_libs/headers/"
 
-echo "copying libraries"
+echo "copying libraries..."
 
 for f in $_dfiles
 do
@@ -123,4 +124,8 @@ done
 #move any other simulator files over 
 mv trunk/out_sim/Release-iphonesimulator/*.a built_libs/simulator
 
-echo "done copying"
+echo "done copying libs. copying headers..."
+
+mv trunk/talk/app/webrtc/objc/public/*.h built_libs/headers
+
+echo "done copying all the things! party time!"
