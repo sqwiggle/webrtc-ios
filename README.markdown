@@ -9,7 +9,7 @@ Requirements:
 - Chrome Depot Tools
 - Beer
 
-Installation instructions (Parts taken from Ninjatec's awesome [blog post](http://ninjanetic.com/how-to-get-started-with-webrtc-and-ios-without-wasting-10-hours-of-your-life/)):
+Installation instructions:
 ---------------
 - Install depot tools,unless you already have them.
 	- To install, run the following command in terminal: <br />
@@ -28,11 +28,6 @@ Building instructions:
 - Run ``` ./build_webrtc ```.
 - Upon completion, all necessary libraries will be exported to ``` trunk/out_ios ```. The will have have a postfix of ``` *.a ```. 
 - All headers required to access libraries are available at ``` trunk/app/webrtc/objc/public ```. Copy these over to wherever you copied over the libraries.
-
-ToDo:
------
-- Travis Build.
-- Script to centralize headers and libraries. 
 
 
 
