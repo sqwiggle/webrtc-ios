@@ -83,13 +83,15 @@ exit 1
 
 wrios || fail
 echo "building device libraries"
-buildios || fail
-echo "done building device libraries"
+(buildios || fail) &
+
+iosBuildPID=$!
 
 wrsim || fail
 echo "building simulator libraries"
-buildsim || fail
-echo "done building simulator libraries"
+(buildsim || fail) &
+
+wait %1 %2 && echo "done building simulator libraries"
 
 _dfiles="trunk/out_ios/Release-iphoneos/*.a"
 
