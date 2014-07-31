@@ -129,3 +129,4 @@ echo "done copying libs. copying headers..."
 mv trunk/talk/app/webrtc/objc/public/*.h built_libs/headers
 
 echo "done copying all the things! party time!"
+ls -la
