@@ -18,8 +18,6 @@ deploy:
     secure: MCx+cY2fxcMz5VzQ5JpCXHTQFKnmT7z9SKSgCAohgV4UBogYWXJ/CUojfkkznHlEO0WKeTYqSWvWvUoxfr5+KIv4OxAhmu2hc23EJQlORrImRTo/si3ftixBkTcNQdecKeyb628LH5Ys+SEMAvQaZWTEpw2ZZJlMYPdb+CTZAfY=
   bucket: webrtc-builds
   local-dir: built_libs
-  acl: !ruby/string:HighLine::String |-
-    cHVibGljX3JlYWQ=
+  acl: public_read
   on:
-    repo: sqwiggle/webrtc-ios
-	branch: master
+    branch: master
