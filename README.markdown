@@ -3,6 +3,10 @@ WebRTC SDK for iOS
 
 This is derived from [Google's implementation of webrtc](https://code.google.com/p/webrtc/) with some slight modification to how the quality of video is handled.
 
+Pre-built Library Download:
+----------------
+[WebRTC for iOS download](https://webrtc-builds.s3.amazonaws.com/webrtc-ios-libs.zip)
+
 Requirements:
 -------------
 - GIT (obviously)
