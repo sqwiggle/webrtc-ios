@@ -26,7 +26,7 @@ export GYP_CROSSCOMPILE=1
 
 function wrios() {
 wrbase
-export GYP_DEFINES="$GYP_DEFINES OS=ios target_arch=armv7"
+export GYP_DEFINES="$GYP_DEFINES OS=ios target_arch=armv7s"
 export GYP_GENERATOR_FLAGS="$GYP_GENERATOR_FLAGS output_dir=out_ios"
 export GYP_CROSSCOMPILE=1
 }
